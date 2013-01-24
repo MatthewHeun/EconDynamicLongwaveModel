@@ -1,0 +1,24 @@
+\begin{thebibliography}{3}
+\newcommand{\enquote}[1]{``#1''}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+
+\bibitem[{Lamport(1994)}]{lamport}
+Lamport, L. (1994): \emph{{\LaTeX}: {A} Document Preparation System: User's
+  Guide and Reference Manual}, Reading, MA, USA: Ad{\-d}i{\-s}on-Wes{\-l}ey,
+  second edition.
+
+\bibitem[{Mittelbach et~al.(2004)Mittelbach, Goossens, Braams, Carlisle,
+  Rowley, Detig, and Schrod}]{mittelbach}
+Mittelbach, F., M.~Goossens, J.~Braams, D.~Carlisle, C.~Rowley, C.~Detig, and
+  J.~Schrod (2004): \emph{The {\LaTeX} Companion}, Tools and Techniques for
+  Computer Typesetting, Reading, MA, USA: Ad{\-d}i{\-s}on-Wes{\-l}ey, second
+  edition.
+
+\bibitem[{Oetiker(2008)}]{oetiker}
+Oetiker, T. (2008): \emph{The Not So Short Introduction to \LaTeXe}, 4.26
+  edition,
+  \urlprefix\url{http://ctan.tug.org/tex-archive/info/lshort/english/lshort.pdf}.
+
+\end{thebibliography}

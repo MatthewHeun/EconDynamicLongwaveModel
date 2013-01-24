@@ -1,0 +1,90 @@
+\documentclass[letterpaper,12pt]{article}
+\usepackage{dgjournal}          
+\usepackage{mathptmx}
+\usepackage{graphics}
+\usepackage[authoryear,comma,longnamesfirst,sectionbib]{natbib} 
+
+\begin{document}
+
+%% Do NOT include any fronmatter information; including the title, author names,
+%% institutes, acknowledgments and title footnotes (author information, funding
+%% sources, etc.). Start the document with the first section or paragraph of
+%% the article.
+
+\section{Mathematical model from Jones (2001)}
+
+\begin{equation}
+x + y = 6
+\end{equation}
+
+\subsection{A second order heading}
+
+Some text under the subheading. Paragraphs that follow heads are not
+indented.
+
+Math should also be set in Times. Use the mathptmx package if you do not have
+any of the commercially available fonts that are compatible with Times.
+\begin{equation}
+    y^{(n)} = \sum_{i=0}^{n-1} a_i(x) y^{(i)} + r(x) 
+\end{equation}
+
+All environments provided by the standard LaTeX document classes are
+unchanged. Vertical spaces within lists have been altered to comply with De Gruyter
+requirements.
+\begin{enumerate}
+\item This is the first item within the list. Some more text here in order to
+  display the alignment.
+\item Another item in the list.
+\item Yet another item in the list.
+\end{enumerate}
+
+Here is an example of a Figure. It's the same as in standard LaTeX.
+
+\begin{figure}[!h]
+%% Use the graphics package to insert figures
+%% \includegraphics{figure.eps}
+% Use \centering to center the table
+\centering
+%% A small box in place of a figure
+\framebox{%
+  \begin{minipage}{10pc}
+    \begin{center}
+      \vspace{1cm}\par
+      A figure\par
+      \vspace{1cm}
+    \end{center}
+  \end{minipage}}
+\caption{Insert your caption here. If you wish to label your figure for
+  cross-referencing, use a label either within the caption or after it.}
+\label{fig1}
+\end{figure}
+
+An example of a table follows. This is also the same as in standard LaTeX.
+
+\begin{table}[!h]
+% Use \centering to center the table
+\centering
+\caption{Insert your table caption here. If you wish to label the table for
+  cross-referencing, use a label either within the caption or after it.}
+\begin{tabular}{llll}
+\hline
+Symbol        & LaTeX Command      & Symbol      & LaTeX Command \\
+\hline
+$\alpha$      & \verb+\alpha+      & $\zeta$     & \verb+\zeta+ \\
+$\beta$       & \verb+\beta+       & $\eta$      & \verb+\eta+ \\
+$\gamma$      & \verb+\gamma+      & $\theta$    & \verb+\theta+ \\
+$\delta$      & \verb+\delta+      & $\vartheta$ & \verb+\vartheta+ \\
+$\epsilon$    & \verb+\epsilon+    & $\iota$     & \verb+\iota+ \\
+$\varepsilon$ & \verb+\varepsilon+ & $\kappa$    & \verb+\kappa+ \\
+\hline
+\end{tabular}
+\end{table}
+
+Use the \verb+thebibliography+ environment for the references.  BibTeX users may
+use the provided BibTeX style file DeGruyter.bst.
+
+%% BibTeX support
+\bibliographystyle{DeGruyter}
+\bibliography{sample}
+
+\end{document}
