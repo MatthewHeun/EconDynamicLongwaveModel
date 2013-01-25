@@ -13,8 +13,81 @@
 
 \section{Mathematical model from Jones (2001)}
 
+The mathematical model being used for this project was taken from Jones (2001). The production function that Jones uses is defined in equation \ref{eq:Jones_production_function}.
+\begin{equation} \label{eq:Jones_production_function}
+y = a_\mathrm{t} ^\sigma l_\mathrm{Yt} ^\beta t_\mathrm{t} ^{1-\beta} \epsilon
+\end{equation}
+
+Definitions of the production function variables, indexed against some base year.
+\begin{equation} \label{eq:index_y}
+y \equiv Y/Y_\mathrm{0}
+\end{equation}
+\begin{equation} \label{eq:index_a}
+a \equiv A/A_\mathrm{0}
+\end{equation}
+\begin{equation} \label{eq:index_t}
+t \equiv T/T_\mathrm{0}
+\end{equation}
+
+The number of people 100 percent commited to labor in the economy.
+\begin{equation}\label{eq:pop_work}
+L = \tau_\mathrm{t} N
+\end{equation}
+
+The number of people 100 percent commited to producing children.
+\begin{equation} \label{eq:pop_birth}
+N-L = (1-\tau_\mathrm{t})N
+\end{equation}
+
+Time constraints in the economy are represented by the two following equations.
+\begin{equation} \label{eq:consumption}
+c_\mathrm{t} = w_\mathrm{t} \tau_\mathrm{t}
+\end{equation}
+
+\begin{equation} \label{eq:birth}
+b_\mathrm{t} = \alpha (1-\tau_\mathrm{t})
+\end{equation}
+
+First-order condition.
+\begin{equation} \label{eq:first_order_condition}
+\frac{u_\mathrm{\tilde b}}{u_\mathrm{\tilde c}} = \frac{w_\mathrm{t}}{\alpha}
+\end{equation}
+
+Equations representing compensation for innovation in the knowledge and labor sector respectively.
+\begin{equation} \title{eq:knowledge_comp}
+w_\mathrm{At} L_\mathrm{At} = \pi_\mathrm{t} Y_\mathrm{t}
+\end{equation}
+
+\begin{equation} \title{labor_comp}
+w_\mathrm{Yt} L_\mathrm{Yt} = (1-\pi_\mathrm{t})Y_\mathrm{t}
+\end{equation}
+
+Differential equation representing the change in the stock of knowledge over time.
+\begin{equation} \title{eq:da_dt}
+\frac{da}{dt} = \delta l_\mathrm{At}^\lambda a_\mathrm{t}^\phi
+\end{equation}
+
+The utility function for choosing between consumption and having children.
+\begin{equation} \title{eq:utility}
+u(c_\mathrm{t}, b_\mathrm{t}) = (1-\mu) \frac{\tilde c_\mathrm{t}^{1-\gamma}}{1-\gamma} + \mu \frac{\tilde b_\mathrm{t}^{1-\eta}}{1-\eta}
+\end{equation}
+
+\begin{equation} \title{eq:c_tilde}
+\tilde c_\mathrm{t} \equiv c_\mathrm{t} - \bar c
+\end{equation}
+
+\begin{equation} \title{eq:b_tilde}
+\tilde b_\mathrm{t} \equiv b_\mathrm{t} - \bar b
+\end{equation}
+
+Differential equation representing the change in the population over time.
+\begin{equation} \title{dn_dt}
+\frac{dn}{dt} = b_\mathrm{t} n_\mathrm{t} - d_\mathrm{t} n_\mathrm{t}
+\end{equation}
+
+Death rate equation.
 \begin{equation}
-x + y = 6
+d_\mathrm{t} = \frac{1}{\omega_\mathrm{1} z_\mathrm{t}^{\omega_\mathrm{2}} + \omega_\mathrm{3} z_\mathrm{t}} + \bar d
 \end{equation}
 
 \subsection{A second order heading}
