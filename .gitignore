@@ -1,4 +1,21 @@
-.pdf
-.gz
-.log
-.aux
+#
+# LaTeX-generated files
+#
+ReeseHeunJournalPaper.pdf
+ReeseHeunJournalPaper.synctex.gz
+ReeseHeunJournalPaper.aux
+ReeseHeunJournalPaper.bbl
+ReeseHeunJournalPaper.blg
+ReeseHeunJournalPaper.log
+
+#
+# Files from OSX
+#
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
