@@ -11,83 +11,124 @@
 %% sources, etc.). Start the document with the first section or paragraph of
 %% the article.
 
-\section{Mathematical model from Jones (2001)}
+\section{Mathematical model from Jones (2001) [take 2]}
+The longwave growth model used as a basis for this project was taken from Jones (2001). The production function that Jones is using to ultimately predict output is given by equation \ref{eq:Jones_production_function} and is a function of the stock of ideas ($a_\mathrm{t}$), labor in the goods producing sector ($l_\mathrm{Y,t}$), land ($t_\mathrm{t}$), and an exogenous shock parameter ($\epsilon_\mathrm{t}$).
 
-The mathematical model being used for this project was taken from Jones (2001). The production function that Jones uses is defined in equation \ref{eq:Jones_production_function}.
 \begin{equation} \label{eq:Jones_production_function}
-y = a_\mathrm{t} ^\sigma l_\mathrm{Yt} ^\beta t_\mathrm{t} ^{1-\beta} \epsilon
+y_\mathrm{t} = a_\mathrm{t} ^\sigma l_\mathrm{Y,t} ^\beta t_\mathrm{t} ^{1-\beta} \epsilon_\mathrm{t}
 \end{equation}
 
-Definitions of the production function variables, indexed against some base year.
+The production function variables are indexed, referenced against some base year to non-dimensionalize them, and given by the following definitions. Where $Y$ represents the output (\$/year), $A$ represents the stock of knowledge and ideas (ideas/year), and $t$ represents the stock of available land (land/year).
+
 \begin{equation} \label{eq:index_y}
-	y \equiv Y/Y_\mathrm{0}
+y \equiv \frac{Y}{Y_\mathrm{0}},
 \end{equation}
 \begin{equation} \label{eq:index_a}
-	a \equiv A/A_\mathrm{0}
+a \equiv \frac{A}{A_\mathrm{0}},
 \end{equation}
 \begin{equation} \label{eq:index_t}
-	t \equiv T/T_\mathrm{0}
+t \equiv \frac{T}{T_\mathrm{0}},
 \end{equation}
 
-The number of people 100 percent commited to labor in the economy.
-\begin{equation}\label{eq:pop_work}
-	L = \tau_\mathrm{t} N
+%%BRIDGE SECTIONS BETWEEN PRODUCTION FUNCTION AND UTILITY FUNCTION
+
+The utility function from Jones (2001) was the basis for our model and is of the form found in equation \ref{eq:utility_function}. The utility function is used to represent an individuals preferences towards consumption or having children at a point in time. 
+
+\begin{equation} \label{eq:utility_function}
+u(c_\mathrm{t}, b_\mathrm{t}) = \frac{1-\mu}{1-\gamma} \bigg{(}\frac{k_\mathrm{c} \tilde c_\mathrm{t}}{U_\mathrm{c,0}} \bigg{)}^{1-\gamma} + \frac{\mu}{1-\eta} \bigg{(}\frac{k_\mathrm{b} \tilde b_\mathrm{t}}{U_\mathrm{b,0}} \bigg{)}^{1-\eta},
 \end{equation}
 
-The number of people 100 percent commited to producing children.
-\begin{equation} \label{eq:pop_birth}
-	N-L = (1-\tau_\mathrm{t})N
+Where $\mu$, $\gamma$, and $\eta$ are dimensionless parameters having values between 0 and 1. $k_\mathrm{c}$ and $k_\mathrm{b}$ represent the amount of utility an individual obtains per unit consumption or birth, in units of utils/\$ and utils/birth respectively. The variable $\tilde c_\mathrm{t}$ is the amount of the individual's consumption in \$/year-person and $\tilde b_\mathrm{t}$ is the number of births in births/year-person. Both the consumption and birth utility terms are divided by the utility in the first year of the simulation, $U_\mathrm{0}$, which is taken to be the year 25,000 B.C. from Jones. It is also important to note that $\tilde c_\mathrm{t}$ is the amount of consumption above a certain subsistence level and $\tilde b_\mathrm{t}$ represents the amount of births above some long-run birth rate, defined by equation \ref{eq:c_tilde} and equation \ref{eq:b_tilde}.
+
+\begin{equation} \label{eq:c_tilde}
+\tilde c_\mathrm{t} \equiv c_\mathrm{t} - \bar c,
 \end{equation}
 
-Time constraints in the economy are represented by the two following equations.
-\begin{equation} \label{eq:consumption}
-	c_\mathrm{t} = w_\mathrm{t} \tau_\mathrm{t}
+\begin{equation} \label{eq:b_tilde}
+\tilde b_\mathrm{t} \equiv b_\mathrm{t} - \bar b,
 \end{equation}
 
-\begin{equation} \label{eq:birth}
-	b_\mathrm{t} = \alpha (1-\tau_\mathrm{t})
-\end{equation}
+Where $\bar c$ is the subsistence level of consumption and $\bar b$ is the long term birth rate.
 
-First-order condition.
+The utility function is subject to the following first order condition.
+
 \begin{equation} \label{eq:first_order_condition}
-	\frac{u_\mathrm{\tilde b}}{u_\mathrm{\tilde c}} = \frac{w_\mathrm{t}}{\alpha}
+\frac{\partial u/ \partial\tilde b}{\partial u/ \partial\tilde c} = \frac{w_\mathrm{t}}{\alpha},
 \end{equation}
+
+Where $w_\mathrm{t}$ is the wage rate that a person is paid in \$/year and $\alpha$ is an equivalent "wage rate" on the number of births per year, or an equivalent monetary amount that a person derives from each birth in \$/year. The appearance of these two coefficients are from the time constraints in the economy. These time constraints are given by equations \ref{eq:pop_work}, \ref{eq:consumption_constraint}, and \ref{eq:birth_constraint}.
+
+\begin{equation}\label{eq:pop_work}
+L = \tau_\mathrm{t} N,
+\end{equation}
+
+\begin{equation} \label{eq:consumption_constraint}
+c_\mathrm{t} = w_\mathrm{t} \tau_\mathrm{t},
+\end{equation}
+
+\begin{equation} \label{eq:birth_constraint}
+b_\mathrm{t} = \alpha (1-\tau_\mathrm{t}),
+\end{equation}
+
+Where $\tau$ is a number between 0 and 1 representing the fraction of available time that people spend on labor (unitless), $N$ is the total population, and $L$ is the total amount of available labor in the economy. So, $(1-\tau)$ represents the fraction of available time that's spent on birth.
+
+The time constraints, in conjunction with the first order condition, reduce the utility function down to a form that directly relates birth and consumption, as shown in equation \ref{eq:FOC_and_time_constraints}.
+
+\begin{equation} \label{eq:FOC_and_time_constraints}
+\frac{k_\mathrm{b}}{U_\mathrm{b,0}} \tilde b_\mathrm{t} = \bigg{[} \frac{k_\mathrm{b}}{U_\mathrm{b,0}} \frac{U_\mathrm{c,0}}{k_\mathrm{c}} \frac{\alpha \mu}{1-\mu} \frac{( \frac{k_\mathrm{c}}{U_\mathrm{c,0}} \tilde c_\mathrm{t} )^\gamma}{w_\mathrm{t}}\bigg{]}^{1/\eta} ,
+\end{equation}
+
+Where both sides of this equation are dimensionless (to allow application of the exponential factor).
+
+The labor section of the economy can be split into two different sectors; one devoted to innovation and producing new ideas and one devoted to producing goods.
+
+
+\section{Mathematical model from Jones (2001)}
+
+The mathematical model being used for this project was taken from Jones (2001). The production function that Jones uses is defined in 
+Definitions of the production function variables, indexed against some base year.
 
 Equations representing compensation for innovation in the knowledge and labor sector respectively.
-\begin{equation} \label{eq:knowledge_comp}
-	w_\mathrm{At} L_\mathrm{At} = \pi_\mathrm{t} Y_\mathrm{t}
+\begin{equation}
+w_\mathrm{At} L_\mathrm{At} = \pi_\mathrm{t} Y_\mathrm{t}
 \end{equation}
 
-\begin{equation} \label{labor_comp}
-	w_\mathrm{Yt} L_\mathrm{Yt} = (1-\pi_\mathrm{t})Y_\mathrm{t}
+\begin{equation}
+w_\mathrm{Yt} L_\mathrm{Yt} = (1-\pi_\mathrm{t})Y_\mathrm{t}
+\end{equation}
+
+Also, in static equilibrium we expect:
+\begin{equation}
+w_\mathrm{A} = w_\mathrm{Y} = w_\mathrm{t}
+\end{equation}
+
+\begin{equation}
+\pi = \frac{L_\mathrm{At}}{L}
 \end{equation}
 
 Differential equation representing the change in the stock of knowledge over time.
 \begin{equation} \label{eq:da_dt}
-	\frac{da}{dt} = \delta l_\mathrm{At}^\lambda a_\mathrm{t}^\phi
+\frac{da}{dt} = \delta l_\mathrm{At}^\lambda a_\mathrm{t}^\phi
 \end{equation}
 
-The utility function for choosing between consumption and having children.
-\begin{equation} \label{eq:utility}
-	u(c_\mathrm{t}, b_\mathrm{t}) = (1-\mu) \frac{\tilde c_\mathrm{t}^{1-\gamma}}{1-\gamma} + \mu \frac{\tilde b_\mathrm{t}^{1-\eta}}{1-\eta}
-\end{equation}
+The utility function is subject to the first-order condition.
 
-\begin{equation} \label{eq:c_tilde}
-	\tilde c_\mathrm{t} \equiv c_\mathrm{t} - \bar c
-\end{equation}
 
-\begin{equation} \label{eq:b_tilde}
-	\tilde b_\mathrm{t} \equiv b_\mathrm{t} - \bar b
+The first order condition, in conjunction with the time constraints, implies that,
+
+Indexed working population.
+\begin{equation}
+n \equiv \frac{N}{N_\mathrm{0}}
 \end{equation}
 
 Differential equation representing the change in the population over time.
-\begin{equation} \label{dn_dt}
-	\frac{dn}{dt} = b_\mathrm{t} n_\mathrm{t} - d_\mathrm{t} n_\mathrm{t}
+\begin{equation}
+\frac{dn}{dt} = b_\mathrm{t} n_\mathrm{t} - d_\mathrm{t} n_\mathrm{t}
 \end{equation}
 
 Death rate equation.
 \begin{equation} \label{deathrate}
-	d_\mathrm{t} = \frac{1}{\omega_\mathrm{1} z_\mathrm{t}^{\omega_\mathrm{2}} + \omega_\mathrm{3} z_\mathrm{t}} + \bar d
+d_\mathrm{t} = \frac{1}{\omega_\mathrm{1} z_\mathrm{t}^{\omega_\mathrm{2}} + \omega_\mathrm{3} z_\mathrm{t}} + \bar d
 \end{equation}
 
 \subsection{A second order heading}
