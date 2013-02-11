@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9) (preloaded format=pdflatex 2013.1.23)  11 FEB 2013 13:50
-=======
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  11 FEB 2013 13:53
->>>>>>> Did a compile after pulling Caleb's changes.
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  11 FEB 2013 14:01
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -283,11 +279,7 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 15.
  [1
 
-<<<<<<< HEAD
-{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}] [2] [3]
-=======
-{/usr/local/texlive/2011/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2]
->>>>>>> Did a compile after pulling Caleb's changes.
+{/usr/local/texlive/2011/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 150.
 
@@ -297,36 +289,12 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<<<<<<< HEAD
-(C:\GitRepositories\LongwaveModeling\ReeseHeunJournalPaper.bbl [4]) [5]
-(C:\GitRepositories\LongwaveModeling\ReeseHeunJournalPaper.aux) ) 
+(./ReeseHeunJournalPaper.bbl [4]) [5] (./ReeseHeunJournalPaper.aux) ) 
 Here is how much of TeX's memory you used:
- 2088 strings out of 493921
- 28631 string characters out of 3144879
- 89367 words of memory out of 3000000
- 5358 multiletter control sequences out of 15000+200000
- 29348 words of font info for 66 fonts, out of 3000000 for 9000
- 841 hyphenation exceptions out of 8191
- 30i,8n,32p,970b,271s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Program Fi
-les (x86)/MiKTeX 2.9/fonts/enc/dvips/fontname/8r.enc}<C:/Program Files (x86)/Mi
-KTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Program Files (x86)/MiKT
-eX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files (x86)/MiKTeX
- 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files (x86)/MiKTeX 2.
-9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 2.9/
-fonts/type1/public/amsfonts/cm/cmtt12.pfb><C:/Program Files (x86)/MiKTeX 2.9/fo
-nts/type1/urw/symbol/usyr.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/ur
-w/symbol/usyr.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/times/utmb
-8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/
-Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on ReeseHeunJournalPaper.pdf (5 pages, 104710 bytes).
-=======
-(./ReeseHeunJournalPaper.bbl) [4] [5] (./ReeseHeunJournalPaper.aux) ) 
-Here is how much of TeX's memory you used:
- 2394 strings out of 493633
- 34005 string characters out of 3143378
- 96806 words of memory out of 3000000
- 5645 multiletter control sequences out of 15000+200000
+ 2397 strings out of 493633
+ 34057 string characters out of 3143378
+ 97833 words of memory out of 3000000
+ 5648 multiletter control sequences out of 15000+200000
  29348 words of font info for 66 fonts, out of 3000000 for 9000
  831 hyphenation exceptions out of 8191
  38i,8n,32p,934b,271s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -341,8 +309,7 @@ dist/fonts/type1/urw/symbol/usyr.pfb></usr/local/texlive/2011/texmf-dist/fonts/
 type1/urw/symbol/usyr.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/urw/t
 imes/utmb8a.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/urw/times/utmr8
 a.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on ReeseHeunJournalPaper.pdf (5 pages, 96568 bytes).
->>>>>>> Did a compile after pulling Caleb's changes.
+Output written on ReeseHeunJournalPaper.pdf (5 pages, 97418 bytes).
 PDF statistics:
  61 PDF objects out of 1000 (max. 8388607)
  43 compressed objects within 1 object stream
