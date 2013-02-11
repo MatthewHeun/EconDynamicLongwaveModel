@@ -80,7 +80,23 @@ The time constraints, in conjunction with the first order condition, reduce the 
 
 Where both sides of this equation are dimensionless (to allow application of the exponential factor).
 
-The labor section of the economy can be split into two different sectors; one devoted to innovation and producing new ideas and one devoted to producing goods.
+The labor section of the economy can be split into two different sectors; one devoted to innovation and producing new ideas and one devoted to producing goods. The split between these sectors is based on the wages paid to each, and given by equations \ref{eq:knowledge_comp} and \ref{eq:labor_comp}.
+
+\begin{equation} \label{eq:knowledge_comp}
+w_\mathrm{A,t} L_\mathrm{A,t} = \pi_\mathrm{t} Y_\mathrm{t},
+\end{equation}
+
+\begin{equation} \label{eq:labor_comp}
+w_\mathrm{Y,t} L_\mathrm{Y,t} = (1-\pi) Y_\mathrm{t},
+\end{equation}
+
+Where $w_\mathrm{A,t}$ and $w_\mathrm{Y,t}$ are the wages paid, in \$/year-person, to workers in the knowledge and goods producing sectors respectively, the variables $L_\mathrm{A,t}$ and $L_\mathrm{Y,t}$ are the number of workers employed by each of the sectors, and $\pi_\mathrm{t}$ is the fraction of the economy's total output that is devoted to compensating inventors. In equilibrium it is expected that the wages will be equal, as shown in the following conditon.
+
+\begin{equation} \label{eq:wage_equality}
+w_\mathrm{A,t} = w_\mathrm{Y,t} = w_\mathrm{t},
+\end{equation}
+
+Wage equality allows $\pi_\mathrm{t}$ to be directly proportional to the fraction of the total employed population working in the knowledge sector.
 
 
 \section{Mathematical model from Jones (2001)}
