@@ -15,40 +15,43 @@
 The longwave growth model used as a basis for this project was taken from Jones (2001). The production function that Jones is using to ultimately predict output is given by equation \ref{eq:Jones_production_function} and is a function of the stock of ideas ($a_\mathrm{t}$), labor in the goods producing sector ($l_\mathrm{Y,t}$), land ($t_\mathrm{t}$), and an exogenous shock parameter ($\epsilon_\mathrm{t}$).
 
 \begin{equation} \label{eq:Jones_production_function}
-y_\mathrm{t} = a_\mathrm{t} ^\sigma l_\mathrm{Y,t} ^\beta t_\mathrm{t} ^{1-\beta} \epsilon_\mathrm{t}
+	y_\mathrm{t} = a_\mathrm{t} ^\sigma l_\mathrm{Y,t} ^\beta t_\mathrm{t} ^{1-\beta} \epsilon_\mathrm{t}
 \end{equation}
 
 The production function variables are indexed, referenced against some base year to non-dimensionalize them, and given by the following definitions. Where $Y$ represents the output (\$/year), $A$ represents the stock of knowledge and ideas (ideas/year), and $t$ represents the stock of available land (land/year).
 
 \begin{equation} \label{eq:index_y}
-y_\mathrm{t} \equiv \frac{Y_\mathrm{t}}{Y_\mathrm{0}},
+	y_\mathrm{t} \equiv \frac{Y_\mathrm{t}}{Y_\mathrm{0}}
 \end{equation}
+
 \begin{equation} \label{eq:index_a}
-a_\mathrm{t} \equiv \frac{A_\mathrm{t}}{A_\mathrm{0}},
+	a_\mathrm{t} \equiv \frac{A_\mathrm{t}}{A_\mathrm{0}}
 \end{equation}
+
 \begin{equation} \label{eq:index_l}
-l_\mathrm{Y,t} \equiv \frac{L_\mathrm{Y,t}}{L_\mathrm{Y,0}},
+	l_\mathrm{Y,t} \equiv \frac{L_\mathrm{Y,t}}{L_\mathrm{Y,0}}
 \end{equation}
+
 \begin{equation} \label{eq:index_t}
-t_\mathrm{t} \equiv \frac{T_\mathrm{t}}{T_\mathrm{0}},
+	t_\mathrm{t} \equiv \frac{T_\mathrm{t}}{T_\mathrm{0}}
 \end{equation}
 
 The lowercase variables represent these indexed variables, and it is assumed from here on out that lowercase variables represent the indexed values. These values are unitless.
 
-The utility function from Jones (2001) was the basis for our model and is of the form found in equation \ref{eq:utility_function}. The utility function is used to represent an individuals preferences towards consumption or having children at a point in time. 
+The utility function from Jones (2001) was the basis for our model and is of the form found in Equation \ref{eq:utility_function}. The utility function represents an individual's preferences towards consumption or having children at a point in time. 
 
 \begin{equation} \label{eq:utility_function}
-u(c_\mathrm{t}, b_\mathrm{t}) = \frac{1-\mu}{1-\gamma} \bigg{(}\frac{k_\mathrm{c} \tilde c_\mathrm{t}}{U_\mathrm{c,0}} \bigg{)}^{1-\gamma} + \frac{\mu}{1-\eta} \bigg{(}\frac{k_\mathrm{b} \tilde b_\mathrm{t}}{U_\mathrm{b,0}} \bigg{)}^{1-\eta},
+	u(c_\mathrm{t}, b_\mathrm{t}) = \frac{1-\mu}{1-\gamma} \bigg{(}\frac{k_\mathrm{c} \tilde c_\mathrm{t}}{U_\mathrm{c,0}} \bigg{)}^{1-\gamma} + \frac{\mu}{1-\eta} \bigg{(}\frac{k_\mathrm{b} \tilde b_\mathrm{t}}{U_\mathrm{b,0}} \bigg{)}^{1-\eta}
 \end{equation}
 
-Where $\mu$, $\gamma$, and $\eta$ are dimensionless parameters having values between 0 and 1. $k_\mathrm{c}$ and $k_\mathrm{b}$ represent the amount of utility an individual obtains per unit consumption or birth, in units of utils/\$ and utils/birth respectively. The variable $\tilde c_\mathrm{t}$ is the amount of the individual's consumption in \$/year-person and $\tilde b_\mathrm{t}$ is the number of births in births/year-person. Both the consumption and birth utility terms are divided by the utility in the first year of the simulation, $U_\mathrm{0}$, which is taken to be the year 25,000 B.C. from Jones. It is also important to note that $\tilde c_\mathrm{t}$ is the amount of consumption above a certain subsistence level and $\tilde b_\mathrm{t}$ represents the amount of births above some long-run birth rate, defined by equation \ref{eq:c_tilde} and equation \ref{eq:b_tilde}.
+\noindent $\mu$, $\gamma$, and $\eta$ are dimensionless parameters having values between 0 and 1. $k_\mathrm{c}$ and $k_\mathrm{b}$ represent the amount of utility an individual obtains per unit consumption or birth, in units of utils/\$ and utils/birth respectively. The variable $\tilde c_\mathrm{t}$ is the amount of the individual's consumption in \$/year-person and $\tilde b_\mathrm{t}$ is the number of births in births/year-person. Both the consumption and birth utility terms are divided by the utility in the first year of the simulation, $U_\mathrm{0}$, which is taken to be the year 25,000 B.C. from Jones. It is also important to note that $\tilde c_\mathrm{t}$ is the amount of consumption above a certain subsistence level and $\tilde b_\mathrm{t}$ represents the amount of births above some long-run birth rate, defined by equation \ref{eq:c_tilde} and equation \ref{eq:b_tilde}.
 
 \begin{equation} \label{eq:c_tilde}
-\tilde c_\mathrm{t} \equiv c_\mathrm{t} - \bar c,
+	\tilde c_\mathrm{t} \equiv c_\mathrm{t} - \bar c
 \end{equation}
 
 \begin{equation} \label{eq:b_tilde}
-\tilde b_\mathrm{t} \equiv b_\mathrm{t} - \bar b,
+	\tilde b_\mathrm{t} \equiv b_\mathrm{t} - \bar b
 \end{equation}
 
 Where $\bar c$ is the subsistence level of consumption and $\bar b$ is the long term birth rate, in \$/year-person and births/year-person respectively.
@@ -56,21 +59,21 @@ Where $\bar c$ is the subsistence level of consumption and $\bar b$ is the long 
 The utility function is subject to the following first order condition.
 
 \begin{equation} \label{eq:first_order_condition}
-\frac{\partial u/ \partial\tilde b}{\partial u/ \partial\tilde c} = \frac{w_\mathrm{t}}{\alpha},
+	\frac{\partial u/ \partial\tilde b}{\partial u/ \partial\tilde c} = \frac{w_\mathrm{t}}{\alpha},
 \end{equation}
 
 Where $w_\mathrm{t}$ is the wage rate that a person is paid in \$/year-person and $\alpha$ is a birth rate on the number of births per year in births/year-person. The appearance of these two coefficients are from the time constraints in the economy. These time constraints are given by equations \ref{eq:pop_work}, \ref{eq:consumption_constraint}, and \ref{eq:birth_constraint}.
 
 \begin{equation}\label{eq:pop_work}
-L = \tau_\mathrm{t} N,
+	L = \tau_\mathrm{t} N
 \end{equation}
 
 \begin{equation} \label{eq:consumption_constraint}
-c_\mathrm{t} = w_\mathrm{t} \tau_\mathrm{t},
+	c_\mathrm{t} = w_\mathrm{t} \tau_\mathrm{t}
 \end{equation}
 
 \begin{equation} \label{eq:birth_constraint}
-b_\mathrm{t} = \alpha (1-\tau_\mathrm{t}),
+	b_\mathrm{t} = \alpha (1-\tau_\mathrm{t})
 \end{equation}
 
 Where $\tau$ is a number between 0 and 1 representing the fraction of available time that people spend on labor (unitless), $N$ is the total population, and $L$ is the total amount of available labor in the economy. So, $(1-\tau)$ represents the fraction of available time that's spent on birth.
@@ -78,7 +81,7 @@ Where $\tau$ is a number between 0 and 1 representing the fraction of available 
 The time constraints, in conjunction with the first order condition, reduce the utility function down to a form that directly relates birth and consumption, as shown in equation \ref{eq:FOC_and_time_constraints}.
 
 \begin{equation} \label{eq:FOC_and_time_constraints}
-\frac{k_\mathrm{b}}{U_\mathrm{b,0}} \tilde b_\mathrm{t} = \bigg{[} \frac{k_\mathrm{b}}{U_\mathrm{b,0}} \frac{U_\mathrm{c,0}}{k_\mathrm{c}} \frac{\alpha \mu}{1-\mu} \frac{( \frac{k_\mathrm{c}}{U_\mathrm{c,0}} \tilde c_\mathrm{t} )^\gamma}{w_\mathrm{t}}\bigg{]}^{1/\eta} ,
+	\frac{k_\mathrm{b}}{U_\mathrm{b,0}} \tilde b_\mathrm{t} = \bigg{[} \frac{k_\mathrm{b}}{U_\mathrm{b,0}} \frac{U_\mathrm{c,0}}{k_\mathrm{c}} \frac{\alpha \mu}{1-\mu} \frac{( \frac{k_\mathrm{c}}{U_\mathrm{c,0}} \tilde c_\mathrm{t} )^\gamma}{w_\mathrm{t}}\bigg{]}^{1/\eta}
 \end{equation}
 
 Where both sides of this equation are dimensionless (to allow application of the exponential factor).
@@ -86,64 +89,65 @@ Where both sides of this equation are dimensionless (to allow application of the
 The labor section of the economy can be split into two different sectors; one devoted to innovation and producing new ideas and one devoted to producing goods. The split between these sectors is based on the wages paid to each, and given by equations \ref{eq:knowledge_comp} and \ref{eq:labor_comp}.
 
 \begin{equation} \label{eq:knowledge_comp}
-w_\mathrm{A,t} L_\mathrm{A,t} = \pi_\mathrm{t} Y_\mathrm{t},
+	w_\mathrm{A,t} L_\mathrm{A,t} = \pi_\mathrm{t} Y_\mathrm{t}
 \end{equation}
 
 \begin{equation} \label{eq:labor_comp}
-w_\mathrm{Y,t} L_\mathrm{Y,t} = (1-\pi) Y_\mathrm{t},
+	w_\mathrm{Y,t} L_\mathrm{Y,t} = (1-\pi) Y_\mathrm{t}
 \end{equation}
 
 Where $w_\mathrm{A,t}$ and $w_\mathrm{Y,t}$ are the wages paid, in \$/year-person, to workers in the knowledge and goods producing sectors respectively, and the variables $L_\mathrm{A,t}$ and $L_\mathrm{Y,t}$ are the number of workers employed by each of the sectors. The total labor supply is constrained as the sum of the two sectors.
 
 \begin{equation} \label{labor_supply}
-L_\mathrm{t} = L_\mathrm{A,t} + L_\mathrm{Y,t},
+	L_\mathrm{t} = L_\mathrm{A,t} + L_\mathrm{Y,t}
 \end{equation}
 
 The two labor supplies can also be given as indexed variables, such as in the production function.
 
 \begin{equation}
-l_\mathrm{Y,t} \equiv \frac{L_\mathrm{Y,t}}{L_\mathrm{Y,0}},
-\end{equation}
-\begin{equation}
-l_\mathrm{A,t} \equiv \frac{L_\mathrm{A,t}}{L_\mathrm{A,0}},
+	l_\mathrm{Y,t} \equiv \frac{L_\mathrm{Y,t}}{L_\mathrm{Y,0}}
 \end{equation}
 
-The dimensionless variable $\pi_\mathrm{t}$ is the fraction of the economy's total output ($Y_\mathrm{t}$) that is devoted to compensating inventors. In equilibrium it is expected that the wages will be equal, as shown in the following conditon.
+\begin{equation}
+	l_\mathrm{A,t} \equiv \frac{L_\mathrm{A,t}}{L_\mathrm{A,0}}
+\end{equation}
+
+The dimensionless variable $\pi_\mathrm{t}$ is the fraction of the economy's total output ($Y_\mathrm{t}$) that is devoted to compensating inventors. In equilibrium it is expected that the wages will be equal, as shown in the following condition.
 
 \begin{equation} \label{eq:wage_equality}
-w_\mathrm{A,t} = w_\mathrm{Y,t} = w_\mathrm{t},
+	w_\mathrm{A,t} = w_\mathrm{Y,t} = w_\mathrm{t}
 \end{equation}
 
 The wage equality allows $\pi_\mathrm{t}$ to be directly proportional to the fraction of the total employed population working in the knowledge sector in static equilibrium,
 
 \begin{equation} \label{eq:pi}
-\pi_\mathrm{t} = \frac{L_\mathrm{A,t}}{L_\mathrm{t}}.
+	\pi_\mathrm{t} = \frac{L_\mathrm{A,t}}{L_\mathrm{t}}.
 \end{equation}
 
-There are two differential equations used in this model to show the growth of knowledge and population over time in the production function (equation \ref{eq:Jones_production_function}), since population directly affects the labor force. Land ($t_\mathrm{t}$) is modeled as constant here since it is assumed that the amount of available land does not change. The change in the stock of knowledge (indexed) is given by equation \ref{eq:da_dt},
+There are two differential equations used in this model to show the growth of knowledge and population over time in the production function (equation \ref{eq:Jones_production_function}), since population directly affects the labor force. Land ($t_\mathrm{t}$) is modeled as constant here since it is assumed that the amount of available land does not change. The change in the stock of knowledge (indexed) is given by
 
 \begin{equation} \label{eq:da_dt}
-\frac{da}{dt} = \delta l_\mathrm{A,t}^\lambda a_\mathrm{t}^\phi,
+	\frac{da}{dt} = \delta l_\mathrm{A,t}^\lambda a_\mathrm{t}^\phi,
 \end{equation}
 
-Where $\delta$, $\lambda$, and $\phi$ are constants, $l_\mathrm{A,t}$ is the indexed labor in the knowledge sector of the economy and $a_\mathrm{t}$ is the indexed stock of ideas.
+\noindent where $\delta$, $\lambda$, and $\phi$ are constants, $l_\mathrm{A,t}$ is the indexed labor in the knowledge sector of the economy and $a_\mathrm{t}$ is the indexed stock of ideas.
 
-The growth of the population in this model is based on the birth and mortality rates. The change in the population (indexed) is given by equation \ref{eq:dn_dt},
+The growth of the population in this model is based on the birth and mortality rates. The change in the population (indexed) is given by
 
 \begin{equation} \label{eq:dn_dt}
-\frac{dn}{dt} = b_\mathrm{t} n_\mathrm{t} - d_\mathrm{t} n_\mathrm{t},
+	\frac{dn}{dt} = b_\mathrm{t} n_\mathrm{t} - d_\mathrm{t} n_\mathrm{t},
 \end{equation}
 
-Where $b_\mathrm{t}$ is the birth rate from equation \ref{eq:utility_function}, $n_\mathrm{t}$ is the indexed population, and $d_\mathrm{t}$ is the mortality rate in deaths/person-year. The mortality rate is determined from a fit of historical mortality rate data (from Jones (2001)) and is given by equation \ref{eq:mortality_rate},
+\noindent where $b_\mathrm{t}$ is the birth rate from equation \ref{eq:utility_function}, $n_\mathrm{t}$ is the indexed population, and $d_\mathrm{t}$ is the mortality rate in deaths/person-year. The mortality rate is determined from a fit of historical mortality rate data (from Jones (2001)) and is given by
 
 \begin{equation} \label{eq:mortality_rate}
-d_\mathrm{t} = \frac{1}{\omega_\mathrm{1} z_\mathrm{t}^{\omega_\mathrm{2}} + \omega_\mathrm{3} z_\mathrm{t}} + \bar d,
+	d_\mathrm{t} = \frac{1}{\omega_\mathrm{1} z_\mathrm{t}^{\omega_\mathrm{2}} + \omega_\mathrm{3} z_\mathrm{t}} + \bar d,
 \end{equation}
 
-Where $d_\mathrm{t}$ is the mortality rate and $\bar d$ is the long-run mortality rate, both in deaths/year-person. $\omega_\mathrm{1}$, $\omega_\mathrm{2}$, and $\omega_\mathrm{3}$ are fitted parameters. The variable $z_\mathrm{t}$ is given by equation \ref{eq:z}, and is the ratio of consumption to the subsistence level as it is assumed to be an indicator of a country's mortality rates.
+\noindent where $d_\mathrm{t}$ is the mortality rate and $\bar d$ is the long-run mortality rate, both in deaths/year-person. $\omega_\mathrm{1}$, $\omega_\mathrm{2}$, and $\omega_\mathrm{3}$ are fitted parameters. The variable $z_\mathrm{t}$ is given by equation \ref{eq:z}, and is the ratio of consumption to the subsistence level as it is assumed to be an indicator of a country's mortality rates.
 
 \begin{equation} \label{eq:z}
-z_\mathrm{t} = \frac{c_\mathrm{t}}{\bar c} - 1
+	z_\mathrm{t} = \frac{c_\mathrm{t}}{\bar c} - 1
 \end{equation}
 
 
