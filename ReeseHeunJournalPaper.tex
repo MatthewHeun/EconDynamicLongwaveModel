@@ -18,9 +18,9 @@ In our model, adapted from the longwave growth model of \citet{Jones2001}, econo
 	y_\mathrm{t} = a_\mathrm{t} ^\sigma l_\mathrm{Y,t} ^\beta t_\mathrm{t} ^{1-\beta} \epsilon_\mathrm{t}
 \end{equation}
 
-\noindent where $a_\mathrm{t}$ is the indexed stock of ideas, $l_\mathrm{Y,t}$ is indexed labor in the goods producing sector, $t_\mathrm{t}$ is indexed land (always 1.0), and $\epsilon_\mathrm{t}$ is an exogenous shock parameter. Lowercase variables represent unitless indexed variables.
+\noindent where $a_\mathrm{t}$ is the indexed stock of ideas, $l_\mathrm{Y,t}$ is indexed labor in the goods producing sector, $t_\mathrm{t}$ is indexed land (always 1.0), and $\epsilon_\mathrm{t}$ is an exogenous shock parameter. 
 
-The indexed factors of production ($a$, $l$, and $t$) at time $\mathrm{t}$ are non-dimensionalized by indexing relative to a base year (subscript ``0''):
+Lowercase variables represent unitless indexed variables. The indexed factors of production ($a$, $l$, and $t$) at time $\mathrm{t}$ are non-dimensionalized by indexing relative to a base year (subscript ``0''):
 
 \begin{equation} \label{eq:index_y}
 	y_\mathrm{t} \equiv \frac{Y_\mathrm{t}}{Y_\mathrm{0}}
@@ -40,13 +40,13 @@ The indexed factors of production ($a$, $l$, and $t$) at time $\mathrm{t}$ are n
 
 \noindent with $Y$ representing economic output (in \$/year), $A$ representing the stock of knowledge and ideas (in ideas/year), $L_\mathrm{Y}$ representing labor in the production sector (in workers/year), and $T$ representing the stock of available land ($\mathrm{m}^2$). [*********** Is $A$ really in ideas/year? Or is it really in ideas? --MKH ************]
 
-Our model for preferences between consumption and childrearing is based on the utility function from \citet{Jones2001}:
+Our model for preferences between consumption and childrearing is based on the utility function from \citet{Jones2001}: ***************** Caleb: I'm adding $u_c$ and $u_b$ here. Do you agree? We may also need to define $u_c$ and $u_b$ with equations.  --MKH ************
 
 \begin{equation} \label{eq:utility_function}
-	u(c_\mathrm{t}, b_\mathrm{t}) = \frac{1-\mu}{1-\gamma} \left(\frac{k_\mathrm{c} \tilde c_\mathrm{t}}{U_\mathrm{c,0}} \right)^{1-\gamma} + \frac{\mu}{1-\eta} \left(\frac{k_\mathrm{b} \tilde b_\mathrm{t}}{U_\mathrm{b,0}} \right)^{1-\eta}
+	u(c_\mathrm{t}, b_\mathrm{t}) = u_\mathrm{c} + u_\mathrm{b} = \frac{1-\mu}{1-\gamma} \left(\frac{k_\mathrm{c} \tilde c_\mathrm{t}}{U_\mathrm{c,0}} \right)^{1-\gamma} + \frac{\mu}{1-\eta} \left(\frac{k_\mathrm{b} \tilde b_\mathrm{t}}{U_\mathrm{b,0}} \right)^{1-\eta}
 \end{equation}
 
-\noindent where $\mu$, $\gamma$, and $\eta$ are dimensionless parameters having values between 0 and 1; $k_\mathrm{c}$ and $k_\mathrm{b}$ represent the amount of utility an individual obtains per unit consumption or birth (in units of utils/\$ and utils/birth, respectively); and $U_{\mathrm{c,0}}$ and $U_{\mathrm{b,0}}$ are the utility derived from consumption and childrearing in the first year of the simulation, respectively (in units of utils/year). The variable $\tilde c_\mathrm{t}$ is the amount of the individual's consumption in \$/year-person and $\tilde b_\mathrm{t}$ is the number of births in births/year-person. It is also important to note that $\tilde c_\mathrm{t}$ is the amount of consumption above a certain subsistence level and $\tilde b_\mathrm{t}$ represents the amount of births above some long-run birth rate, defined by equation \ref{eq:c_tilde} and equation \ref{eq:b_tilde}.
+\noindent where $\mu$, $\gamma$, and $\eta$ are dimensionless parameters having values between 0 and 1; $k_\mathrm{c}$ and $k_\mathrm{b}$ represent the utility an individual obtains per unit consumption or birth (in units of utils/\$ and utils/birth, respectively); and $U_{\mathrm{c,0}}$ and $U_{\mathrm{b,0}}$ are the utility derived from consumption and childrearing in the first year of the simulation, respectively (in units of utils/year). ************* Caleb: Need to define $U_{b,0}$ and $U_{c,0}$ with equations here --MKH ****************** The variable $\tilde c_\mathrm{t}$ is the amount of the individual's consumption in \$/year-person and $\tilde b_\mathrm{t}$ is the number of births in births/year-person. $\tilde c_\mathrm{t}$ represents the amount of consumption above subsistence level ($\bar c$ in \$/year-person) and $\tilde b_\mathrm{t}$ represents the amount of births above some long-run birth rate ($\bar b$, in births/year per capita).
 
 \begin{equation} \label{eq:c_tilde}
 	\tilde c_\mathrm{t} \equiv c_\mathrm{t} - \bar c
@@ -56,15 +56,19 @@ Our model for preferences between consumption and childrearing is based on the u
 	\tilde b_\mathrm{t} \equiv b_\mathrm{t} - \bar b
 \end{equation}
 
-Where $\bar c$ is the subsistence level of consumption and $\bar b$ is the long term birth rate, in \$/year-person and births/year-person respectively.
+The first order condition on the utility function indicates that a person will obtain equal incremental utility from spending additional time consuming or rearing children: ******************* Caleb: Is this next equation correct? --MKH *********************
 
-The utility function is subject to the following first order condition.
+\begin{equation} \label{eq:first_order_condition_def}
+	\frac{\partial u_{c}}{\partial L} = \frac{\partial u_{b}}{\partial L}
+\end{equation}
 
-\begin{equation} \label{eq:first_order_condition}
+\noindent The first order condition simplifies to 
+
+\begin{equation} \label{eq:first_order_condition_simplified}
 	\frac{\partial u/ \partial\tilde b}{\partial u/ \partial\tilde c} = \frac{w_\mathrm{t}}{\alpha},
 \end{equation}
 
-Where $w_\mathrm{t}$ is the wage rate that a person is paid in \$/year-person and $\alpha$ is a birth rate on the number of births per year in births/year-person. The appearance of these two coefficients are from the time constraints in the economy. These time constraints are given by equations \ref{eq:pop_work}, \ref{eq:consumption_constraint}, and \ref{eq:birth_constraint}.
+\noindent where $w_\mathrm{t}$ is the wage rate that a worker is paid (in \$/year-person) and $\alpha$ is a birth efficiency (in births/year per capita). [********** Caleb: notice that I'm using ``per capita'' in several places. Is that appropriate? --MKH ********************] $w_\mathrm{t}$ and $\alpha$ come from the time constraints in the economy. These time constraints are given by:
 
 \begin{equation}\label{eq:pop_work}
 	L = \tau_\mathrm{t} N
@@ -78,9 +82,9 @@ Where $w_\mathrm{t}$ is the wage rate that a person is paid in \$/year-person an
 	b_\mathrm{t} = \alpha (1-\tau_\mathrm{t})
 \end{equation}
 
-Where $\tau$ is a number between 0 and 1 representing the fraction of available time that people spend on labor (unitless), $N$ is the total population, and $L$ is the total amount of available labor in the economy. So, $(1-\tau)$ represents the fraction of available time that's spent on birth.
+\noindent where $\tau$ is a number between 0 and 1 representing the fraction of available time that people spend on labor (unitless), $N$ is the total population (in persons), and $L$ is the total amount of available labor in the economy (in persons). So, $(1-\tau)$ represents the fraction of available time spent on childrearing.
 
-Applying the first order condition to the utility function and including time constraints yields an equation that relates birth and consumption:
+Applying the first order condition (Equation \ref{eq:first_order_condition_simplified}) and including time constraints yields an equation that describes preferences for consumption and childrearing:
 
 \begin{equation} \label{eq:FOC_and_time_constraints}
 	\frac{1}{\alpha \mu} \frac{U_\mathrm{b,0}}{k_\mathrm{b}} \left( \frac{k_\mathrm{b}}{U_\mathrm{b,0}} \tilde b_\mathrm{t} \right) ^{\eta} 
@@ -133,7 +137,7 @@ Two differential equations describe the growth of knowledge and population over 
 
 \noindent where $\delta$, $\lambda$, and $\phi$ are constants, $l_\mathrm{A,t}$ is the indexed labor in the knowledge sector of the economy, and $a_\mathrm{t}$ is the indexed stock of ideas.
 
-The rate of change of indexed population ($n$) is a function of birth and mortality rates ($b$ and $d$ in births/year per capita and deaths/year per capita, respectively).
+The rate of change of indexed population ($n$) is a function of birth and mortality rates ($b$ and $d$ in births/year per capita and deaths/year per capita, respectively):
 
 \begin{equation} \label{eq:dn_dt}
 	\frac{dn}{dt} = b_\mathrm{t} n_\mathrm{t} - d_\mathrm{t} n_\mathrm{t},
@@ -145,12 +149,13 @@ The rate of change of indexed population ($n$) is a function of birth and mortal
 	d_\mathrm{t} = \frac{1}{\omega_\mathrm{1} z_\mathrm{t}^{\omega_\mathrm{2}} + \omega_\mathrm{3} z_\mathrm{t}} + \bar d,
 \end{equation}
 
-\noindent where $d_\mathrm{t}$ is the mortality rate and $\bar d$ is the long-run mortality rate, both in deaths/year-person. $\omega_\mathrm{1}$, $\omega_\mathrm{2}$, and $\omega_\mathrm{3}$ are fitted parameters. The variable $z_\mathrm{t}$ is given by equation \ref{eq:z}, and is the ratio of consumption to the subsistence level as it is assumed to be an indicator of a country's mortality rates.
+\noindent where $d_\mathrm{t}$ is the mortality rate and $\bar d$ is the long-run mortality rate, both in deaths/year-person. $\omega_\mathrm{1}$, $\omega_\mathrm{2}$, and $\omega_\mathrm{3}$ are fitted parameters. The ratio of consumption to the subsistence level is given by $z_\mathrm{t}$:
 
 \begin{equation} \label{eq:z}
-	z_\mathrm{t} = \frac{c_\mathrm{t}}{\bar c} - 1
+	z_\mathrm{t} = \frac{c_\mathrm{t}}{\bar c} - 1, 
 \end{equation}
 
+\noindent which is an indicator of the mortality rate through Equation \ref{eq:mortality_rate}.
 
 
 \subsection{A second order heading}
