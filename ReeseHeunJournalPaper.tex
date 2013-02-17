@@ -80,15 +80,14 @@ Where $w_\mathrm{t}$ is the wage rate that a person is paid in \$/year-person an
 
 Where $\tau$ is a number between 0 and 1 representing the fraction of available time that people spend on labor (unitless), $N$ is the total population, and $L$ is the total amount of available labor in the economy. So, $(1-\tau)$ represents the fraction of available time that's spent on birth.
 
-The time constraints, in conjunction with the first order condition, reduce the utility function down to a form that directly relates birth and consumption, as shown in equation \ref{eq:FOC_and_time_constraints}.
+Applying the first order condition to the utility function and including time constraints yields an equation that relates birth and consumption:
 
 \begin{equation} \label{eq:FOC_and_time_constraints}
-	\frac{k_\mathrm{b}}{U_\mathrm{b,0}} \tilde b_\mathrm{t} = \left[ \frac{k_\mathrm{b}}{U_\mathrm{b,0}} \frac{U_\mathrm{c,0}}{k_\mathrm{c}} \frac{\alpha \mu}{1-\mu} \frac{( \frac{k_\mathrm{c}}{U_\mathrm{c,0}} \tilde c_\mathrm{t} )^\gamma}{w_\mathrm{t}}\right]^{1/\eta}
+	\frac{1}{\alpha \mu} \frac{U_\mathrm{b,0}}{k_\mathrm{b}} \left( \frac{k_\mathrm{b}}{U_\mathrm{b,0}} \tilde b_\mathrm{t} \right) ^{\eta} 
+	= \frac{1}{w_\mathrm{t}(1-\mu)} \frac{U_\mathrm{c,0}}{k_\mathrm{c}}  \left( \frac{k_\mathrm{c}}{U_\mathrm{c,0}} \tilde c_\mathrm{t} \right)^\gamma .
 \end{equation}
 
-\noindent where both sides of this equation are dimensionless (to allow application of the exponential factor).
-
-The labor section of the economy can be split into two different sectors; one devoted to innovation and producing new ideas and one devoted to producing goods. The split between these sectors is based on the wages paid to each, and given by equations \ref{eq:knowledge_comp} and \ref{eq:labor_comp}.
+Labor is split between two sectors; one devoted to innovation and producing new ideas ($A$) and one devoted to producing goods ($Y$). The split between these sectors is based on the wages paid to each as shown in the equations below:
 
 \begin{equation} \label{eq:knowledge_comp}
 	w_\mathrm{A,t} L_\mathrm{A,t} = \pi_\mathrm{t} Y_\mathrm{t}
@@ -98,13 +97,13 @@ The labor section of the economy can be split into two different sectors; one de
 	w_\mathrm{Y,t} L_\mathrm{Y,t} = (1-\pi) Y_\mathrm{t}
 \end{equation}
 
-Where $w_\mathrm{A,t}$ and $w_\mathrm{Y,t}$ are the wages paid, in \$/year-person, to workers in the knowledge and goods producing sectors respectively, and the variables $L_\mathrm{A,t}$ and $L_\mathrm{Y,t}$ are the number of workers employed by each of the sectors. The total labor supply is constrained as the sum of the two sectors.
+\noindent where $w_\mathrm{A,t}$ and $w_\mathrm{Y,t}$ are the wages paid to workers in the knowledge and goods producing sectors respectively (in \$/person-year), and $L_\mathrm{A,t}$ and $L_\mathrm{Y,t}$ represent the number of workers employed by each of the sectors (in persons/year). The total labor supply is constrained as the sum of the two sectors.
 
 \begin{equation} \label{labor_supply}
 	L_\mathrm{t} = L_\mathrm{A,t} + L_\mathrm{Y,t}
 \end{equation}
 
-The two labor supplies can also be given as indexed variables, such as in the production function.
+The two labor supplies can also indexed when necessary.
 
 \begin{equation}
 	l_\mathrm{Y,t} \equiv \frac{L_\mathrm{Y,t}}{L_\mathrm{Y,0}}
@@ -114,27 +113,27 @@ The two labor supplies can also be given as indexed variables, such as in the pr
 	l_\mathrm{A,t} \equiv \frac{L_\mathrm{A,t}}{L_\mathrm{A,0}}
 \end{equation}
 
-The dimensionless variable $\pi_\mathrm{t}$ is the fraction of the economy's total output ($Y_\mathrm{t}$) that is devoted to compensating inventors. In equilibrium it is expected that the wages will be equal, as shown in the following condition.
+In equilibrium, it is expected that the wages will be equal.
 
 \begin{equation} \label{eq:wage_equality}
 	w_\mathrm{A,t} = w_\mathrm{Y,t} = w_\mathrm{t}
 \end{equation}
 
-The wage equality allows $\pi_\mathrm{t}$ to be directly proportional to the fraction of the total employed population working in the knowledge sector in static equilibrium,
+The dimensionless variable $\pi_\mathrm{t}$ is the fraction of the economy's total output ($Y_\mathrm{t}$) that is devoted to compensating inventors. The wage equality allows $\pi_\mathrm{t}$ to be directly proportional to the fraction of the total employed population working in the knowledge sector in static equilibrium.
 
 \begin{equation} \label{eq:pi}
-	\pi_\mathrm{t} = \frac{L_\mathrm{A,t}}{L_\mathrm{t}}.
+	\pi_\mathrm{t} = \frac{L_\mathrm{A,t}}{L_\mathrm{t}}
 \end{equation}
 
-There are two differential equations used in this model to show the growth of knowledge and population over time in the production function (equation \ref{eq:Jones_production_function}), since population directly affects the labor force. Land ($t_\mathrm{t}$) is modeled as constant here since it is assumed that the amount of available land does not change. The change in the stock of knowledge (indexed) is given by
+Two differential equations describe the growth of knowledge and population over time in the production function (Equation \ref{eq:Jones_production_function}), because population directly affects the labor force. The rate of change in the indexed stock of knowledge ($a_{\mathrm{t}}$) is given by
 
 \begin{equation} \label{eq:da_dt}
 	\frac{da}{dt} = \delta l_\mathrm{A,t}^\lambda a_\mathrm{t}^\phi,
 \end{equation}
 
-\noindent where $\delta$, $\lambda$, and $\phi$ are constants, $l_\mathrm{A,t}$ is the indexed labor in the knowledge sector of the economy and $a_\mathrm{t}$ is the indexed stock of ideas.
+\noindent where $\delta$, $\lambda$, and $\phi$ are constants, $l_\mathrm{A,t}$ is the indexed labor in the knowledge sector of the economy, and $a_\mathrm{t}$ is the indexed stock of ideas.
 
-The growth of the population in this model is based on the birth and mortality rates. The change in the population (indexed) is given by
+The rate of change of indexed population ($n$) is a function of birth and mortality rates ($b$ and $d$ in births/year per capita and deaths/year per capita, respectively).
 
 \begin{equation} \label{eq:dn_dt}
 	\frac{dn}{dt} = b_\mathrm{t} n_\mathrm{t} - d_\mathrm{t} n_\mathrm{t},
