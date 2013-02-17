@@ -12,7 +12,7 @@
 %% the article.
 
 \section{Longwave growth model}
-In our model, adapted from the longwave growth model of \citet{Jones2001}, economic production is given by
+In our model, adapted from the longwave growth model of \citet{Jones:2001wn}, economic production is given by
 
 \begin{equation} \label{eq:Jones_production_function}
 	y_\mathrm{t} = a_\mathrm{t} ^\sigma l_\mathrm{Y,t} ^\beta t_\mathrm{t} ^{1-\beta} \epsilon_\mathrm{t}
@@ -40,7 +40,7 @@ Lowercase variables represent unitless indexed variables. The indexed factors of
 
 \noindent with $Y$ representing economic output (in \$/year), $A$ representing the stock of knowledge and ideas (in ideas/year), $L_\mathrm{Y}$ representing labor in the production sector (in workers/year), and $T$ representing the stock of available land ($\mathrm{m}^2$). [*********** Is $A$ really in ideas/year? Or is it really in ideas? --MKH ************]
 
-Our model for preferences between consumption and childrearing is based on the utility function from \citet{Jones2001}: ***************** Caleb: I'm adding $u_c$ and $u_b$ here. Do you agree? We may also need to define $u_c$ and $u_b$ with equations.  --MKH ************
+Our model for preferences between consumption and childrearing is based on the utility function from \citet{Jones:2001wn}: ***************** Caleb: I'm adding $u_c$ and $u_b$ here. Do you agree? We may also need to define $u_c$ and $u_b$ with equations.  --MKH ************
 
 \begin{equation} \label{eq:utility_function}
 	u(c_\mathrm{t}, b_\mathrm{t}) = u_\mathrm{c} + u_\mathrm{b} = \frac{1-\mu}{1-\gamma} \left(\frac{k_\mathrm{c} \tilde c_\mathrm{t}}{U_\mathrm{c,0}} \right)^{1-\gamma} + \frac{\mu}{1-\eta} \left(\frac{k_\mathrm{b} \tilde b_\mathrm{t}}{U_\mathrm{b,0}} \right)^{1-\eta}
@@ -143,7 +143,7 @@ The rate of change of indexed population ($n$) is a function of birth and mortal
 	\frac{dn}{dt} = b_\mathrm{t} n_\mathrm{t} - d_\mathrm{t} n_\mathrm{t},
 \end{equation}
 
-\noindent where $b_\mathrm{t}$ is the birth rate from Equation \ref{eq:utility_function}, $n_\mathrm{t}$ is the indexed population, and $d_\mathrm{t}$ is the mortality rate in deaths/person-year. The mortality rate is determined from a fit of historical mortality rate data \citep{Jones2001} and is given by
+\noindent where $b_\mathrm{t}$ is the birth rate from Equation \ref{eq:utility_function}, $n_\mathrm{t}$ is the indexed population, and $d_\mathrm{t}$ is the mortality rate in deaths/person-year. The mortality rate is determined from a fit of historical mortality rate data \citep{Jones:2001wn} and is given by
 
 \begin{equation} \label{eq:mortality_rate}
 	d_\mathrm{t} = \frac{1}{\omega_\mathrm{1} z_\mathrm{t}^{\omega_\mathrm{2}} + \omega_\mathrm{3} z_\mathrm{t}} + \bar d,
