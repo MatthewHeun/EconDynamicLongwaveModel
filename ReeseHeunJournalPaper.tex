@@ -12,13 +12,15 @@
 %% the article.
 
 \section{Longwave growth model}
-Our model is adapted from the longwave growth model of \citet{Jones2001}. The production function is given by Equation \ref{eq:Jones_production_function} and is a function of the stock of ideas ($a_\mathrm{t}$), labor in the goods producing sector ($l_\mathrm{Y,t}$), land ($t_\mathrm{t}$), and an exogenous shock parameter ($\epsilon_\mathrm{t}$).
+In our model, adapted from the longwave growth model of \citet{Jones2001}, economic production is given by
 
 \begin{equation} \label{eq:Jones_production_function}
 	y_\mathrm{t} = a_\mathrm{t} ^\sigma l_\mathrm{Y,t} ^\beta t_\mathrm{t} ^{1-\beta} \epsilon_\mathrm{t}
 \end{equation}
 
-The factors of production ($l$ and $t$) are non-dimensionalized by indexing relative to a base year as shown in the following equations
+\noindent where $a_\mathrm{t}$ is the indexed stock of ideas, $l_\mathrm{Y,t}$ is indexed labor in the goods producing sector, $t_\mathrm{t}$ is indexed land (always 1.0), and $\epsilon_\mathrm{t}$ is an exogenous shock parameter. Lowercase variables represent unitless indexed variables.
+
+The indexed factors of production ($a$, $l$, and $t$) at time $\mathrm{t}$ are non-dimensionalized by indexing relative to a base year (subscript ``0''):
 
 \begin{equation} \label{eq:index_y}
 	y_\mathrm{t} \equiv \frac{Y_\mathrm{t}}{Y_\mathrm{0}}
@@ -36,15 +38,15 @@ The factors of production ($l$ and $t$) are non-dimensionalized by indexing rela
 	t_\mathrm{t} \equiv \frac{T_\mathrm{t}}{T_\mathrm{0}}
 \end{equation}
 
-\noindent where $Y$ represents economic output (in \$/year), $A$ represents the stock of knowledge and ideas (ideas/year), $L_\mathrm{Y}$ represents labor in the production sector (workers/year), and $T$ represents the stock of available land ($\mathrm{m}^2$/year). [*********** Is $A$ really in ideas/year? Or is it really in ideas? --MKH ************] Lowercase variables represent unitless indexed variables; the subscript ``t'' represents the time period; and the subscript ``0'' represents initial values of the variables.
+\noindent with $Y$ representing economic output (in \$/year), $A$ representing the stock of knowledge and ideas (in ideas/year), $L_\mathrm{Y}$ representing labor in the production sector (in workers/year), and $T$ representing the stock of available land ($\mathrm{m}^2$). [*********** Is $A$ really in ideas/year? Or is it really in ideas? --MKH ************]
 
-The utility function from \citet{Jones2001} forms the basis for our model for an individual's preferences towards consumption or having children at a point in time.
+Our model for preferences between consumption and childrearing is based on the utility function from \citet{Jones2001}:
 
 \begin{equation} \label{eq:utility_function}
 	u(c_\mathrm{t}, b_\mathrm{t}) = \frac{1-\mu}{1-\gamma} \left(\frac{k_\mathrm{c} \tilde c_\mathrm{t}}{U_\mathrm{c,0}} \right)^{1-\gamma} + \frac{\mu}{1-\eta} \left(\frac{k_\mathrm{b} \tilde b_\mathrm{t}}{U_\mathrm{b,0}} \right)^{1-\eta}
 \end{equation}
 
-\noindent $\mu$, $\gamma$, and $\eta$ are dimensionless parameters having values between 0 and 1. $k_\mathrm{c}$ and $k_\mathrm{b}$ represent the amount of utility an individual obtains per unit consumption or birth, in units of utils/\$ and utils/birth respectively. The variable $\tilde c_\mathrm{t}$ is the amount of the individual's consumption in \$/year-person and $\tilde b_\mathrm{t}$ is the number of births in births/year-person. Both the consumption and birth utility terms are divided by the utility in the first year of the simulation, $U_\mathrm{0}$, which is taken to be the year 25,000 B.C. from Jones. It is also important to note that $\tilde c_\mathrm{t}$ is the amount of consumption above a certain subsistence level and $\tilde b_\mathrm{t}$ represents the amount of births above some long-run birth rate, defined by equation \ref{eq:c_tilde} and equation \ref{eq:b_tilde}.
+\noindent where $\mu$, $\gamma$, and $\eta$ are dimensionless parameters having values between 0 and 1; $k_\mathrm{c}$ and $k_\mathrm{b}$ represent the amount of utility an individual obtains per unit consumption or birth (in units of utils/\$ and utils/birth, respectively); and $U_{\mathrm{c,0}}$ and $U_{\mathrm{b,0}}$ are the utility derived from consumption and childrearing in the first year of the simulation, respectively (in units of utils/year). The variable $\tilde c_\mathrm{t}$ is the amount of the individual's consumption in \$/year-person and $\tilde b_\mathrm{t}$ is the number of births in births/year-person. It is also important to note that $\tilde c_\mathrm{t}$ is the amount of consumption above a certain subsistence level and $\tilde b_\mathrm{t}$ represents the amount of births above some long-run birth rate, defined by equation \ref{eq:c_tilde} and equation \ref{eq:b_tilde}.
 
 \begin{equation} \label{eq:c_tilde}
 	\tilde c_\mathrm{t} \equiv c_\mathrm{t} - \bar c
