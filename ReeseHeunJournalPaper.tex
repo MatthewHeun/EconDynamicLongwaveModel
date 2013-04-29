@@ -11,7 +11,7 @@
 %% sources, etc.). Start the document with the first section or paragraph of
 %% the article.
 
-\section{Longwave growth model}
+\section{The model}
 In our model, adapted from the longwave growth model of \citet{Jones:2001wn}, economic production is given by
 
 \begin{equation} \label{eq:Jones_production_function}
@@ -38,15 +38,15 @@ Lowercase variables represent unitless indexed variables. The indexed factors of
 	t_\mathrm{t} \equiv \frac{T_\mathrm{t}}{T_\mathrm{0}}
 \end{equation}
 
-\noindent with $Y$ representing economic output (in \$/year), $A$ representing the stock of knowledge and ideas (in ideas/year), $L_\mathrm{Y}$ representing labor in the production sector (in workers/year), and $T$ representing the stock of available land ($\mathrm{m}^2$). [*********** Is $A$ really in ideas/year? Or is it really in ideas? --MKH ************]
+\noindent with $Y$ representing economic output (in \$/year), $A$ representing the stock of knowledge and ideas (in ideas), $L_\mathrm{Y}$ representing labor in the production sector (in workers/year), and $T$ representing the stock of available land ($\mathrm{m}^2$).
 
-Our model for preferences between consumption and childrearing is based on the utility function from \citet{Jones:2001wn}: ***************** Caleb: I'm adding $u_c$ and $u_b$ here. Do you agree? We may also need to define $u_c$ and $u_b$ with equations.  --MKH ************
+Our model for preferences between consumption and childrearing is based on the utility function from \citet{Jones:2001wn}:
 
 \begin{equation} \label{eq:utility_function}
 	u(c_\mathrm{t}, b_\mathrm{t}) = u_\mathrm{c} + u_\mathrm{b} = \frac{1-\mu}{1-\gamma} \left(\frac{k_\mathrm{c} \tilde c_\mathrm{t}}{U_\mathrm{c,0}} \right)^{1-\gamma} + \frac{\mu}{1-\eta} \left(\frac{k_\mathrm{b} \tilde b_\mathrm{t}}{U_\mathrm{b,0}} \right)^{1-\eta}
 \end{equation}
 
-\noindent where $\mu$, $\gamma$, and $\eta$ are dimensionless parameters having values between 0 and 1; $k_\mathrm{c}$ and $k_\mathrm{b}$ represent the utility an individual obtains per unit consumption or birth (in units of utils/\$ and utils/birth, respectively); and $U_{\mathrm{c,0}}$ and $U_{\mathrm{b,0}}$ are the utility derived from consumption and childrearing in the first year of the simulation, respectively (in units of utils/year). ************* Caleb: Need to define $U_{b,0}$ and $U_{c,0}$ with equations here --MKH ****************** The variable $\tilde c_\mathrm{t}$ is the amount of the individual's consumption in \$/year-person and $\tilde b_\mathrm{t}$ is the number of births in births/year-person. $\tilde c_\mathrm{t}$ represents the amount of consumption above subsistence level ($\bar c$ in \$/year-person) and $\tilde b_\mathrm{t}$ represents the amount of births above some long-run birth rate ($\bar b$, in births/year per capita).
+\noindent where $\mu$, $\gamma$, and $\eta$ are dimensionless parameters having values between 0 and 1; $k_\mathrm{c}$ and $k_\mathrm{b}$ represent the utility an individual obtains per unit consumption or birth (in units of utils/\$ and utils/birth, respectively); and $U_{\mathrm{c,0}}$ and $U_{\mathrm{b,0}}$ are the utility derived from consumption and childrearing in the first year of the simulation, respectively (in units of utils/year). The variable $\tilde c_\mathrm{t}$ is the amount of the individual's consumption in \$/year-person and $\tilde b_\mathrm{t}$ is the number of births in births/year-person. $\tilde c_\mathrm{t}$ represents the amount of consumption above subsistence level ($\bar c$ in \$/year-person) and $\tilde b_\mathrm{t}$ represents the amount of births above some long-run birth rate ($\bar b$, in births/year per capita).$u_\mathrm{c}$ and $u_\mathrm{b}$ are the utilities obtained from consumption and births, represented by the left and right terms respectively in the last part of the equation.
 
 \begin{equation} \label{eq:c_tilde}
 	\tilde c_\mathrm{t} \equiv c_\mathrm{t} - \bar c
@@ -56,10 +56,10 @@ Our model for preferences between consumption and childrearing is based on the u
 	\tilde b_\mathrm{t} \equiv b_\mathrm{t} - \bar b
 \end{equation}
 
-The first order condition on the utility function indicates that a person will obtain equal incremental utility from spending additional time consuming or rearing children: ******************* Caleb: Is this next equation correct? --MKH *********************
+The first order condition on the utility function indicates that a person will obtain equal incremental utility from spending additional time consuming or rearing children:
 
 \begin{equation} \label{eq:first_order_condition_def}
-	\frac{\partial u_{c}}{\partial L} = \frac{\partial u_{b}}{\partial L}
+	\frac{\partial u_{c}}{\partial \tau} = \frac{\partial u_{b}}{\partial \tau}
 \end{equation}
 
 \noindent The first order condition simplifies to 
@@ -156,6 +156,10 @@ The rate of change of indexed population ($n$) is a function of birth and mortal
 \end{equation}
 
 \noindent which is an indicator of the mortality rate through Equation \ref{eq:mortality_rate}.
+
+\section{Determining year 0 information}
+
+The 
 
 
 \subsection{A second order heading}
