@@ -1,21 +1,31 @@
+.Rproj.user
+.Rhistory
+.RData
+/cache
 #
-# LaTeX-generated files
+# Files created by MacOSX
+# 
+.DS_Store
+#
+# Files created by LaTeX
 #
 ReeseHeunJournalPaper.pdf
-ReeseHeunJournalPaper.synctex.gz
-ReeseHeunJournalPaper.aux
-ReeseHeunJournalPaper.bbl
+LongwaveModelPaper.pdf
+*.log
+*.gz
+*.tikz
+*.aux
+*.spl
+*-concordance.tex
+*-tikzDictionary
+*.tex
+*.vrb
+*.bbl
 ReeseHeunJournalPaper.blg
-ReeseHeunJournalPaper.log
-
+figure/
 #
-# Files from OSX
+# Files created by beamer
 #
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-Icon?
-ehthumbs.db
-Thumbs.db
+*.nav
+*.snm
+*.toc
