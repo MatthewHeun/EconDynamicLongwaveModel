@@ -1,0 +1,109 @@
+% This article has been prepared for publication in Energy Economics in RStudio with knitr.
+
+\documentclass[letterpaper,12pt]{article}
+\usepackage{dgjournal}          
+\usepackage{mathptmx}
+\usepackage{graphics}
+\usepackage[authoryear,comma,longnamesfirst,sectionbib]{natbib} 
+
+\begin{document}
+
+<<setup_parent, echo=FALSE, message=FALSE, eval=TRUE>>=
+require(deSolve)
+require(knitr)
+require(lattice)
+require(latticeExtra)
+require(ggplot2)
+require(car)
+require(mosaic)
+require(xtable)
+require(reshape2) # Provides access to data melting. See http://cran.r-project.org/web/packages/reshape2/reshape2.pdf
+# tikz allows use of LaTeX formatting and font in graphs. Allows for a consistent look across the paper.
+# See http://r-forge.r-project.org/R/?group_id=440 for instructions on installing tikzDevice.
+require(tikzDevice) 
+trellis.par.set(theme=theme.mosaic())
+options(width=75)
+options(show.signif.stars=TRUE)
+opts_chunk$set(
+  # ********************************************************************************************************
+  eval=TRUE,
+  # ********************************************************************************************************
+  dev='tikz',    #Allows LaTeX code in graphical output. E.g., "$y$" for a variable name in the legend for a graph.
+  tidy=FALSE,
+  comment=NA,
+  #Tells whether to cache output from chunks are saved. Cacheing saves time. 
+  #However, references to LaTeX tables DO NOT WORK if cacheing is turned on (i.e., cache=TRUE).
+  cache=FALSE,
+  warning=FALSE,  #Tells whether to show warnings in the output.
+  message=FALSE, #Turns off messages for all chunks. Set TRUE on an individual chunk to see it.
+  echo=FALSE     #Tells whether to echo code for all chunks. Set TRUE on an individual chunk to see its code.
+)
+
+########### Several global parameters for graphs. Set here and use below to ensure consistent appearance of graphs.
+maxWidth <- 6.5 #Inches
+# Full page lattice plot sizes
+threePanelGraphWidth <- maxWidth
+threePanelGraphHeight <- 3.17 #Inches
+ninePanelGraphWidth <- maxWidth     
+ninePanelGraphHeight <- 7.5  #Inches
+presentationGraph1RowHeight <- 2.8 #Inches
+presentationGraph2ColWidth <- 2 #Inches
+presentationGraph1ColWidth <- 2*presentationGraph2ColWidth
+keyTextSize <- 0.85 #85% of normal size
+keyColumns <- 1 #Want only 1 column in the key for lattice graphs
+defaultKeyXLoc <- 0.01 #x position of the key. This default is good for 9-panel graphs.
+defaultKeyYLoc <- 0.95 #y position of the key. This default is good for 9-panel graphs.
+# Other graph parameters that apply to all graphs
+scaleTextSize <- 0.8  #Multiple of normal size
+scaleTickSize <- -0.5 #50% of normal size and pointing INWARD!
+@
+
+<<Test_DAE_Solver, eval=TRUE>>=
+###########################
+# Example of an ODE using the van der Pol equation from the examples in 
+# Soetaert, Karline, Thomas Petzoldt, and R Woodrow Setzer. 2010. “Solving Differential Equations in R.” 
+# The R Journal 2 (2) (December 30): 1–11.
+##
+vdpol <- function (t, y, mu) {
+          # Dereference the names into something more readable.
+          y1 <- y["y1"]
+          y2 <- y["y2"]
+          # Calculate derivatives
+          dy1dt <- y2
+          dy2dt <- mu * (1 - y1^2) * y2 - y1
+          # Build an outgoing list of the derivatives
+          out <- list(c(dy1dt=dy1dt, dy2dt=dy2dt))
+          return(out)
+}
+
+yini <- c(y1 = 2, y2 = 0)
+stiff    <- ode(y = yini, func = vdpol, times = 0:3000,                parms = 1000)
+nonstiff <- ode(y = yini, func = vdpol, times = seq(0, 30, by = 0.01), parms = 1)
+head(stiff, n = 3)
+plot(stiff,    type = "l", which = "y1", lwd = 2, ylab = "y", main = "IVP ODE, stiff")
+plot(nonstiff, type = "l", which = "y1", lwd = 2, ylab = "y", main = "IVP ODE, nonstiff")
+
+###########################
+# Example of solving a DAE using the Rober problem from the examples in 
+# Soetaert, Karline, Thomas Petzoldt, and R Woodrow Setzer. 2010. “Solving Differential Equations in R.” 
+# The R Journal 2 (2) (December 30): 1–11.
+##
+daefun <- function(t, y, dy, parms) {
+            res1 <- - dy[1] - 0.04 * y[1] + 1e4 * y[2] * y[3]
+            res2 <- - dy[2] + 0.04 * y[1] - 1e4 * y[2] * y[3] - 3e7 * y[2]^2
+            res3 <- y[1] + y[2] + y[3] - 1
+            list(c(res1, res2, res3), error = as.vector(y[1] + y[2] + y[3]) - 1)
+}
+yini <-c(y1=1,y2=0,y3=0) 
+dyini <- c(-0.04, 0.04, 0)
+times <- 10 ^ seq(-6,6,0.1)
+print(system.time(out <-daspk(y = yini, dy = dyini, times = times, res = daefun, parms = NULL)))
+plot(out, ylab = "conc.", xlab = "time", type = "l", lwd = 2, log = "x")
+mtext("IVP DAE", side = 3, outer = TRUE, line = -1)
+@
+
+%% BibTeX support
+\bibliographystyle{DeGruyter}
+\bibliography{ReeseHeunJournalPaper}
+
+\end{document}
