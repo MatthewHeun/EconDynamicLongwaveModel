@@ -1,7 +1,7 @@
 \documentclass[letterpaper,12pt]{article}
 \usepackage{dgjournal}          
 \usepackage{mathptmx}
-\usepackage{graphicx}
+\usepackage{graphicx} % Allows use of width and scale options for \includegraphics
 \usepackage[authoryear,comma,longnamesfirst,sectionbib]{natbib} 
 
 \begin{document}
@@ -92,7 +92,7 @@ The first order condition on the utility function indicates that a person will o
 	\frac{\partial u/ \partial\tilde b}{\partial u/ \partial\tilde c} = \frac{w_\mathrm{t}}{\alpha},
 \end{equation}
 
-\noindent where $w_\mathrm{t}$ is the wage rate that a worker is paid (in \$/year-person ***** per worker or per capita? *******) and $\alpha$ is a birth efficiency (in births/year-capita). [********** Caleb: notice that I'm using ``per capita'' in several places. Is that appropriate? I think we want to avoid ``per person'' wherever possible, preferring instead ``per capita'' or ``per worker.'' --Prof. Heun ********************] $w_\mathrm{t}$ and $\alpha$ come from the time constraints in the economy. These time constraints are given by:
+\noindent where $w_\mathrm{t}$ is the wage rate that a worker is paid (in \$/year-person ***** per worker or per capita? *******) and $\alpha$ is a birth efficiency (in births/year-capita). [**** Caleb: notice that I'm using ``per capita'' in several places. Is that appropriate? I think we want to avoid ``per person'' wherever possible, preferring instead ``per capita'' or ``per worker.'' --Prof. Heun ****] $w_\mathrm{t}$ and $\alpha$ come from the time constraints in the economy. These time constraints are given by:
 
 \begin{equation}\label{eq:pop_work}
 	L = \tau_\mathrm{t} N
@@ -173,7 +173,7 @@ The rate of change of indexed population ($n$) is a function of birth and mortal
 	d_\mathrm{t} = \frac{1}{\omega_\mathrm{1} z_\mathrm{t}^{\omega_\mathrm{2}} + \omega_\mathrm{3} z_\mathrm{t}} + \bar d,
 \end{equation}
 
-\noindent where $d_\mathrm{t}$ is the mortality rate and $\bar d$ is the long-run mortality rate, both in deaths/year-person ***** per worker or per capita? *******. $\omega_\mathrm{1}$, $\omega_\mathrm{2}$, and $\omega_\mathrm{3}$ are fitted parameters. The ratio of consumption to the subsistence level is given by $z_\mathrm{t}$:
+\noindent where $d_\mathrm{t}$ is the mortality rate and $\bar d$ is the long-run mortality rate, both in units of deaths/year-person ***** per worker or per capita? *******. $\omega_\mathrm{1}$, $\omega_\mathrm{2}$, and $\omega_\mathrm{3}$ are fitted parameters. The ratio of consumption to the subsistence level is given by $z_\mathrm{t}$:
 
 \begin{equation} \label{eq:z}
 	z_\mathrm{t} = \frac{c_\mathrm{t}}{\bar c} - 1, 
