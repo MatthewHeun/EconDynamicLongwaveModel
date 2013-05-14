@@ -11,8 +11,17 @@
 %% sources, etc.). Start the document with the first section or paragraph of
 %% the article.
 
+\section*{Abstract}
+
+\section{Introduction}
+
 \section{The model}
-In our model, adapted from the longwave growth model of \citet{Jones:2001wn}, economic production is given by
+
+The model is adapted from the longwave growth model of \citet{Jones:2001wn}.
+
+\subsection{The model without energy}
+
+For \citet{Jones:2001wn}, economic production is given by
 
 \begin{equation} \label{eq:Jones_production_function}
 	y_\mathrm{t} = a_\mathrm{t} ^\sigma l_\mathrm{Y,t} ^\beta t_\mathrm{t} ^{1-\beta} \epsilon_\mathrm{t}
@@ -46,7 +55,7 @@ Our model for preferences between consumption and childrearing is based on the u
 	u(c_\mathrm{t}, b_\mathrm{t}) = u_\mathrm{c} + u_\mathrm{b} = \frac{1-\mu}{1-\gamma} \left(\frac{k_\mathrm{c} \tilde c_\mathrm{t}}{U_\mathrm{c,0}} \right)^{1-\gamma} + \frac{\mu}{1-\eta} \left(\frac{k_\mathrm{b} \tilde b_\mathrm{t}}{U_\mathrm{b,0}} \right)^{1-\eta}
 \end{equation}
 
-\noindent where $\mu$, $\gamma$, and $\eta$ are dimensionless parameters having values between 0 and 1; $k_\mathrm{c}$ and $k_\mathrm{b}$ represent the utility an individual obtains per unit consumption or birth (in units of utils/\$ and utils/birth, respectively); and $U_{\mathrm{c,0}}$ and $U_{\mathrm{b,0}}$ are the utility derived from consumption and childrearing in the first year of the simulation, respectively (in units of utils/year). The variable $\tilde c_\mathrm{t}$ is the amount of the individual's consumption in \$/year-person and $\tilde b_\mathrm{t}$ is the number of births in births/year-person. $\tilde c_\mathrm{t}$ represents the amount of consumption above subsistence level ($\bar c$ in \$/year-person) and $\tilde b_\mathrm{t}$ represents the amount of births above some long-run birth rate ($\bar b$, in births/year per capita).$u_\mathrm{c}$ and $u_\mathrm{b}$ are the utilities obtained from consumption and births, represented by the left and right terms respectively in the last part of the equation.
+\noindent where $\mu$, $\gamma$, and $\eta$ are dimensionless parameters having values between 0 and 1; $k_\mathrm{c}$ and $k_\mathrm{b}$ represent the utility an individual obtains per unit consumption or birth (in units of utils/\$ and utils/birth, respectively); and $U_{\mathrm{c,0}}$ and $U_{\mathrm{b,0}}$ are the utility derived from consumption and childrearing in the first year of the simulation, respectively (in units of utils/year). The variable $\tilde c_\mathrm{t}$ is the amount of the individual's consumption in \$/year-person ****** per worker or per capita? ****** and $\tilde b_\mathrm{t}$ is the number of births in births/year-person ***** per worker or per capita? *******. $\tilde c_\mathrm{t}$ represents the amount of consumption above subsistence level ($\bar c$ in \$/year-person ***** per worker or per capita? *******) and $\tilde b_\mathrm{t}$ represents the amount of births above some long-run birth rate ($\bar b$, in births/year per capita). $u_\mathrm{c}$ and $u_\mathrm{b}$ are the utilities obtained from consumption and births, represented by the left and right terms respectively in the last part of the equation.
 
 \begin{equation} \label{eq:c_tilde}
 	\tilde c_\mathrm{t} \equiv c_\mathrm{t} - \bar c
@@ -68,7 +77,7 @@ The first order condition on the utility function indicates that a person will o
 	\frac{\partial u/ \partial\tilde b}{\partial u/ \partial\tilde c} = \frac{w_\mathrm{t}}{\alpha},
 \end{equation}
 
-\noindent where $w_\mathrm{t}$ is the wage rate that a worker is paid (in \$/year-person) and $\alpha$ is a birth efficiency (in births/year per capita). [********** Caleb: notice that I'm using ``per capita'' in several places. Is that appropriate? --MKH ********************] $w_\mathrm{t}$ and $\alpha$ come from the time constraints in the economy. These time constraints are given by:
+\noindent where $w_\mathrm{t}$ is the wage rate that a worker is paid (in \$/year-person ***** per worker or per capita? *******) and $\alpha$ is a birth efficiency (in births/year-capita). [********** Caleb: notice that I'm using ``per capita'' in several places. Is that appropriate? I think we want to avoid ``per person'' wherever possible, preferring instead ``per capita'' or ``per worker.'' --Prof. Heun ********************] $w_\mathrm{t}$ and $\alpha$ come from the time constraints in the economy. These time constraints are given by:
 
 \begin{equation}\label{eq:pop_work}
 	L = \tau_\mathrm{t} N
@@ -82,7 +91,7 @@ The first order condition on the utility function indicates that a person will o
 	b_\mathrm{t} = \alpha (1-\tau_\mathrm{t})
 \end{equation}
 
-\noindent where $\tau$ is a number between 0 and 1 representing the fraction of available time that people spend on labor (unitless), $N$ is the total population (in persons), and $L$ is the total amount of available labor in the economy (in persons). So, $(1-\tau)$ represents the fraction of available time spent on childrearing.
+\noindent where $\tau$ is a number between 0 and 1 representing the fraction of available time that people spend on labor (unitless), $N$ is the total population (in persons), and $L$ is the total amount of available labor in the economy (in persons ***** in workers? *******). So, $(1-\tau)$ represents the fraction of available time spent on childrearing.
 
 Applying the first order condition (Equation \ref{eq:first_order_condition_simplified}) and including time constraints yields an equation that describes preferences for consumption and childrearing:
 
@@ -101,7 +110,7 @@ Labor is split between two sectors; one devoted to innovation and producing new 
 	w_\mathrm{Y,t} L_\mathrm{Y,t} = (1-\pi) Y_\mathrm{t}
 \end{equation}
 
-\noindent where $w_\mathrm{A,t}$ and $w_\mathrm{Y,t}$ are the wages paid to workers in the knowledge and goods producing sectors respectively (in \$/person-year), and $L_\mathrm{A,t}$ and $L_\mathrm{Y,t}$ represent the number of workers employed by each of the sectors (in persons/year). The total labor supply is constrained as the sum of the two sectors.
+\noindent where $w_\mathrm{A,t}$ and $w_\mathrm{Y,t}$ are the wages paid to workers in the knowledge and goods producing sectors respectively (in \$/person-year ***** per worker or per capita? *******), and $L_\mathrm{A,t}$ and $L_\mathrm{Y,t}$ represent the number of workers employed by each of the sectors (in persons/year ***** workers/year or capita/year? *******). The total labor supply is constrained as the sum of the two sectors.
 
 \begin{equation} \label{labor_supply}
 	L_\mathrm{t} = L_\mathrm{A,t} + L_\mathrm{Y,t}
@@ -143,13 +152,13 @@ The rate of change of indexed population ($n$) is a function of birth and mortal
 	\frac{dn}{dt} = b_\mathrm{t} n_\mathrm{t} - d_\mathrm{t} n_\mathrm{t},
 \end{equation}
 
-\noindent where $b_\mathrm{t}$ is the birth rate from Equation \ref{eq:utility_function}, $n_\mathrm{t}$ is the indexed population, and $d_\mathrm{t}$ is the mortality rate in deaths/person-year. The mortality rate is determined from a fit of historical mortality rate data \citep{Jones:2001wn} and is given by
+\noindent where $b_\mathrm{t}$ is the birth rate from Equation \ref{eq:utility_function}, $n_\mathrm{t}$ is the indexed population, and $d_\mathrm{t}$ is the mortality rate in deaths/person-year ***** per worker or per capita? *******. The mortality rate is determined from a fit of historical mortality rate data \citep{Jones:2001wn} and is given by
 
 \begin{equation} \label{eq:mortality_rate}
 	d_\mathrm{t} = \frac{1}{\omega_\mathrm{1} z_\mathrm{t}^{\omega_\mathrm{2}} + \omega_\mathrm{3} z_\mathrm{t}} + \bar d,
 \end{equation}
 
-\noindent where $d_\mathrm{t}$ is the mortality rate and $\bar d$ is the long-run mortality rate, both in deaths/year-person. $\omega_\mathrm{1}$, $\omega_\mathrm{2}$, and $\omega_\mathrm{3}$ are fitted parameters. The ratio of consumption to the subsistence level is given by $z_\mathrm{t}$:
+\noindent where $d_\mathrm{t}$ is the mortality rate and $\bar d$ is the long-run mortality rate, both in deaths/year-person ***** per worker or per capita? *******. $\omega_\mathrm{1}$, $\omega_\mathrm{2}$, and $\omega_\mathrm{3}$ are fitted parameters. The ratio of consumption to the subsistence level is given by $z_\mathrm{t}$:
 
 \begin{equation} \label{eq:z}
 	z_\mathrm{t} = \frac{c_\mathrm{t}}{\bar c} - 1, 
@@ -157,75 +166,14 @@ The rate of change of indexed population ($n$) is a function of birth and mortal
 
 \noindent which is an indicator of the mortality rate through Equation \ref{eq:mortality_rate}.
 
-\section{Determining year 0 information}
+\subsection{Tuning the model}
 
-The 
+\subsection{Extending the model to include energy}
 
+\section{Implications}
 
-\subsection{A second order heading}
+\section{Conclusion}
 
-Some text under the subheading. Paragraphs that follow heads are not
-indented.
-
-Math should also be set in Times. Use the mathptmx package if you do not have
-any of the commercially available fonts that are compatible with Times.
-\begin{equation}
-    y^{(n)} = \sum_{i=0}^{n-1} a_i(x) y^{(i)} + r(x) 
-\end{equation}
-
-All environments provided by the standard LaTeX document classes are
-unchanged. Vertical spaces within lists have been altered to comply with De Gruyter
-requirements.
-\begin{enumerate}
-\item This is the first item within the list. Some more text here in order to display the alignment.
-\item Another item in the list.
-\item Yet another item in the list.
-\end{enumerate}
-
-Here is an example of a Figure. It's the same as in standard LaTeX.
-
-\begin{figure}[!h]
-%% Use the graphics package to insert figures
-%% \includegraphics{figure.eps}
-% Use \centering to center the table
-\centering
-%% A small box in place of a figure
-\framebox{%
-  \begin{minipage}{10pc}
-    \begin{center}
-      \vspace{1cm}\par
-      A figure\par
-      \vspace{1cm}
-    \end{center}
-  \end{minipage}}
-\caption{Insert your caption here. If you wish to label your figure for
-  cross-referencing, use a label either within the caption or after it.}
-\label{fig1}
-\end{figure}
-
-An example of a table follows. This is also the same as in standard LaTeX.
-
-\begin{table}[!h]
-% Use \centering to center the table
-\centering
-\caption{Insert your table caption here. If you wish to label the table for
-  cross-referencing, use a label either within the caption or after it.}
-\begin{tabular}{llll}
-\hline
-Symbol        & LaTeX Command      & Symbol      & LaTeX Command \\
-\hline
-$\alpha$      & \verb+\alpha+      & $\zeta$     & \verb+\zeta+ \\
-$\beta$       & \verb+\beta+       & $\eta$      & \verb+\eta+ \\
-$\gamma$      & \verb+\gamma+      & $\theta$    & \verb+\theta+ \\
-$\delta$      & \verb+\delta+      & $\vartheta$ & \verb+\vartheta+ \\
-$\epsilon$    & \verb+\epsilon+    & $\iota$     & \verb+\iota+ \\
-$\varepsilon$ & \verb+\varepsilon+ & $\kappa$    & \verb+\kappa+ \\
-\hline
-\end{tabular}
-\end{table}
-
-Use the \verb+thebibliography+ environment for the references.  BibTeX users may
-use the provided BibTeX style file DeGruyter.bst.
 
 %% BibTeX support
 \bibliographystyle{DeGruyter}
