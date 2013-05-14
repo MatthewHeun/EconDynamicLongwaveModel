@@ -120,11 +120,7 @@ mtext("IVP DAE", side=3, outer=TRUE, line=-1)
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Raw Data}
-\label{sec:Raw_Data}
-\setcounter{table}{0} % Restarts table number counter at 0 in this section.
-\setcounter{figure}{0} % Restarts figure number counter at 0 in this section.
-\setcounter{equation}{0} % Restarts equation counter to 0 in this section.
+\section{Raw Data} \label{sec:Raw_Data}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The following table shows raw data for the U.S.
