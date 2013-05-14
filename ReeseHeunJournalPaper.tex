@@ -70,7 +70,7 @@ Our model for preferences between consumption and childrearing is based on the u
 	u(c_\mathrm{t}, b_\mathrm{t}) = u_\mathrm{c} + u_\mathrm{b} = \frac{1-\mu}{1-\gamma} \left(\frac{k_\mathrm{c} \tilde c_\mathrm{t}}{U_\mathrm{c,0}} \right)^{1-\gamma} + \frac{\mu}{1-\eta} \left(\frac{k_\mathrm{b} \tilde b_\mathrm{t}}{U_\mathrm{b,0}} \right)^{1-\eta}
 \end{equation}
 
-\noindent where $\mu$, $\gamma$, and $\eta$ are dimensionless parameters having values between 0 and 1; $k_\mathrm{c}$ and $k_\mathrm{b}$ represent the utility an individual obtains per unit consumption or birth (in units of utils/\$ and utils/birth, respectively); and $U_{\mathrm{c,0}}$ and $U_{\mathrm{b,0}}$ are the utility derived from consumption and childrearing in the first year of the simulation, respectively (in units of utils/year). The variable $\tilde c_\mathrm{t}$ is the amount of the individual's consumption in \$/year-person ****** per worker or per capita? ****** and $\tilde b_\mathrm{t}$ is the number of births in births/year-person ***** per worker or per capita? *******. $\tilde c_\mathrm{t}$ represents the amount of consumption above subsistence level ($\bar c$ in \$/year-person ***** per worker or per capita? *******) and $\tilde b_\mathrm{t}$ represents the amount of births above some long-run birth rate ($\bar b$, in births/year per capita). $u_\mathrm{c}$ and $u_\mathrm{b}$ are the utilities obtained from consumption and births, represented by the left and right terms respectively in the last part of the equation.
+\noindent where $\mu$, $\gamma$, and $\eta$ are dimensionless parameters having values between 0 and 1; $k_\mathrm{c}$ and $k_\mathrm{b}$ represent the utility an individual obtains per unit consumption or birth (in units of utils/\$ and utils/birth, respectively); and $U_{\mathrm{c,0}}$ and $U_{\mathrm{b,0}}$ are the utility derived from consumption and childrearing in the first year of the simulation, respectively (in units of utils/year). The variable $\tilde c_\mathrm{t}$ is the amount of the individual's consumption in \$/year-person ****** per worker or per capita? ****** and $\tilde b_\mathrm{t}$ is the number of births in births/year-person ***** per worker or per capita? *******. $\tilde c_\mathrm{t}$ represents the amount of consumption above subsistence level ($\bar c$ in \$/year-person ***** per worker or per capita? *******) and $\tilde b_\mathrm{t}$ represents the amount of births above some long-run birth rate ($\bar b$, in births/year-capita). $u_\mathrm{c}$ and $u_\mathrm{b}$ are the utilities obtained from consumption and births, represented by the left and right terms respectively in the last part of the equation.
 
 \begin{equation} \label{eq:c_tilde}
 	\tilde c_\mathrm{t} \equiv c_\mathrm{t} - \bar c
@@ -161,7 +161,7 @@ Two differential equations describe the growth of knowledge and population over 
 
 \noindent where $\delta$, $\lambda$, and $\phi$ are constants, $l_\mathrm{A,t}$ is the indexed labor in the knowledge sector of the economy, and $a_\mathrm{t}$ is the indexed stock of ideas.
 
-The rate of change of indexed population ($n$) is a function of birth and mortality rates ($b$ and $d$ in births/year per capita and deaths/year per capita, respectively):
+The rate of change of indexed population ($n$) is a function of birth and mortality rates ($b$ and $d$ in births/year-capita and deaths/year-capita, respectively):
 
 \begin{equation} \label{eq:dn_dt}
 	\frac{dn}{dt} = b_\mathrm{t} n_\mathrm{t} - d_\mathrm{t} n_\mathrm{t},
