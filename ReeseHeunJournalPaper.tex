@@ -1,7 +1,7 @@
 \documentclass[letterpaper,12pt]{article}
 \usepackage{dgjournal}          
 \usepackage{mathptmx}
-\usepackage{graphics}
+\usepackage{graphicx}
 \usepackage[authoryear,comma,longnamesfirst,sectionbib]{natbib} 
 
 \begin{document}
@@ -29,9 +29,11 @@ The model is adapted from the longwave growth model of \citet{Jones:2001wn}.
 \subsection{The model without energy and capital stock}
 %++++++++++++++++++++++++++++++
 
-\begin{figure} \label{fig:ModelWithEnergy}
-  \includegraphics{figure_other/ModelWithEnergy.pdf}
-  \caption{Dynamic model without energy.}
+\begin{figure} \label{fig:ModelWithoutEnergy}
+  \begin{center}
+    \includegraphics[width=\textwidth]{figure_other/ModelWithoutEnergy.pdf}
+    \caption{Dynamic model without energy.}
+  \end{center}
 \end{figure}
 
 For \citet{Jones:2001wn}, economic production is given by
@@ -188,8 +190,10 @@ The rate of change of indexed population ($n$) is a function of birth and mortal
 %++++++++++++++++++++++++++++++
 
 \begin{figure} \label{fig:ModelWithEnergy}
-  \includegraphics{figure_other/ModelWithEnergy.pdf}
-  \caption{Dynamic model with energy.}
+  \begin{center}
+    \includegraphics[width=\textwidth]{figure_other/ModelWithEnergy.pdf}
+    \caption{Dynamic model with energy.}
+  \end{center}
 \end{figure}
 
 %++++++++++++++++++++++++++++++
@@ -206,7 +210,7 @@ The rate of change of indexed population ($n$) is a function of birth and mortal
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% BibTeX support
+%% Bibliography (via BibTeX)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bibliographystyle{DeGruyter}
 \bibliography{ReeseHeunJournalPaper}
