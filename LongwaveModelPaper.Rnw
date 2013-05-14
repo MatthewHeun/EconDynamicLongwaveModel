@@ -5,6 +5,7 @@
 \usepackage{dgjournal}          
 \usepackage{mathptmx}
 \usepackage{graphicx}
+
 \usepackage[authoryear,comma,longnamesfirst,sectionbib]{natbib} 
 
 \begin{document}
@@ -27,7 +28,7 @@ options(width=75)
 options(show.signif.stars=TRUE)
 opts_chunk$set(
   # ********************************************************************************************************
-  eval=TRUE,
+  eval=FALSE,
   # ********************************************************************************************************
   dev='tikz',    #Allows LaTeX code in graphical output. E.g., "$y$" for a variable name in the legend for a graph.
   tidy=FALSE,
@@ -57,9 +58,12 @@ defaultKeyYLoc <- 0.95 #y position of the key. This default is good for 9-panel 
 # Other graph parameters that apply to all graphs
 scaleTextSize <- 0.8  #Multiple of normal size
 scaleTickSize <- -0.5 #50% of normal size and pointing INWARD!
+
+# Load raw data
+rawData <- read.table(file="data/USData.txt", header = TRUE)
 @
 
-<<Test_DAE_Solver, eval=TRUE>>=
+<<Test_DAE_Solver>>=
 ###########################
 # Example of an ODE using the van der Pol equation from the examples in 
 # Soetaert, Karline, Thomas Petzoldt, and R Woodrow Setzer. 2010. “Solving Differential Equations in R.” 
@@ -108,6 +112,30 @@ print(system.time(out <- daspk(y=yini, dy=dyini, times=times, res=daefun, parms=
 plot(out, ylab="conc.", xlab="time", type="l", lwd=2, log="x")
 mtext("IVP DAE", side=3, outer=TRUE, line=-1)
 @
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Raw Data}
+\label{sec:Raw_Data}
+\setcounter{table}{0} % Restarts table number counter at 0 in this section.
+\setcounter{figure}{0} % Restarts figure number counter at 0 in this section.
+\setcounter{equation}{0} % Restarts equation counter to 0 in this section.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The following table shows the raw data for the U.S.
+
+<<Raw_US_Data, results='asis', label="tab:Raw_US_Data", eval=TRUE>>=
+print(class(rawData))
+rawDataXtable <- xtable(x=rawData, caption="Raw data for the U.S.", label=paste("tab:Raw_US_Data"))
+print(rawDataXtable, caption.placement="top", sanitize.rownames.function = identity)
+@
+
+
 
 %% BibTeX support
 \bibliographystyle{DeGruyter}
