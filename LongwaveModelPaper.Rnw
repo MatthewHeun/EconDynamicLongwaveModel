@@ -4,7 +4,7 @@
 \documentclass[letterpaper,12pt]{article}
 \usepackage{dgjournal}          
 \usepackage{mathptmx}
-\usepackage{graphics}
+\usepackage{graphicx}
 \usepackage[authoryear,comma,longnamesfirst,sectionbib]{natbib} 
 
 \begin{document}
