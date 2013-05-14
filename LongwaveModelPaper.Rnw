@@ -60,7 +60,7 @@ scaleTextSize <- 0.8  #Multiple of normal size
 scaleTickSize <- -0.5 #50% of normal size and pointing INWARD!
 
 # Load raw data
-rawData <- read.table(file="data/USData.txt", header = TRUE)
+rawData <- read.table(file="data/USData.txt", header=TRUE, sep="\t")
 @
 
 <<Test_DAE_Solver>>=
