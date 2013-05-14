@@ -127,12 +127,11 @@ mtext("IVP DAE", side=3, outer=TRUE, line=-1)
 \setcounter{equation}{0} % Restarts equation counter to 0 in this section.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The following table shows the raw data for the U.S.
+The following table shows raw data for the U.S.
 
 <<Raw_US_Data, results='asis', label="tab:Raw_US_Data", eval=TRUE>>=
-print(class(rawData))
 rawDataXtable <- xtable(x=rawData, caption="Raw data for the U.S.", label=paste("tab:Raw_US_Data"))
-print(rawDataXtable, caption.placement="top", sanitize.rownames.function = identity)
+print(rawDataXtable, caption.placement="top", sanitize.rownames.function = identity, size="\\tiny")
 @
 
 
