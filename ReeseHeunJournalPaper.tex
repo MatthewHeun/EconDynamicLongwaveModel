@@ -3,8 +3,15 @@
 \usepackage{mathptmx}
 \usepackage{graphicx} % Allows use of width and scale options for \includegraphics
 \usepackage[authoryear,comma,longnamesfirst,sectionbib]{natbib} 
+%% The lineno packages adds line numbers. Start line numbering with
+%% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
+%% for the whole article with \linenumbers after \end{frontmatter}.
+\usepackage{lineno}
+
 
 \begin{document}
+
+\linenumbers % Turns on line numbering
 
 %% Do NOT include any frontmatter information; including the title, author names,
 %% institutes, acknowledgments and title footnotes (author information, funding
@@ -15,18 +22,28 @@
 \section*{Abstract}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{The model}
+\section{Sources of Data}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The model is adapted from the longwave growth model of \citet{Jones:2001wn}.
+**** Caleb complete this section ****
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Basic model (without energy and capital stock)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The model is adapted from the longwave growth model of \citet{Jones:2001wn}. **** Caleb update this section ****
+
 
 %++++++++++++++++++++++++++++++
-\subsection{The model without energy and capital stock}
+\subsection{Basic model development}
 %++++++++++++++++++++++++++++++
 
 \begin{figure} \label{fig:ModelWithoutEnergy}
@@ -182,12 +199,27 @@ The rate of change of indexed population ($n$) is a function of birth and mortal
 \noindent which is an indicator of the mortality rate through Equation \ref{eq:mortality_rate}.
 
 %++++++++++++++++++++++++++++++
-\subsection{Tuning the model without energy and capital stock}
+\subsection{Tuning: basic model}
 %++++++++++++++++++++++++++++++
 
+**** Caleb discuss the process you used to tune the model. ****
+
 %++++++++++++++++++++++++++++++
-\subsection{Extending the model to include energy and capital stock}
+\subsection{Results: basic model}
 %++++++++++++++++++++++++++++++
+
+**** MKH to develop graphs and other results based on Caleb's existing work ****
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Enhanced model (with energy and capital stock)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%++++++++++++++++++++++++++++++
+\subsection{Enhanced model development}
+%++++++++++++++++++++++++++++++
+
+We now enhance the basic model with both energy flows and capital stock.
 
 \begin{figure} \label{fig:ModelWithEnergy}
   \begin{center}
@@ -197,8 +229,17 @@ The rate of change of indexed population ($n$) is a function of birth and mortal
 \end{figure}
 
 %++++++++++++++++++++++++++++++
-\subsection{Tuning the model with energy and capital stock}
+\subsection{Tuning: enhanced model}
 %++++++++++++++++++++++++++++++
+
+**** Caleb: discuss the process you used to tune the enhanced model. ****
+
+%++++++++++++++++++++++++++++++
+\subsection{Results: enhanced model}
+%++++++++++++++++++++++++++++++
+
+**** MKH to develop graphs and other results based on Caleb's existing work ****
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Implications}
