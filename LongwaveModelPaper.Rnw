@@ -5,8 +5,9 @@
 \usepackage{dgjournal}          
 \usepackage{mathptmx}
 \usepackage{graphicx}
-
 \usepackage[authoryear,comma,longnamesfirst,sectionbib]{natbib} 
+\usepackage{lineno}
+\linenumbers % Turns on line numbering for the entire document.
 
 \begin{document}
 
@@ -120,7 +121,8 @@ mtext("IVP DAE", side=3, outer=TRUE, line=-1)
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Raw Data} \label{sec:Raw_Data}
+\section{Raw Data} 
+\label{sec:Raw_Data}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The following table shows raw data for the U.S.
