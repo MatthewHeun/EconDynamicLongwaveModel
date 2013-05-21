@@ -24,13 +24,13 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
-\label{sec:Introduction}
+\label{sec:introduction}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Sources of data}
-\label{sec:Sources_of_data}
+\label{sec:sources_of_data}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 **** Caleb complete this section ****
@@ -38,14 +38,14 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Basic model (without energy or capital stock)}
-\label{sec:Basic_model}
+\label{sec:basic_model}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The model is adapted from the longwave growth model of \citet{Jones:2001wn}. 
 
 %++++++++++++++++++++++++++++++
 \subsection{Basic model development}
-\label{sec:Basic_model_development}
+\label{sec:basic_model_development}
 %++++++++++++++++++++++++++++++
 
 **** Caleb: update this section ****
@@ -65,7 +65,7 @@ For \citet{Jones:2001wn}, economic production ($y$) is given by
 	y_\mathrm{t} = a_\mathrm{t} ^\sigma l_\mathrm{Y,t} ^\beta t_\mathrm{t} ^{1-\beta} \epsilon_\mathrm{t}
 \end{equation}
 
-\noindent where $a_\mathrm{t}$ is the indexed stock of ideas, $l_\mathrm{Y}$ is indexed labor in the goods producing sector, $t$ is indexed land (always 1.0), and $\varepsilon$ is an exogenous shock parameter. The subscript ``t'' indicates time (measured in years). Any symbol in a equation with subscript ``$\mathrm{t}$'' indicates a time-varying quantity. Lowercase variable names represent unitless, indexed quantities. The indexed factors of production ($a$, $l$, and $t$) are defined relative to a base year ($\mathrm{t} = 0$):
+\noindent where $a_\mathrm{t}$ is the indexed stock of ideas, $l_\mathrm{Y,t}$ is indexed labor in the goods producing sector, $t_\mathrm{t}$ is indexed land (always 1.0), and $\varepsilon_\mathrm{t}$ is an exogenous shock parameter. The subscript ``t'' indicates time (measured in years). Any symbol in a equation with subscript ``$\mathrm{t}$'' indicates a time-varying quantity. Symbols without subscript ``$\mathrm{t}$'' indicate time-invariant quantities. Lowercase variable names represent unitless, indexed quantities. The indexed factors of production ($a_\mathrm{t}$, $l_\mathrm{t}$, and $t_\mathrm{t}$) are defined relative to a base year ($\mathrm{t} = 0$):
 
 \begin{equation} \label{eq:index_y}
 	y_\mathrm{t} \equiv \frac{Y_\mathrm{t}}{Y_\mathrm{0}}
@@ -83,15 +83,15 @@ For \citet{Jones:2001wn}, economic production ($y$) is given by
 	t_\mathrm{t} \equiv \frac{T_\mathrm{t}}{T_\mathrm{0}} = 1.0
 \end{equation}
 
-\noindent with $Y$ representing economic output (in 2005\$/year), $A$ representing the stock of knowledge and ideas (in ideas), $L_\mathrm{Y}$ representing labor in the production sector (in workers/year), and $T$ representing the stock of available land (in m$^2$).
+\noindent with $Y_\mathrm{t}$ representing economic output (in 2005\$/year), $A_\mathrm{t}$ representing the stock of knowledge (in units of ideas), $L_\mathrm{Y,t}$ representing labor in the production sector (in workers/year), and $T_\mathrm{t}$ representing the stock of available land (in m$^2$).
 
 Our model for preferences between consumption and childrearing is based on the utility function from \citet{Jones:2001wn}:
 
 \begin{equation} \label{eq:utility_function}
-	u(c_\mathrm{t}, b_\mathrm{t}) = u_\mathrm{c} + u_\mathrm{b} = \frac{1-\mu}{1-\gamma} \left(\frac{k_\mathrm{c} \tilde c_\mathrm{t}}{U_\mathrm{c,0}} \right)^{1-\gamma} + \frac{\mu}{1-\eta} \left(\frac{k_\mathrm{b} \tilde b_\mathrm{t}}{U_\mathrm{b,0}} \right)^{1-\eta}
+	u_\mathrm{t}(c_\mathrm{t}, b_\mathrm{t}) = u_\mathrm{c,t} + u_\mathrm{b,t} = \frac{1-\mu}{1-\gamma} \left(\frac{k_\mathrm{c} \tilde c_\mathrm{t}}{U_\mathrm{c,0}} \right)^{1-\gamma} + \frac{\mu}{1-\eta} \left(\frac{k_\mathrm{b} \tilde b_\mathrm{t}}{U_\mathrm{b,0}} \right)^{1-\eta}
 \end{equation}
 
-\noindent where $\mu$, $\gamma$, and $\eta$ are dimensionless parameters with values between 0 and 1; $k_\mathrm{c}$ and $k_\mathrm{b}$ represent the utility an individual obtains per unit consumption or birth (in units of utils/\$ and utils/birth, respectively); and $U_{\mathrm{c,0}}$ and $U_{\mathrm{b,0}}$ are the utility derived from consumption and childrearing, respectively, at $\mathrm{t} = 0$ (in units of utils/year). The variable $\tilde c$ is the rate of the individual's consumption in 2005\$/year-capita and $\tilde b$ is the rate of births in births/year-capita. $u_\mathrm{c}$ and $u_\mathrm{b}$ are the utilities obtained from consumption and births, represented by the first and second terms, respectively, on the right side of Equation~\ref{eq:utility_function}. $\tilde c$ represents the rate of consumption above subsistence level ($\bar c$ in 2005\$/year-capita), and $\tilde b$ represents the rate of births above some long-run birth rate ($\bar b$, in births/year-capita).
+\noindent where $\mu$, $\gamma$, and $\eta$ are dimensionless parameters with values between 0 and 1; $k_\mathrm{c}$ and $k_\mathrm{b}$ represent the utility obtained per unit consumption or birth (in units of utils/\$ and utils/birth, respectively); and $U_{\mathrm{c,0}}$ and $U_{\mathrm{b,0}}$ are the utility derived from consumption and childrearing, respectively, at $\mathrm{t} = 0$ (in units of utils/year). $\tilde c_\mathrm{t}$ is the rate of the individual's consumption in 2005\$/year-capita and $\tilde b_\mathrm{t}$ is the rate of births in births/year-capita. $u_\mathrm{c,t}$ and $u_\mathrm{b,t}$ represent utility obtained from consumption and births, represented by the first and second terms, respectively, on the right side of Equation~\ref{eq:utility_function}. $\tilde c_\mathrm{t}$ represents the rate of consumption above subsistence level ($\bar c$ in 2005\$/year-capita), and $\tilde b_\mathrm{t}$ represents the rate of births above some long-run birth rate ($\bar b$, in births/year-capita).
 
 \begin{equation} \label{eq:c_tilde}
 	\tilde c_\mathrm{t} \equiv c_\mathrm{t} - \bar c
@@ -104,16 +104,16 @@ Our model for preferences between consumption and childrearing is based on the u
 The first order condition on the utility function (Equation \ref{eq:utility_function}) requires that a person will obtain equal incremental utility from spending additional time consuming or rearing children:
 
 \begin{equation} \label{eq:first_order_condition_def}
-	\frac{\partial u_{c}}{\partial \tau} = \frac{\partial u_{b}}{\partial \tau}
+	\frac{\partial u_{c,t}}{\partial \tau_\mathrm{t}} = \frac{\partial u_{b,t}}{\partial \tau_\mathrm{t}}
 \end{equation}
 
-\noindent where $\tau \in (0,1)$. $\tau$ can be interpreted on a per-person basis as worked hours per total available working time. Or, if each individual in the population is assumed to be either a worker or a childrearer, $\tau$ represents the ratio of workers to total population ($L/N$). The first order condition simplifies to 
+\noindent where $\tau_\mathrm{t} \in (0,1)$. $\tau_\mathrm{t}$ can be interpreted on a per-person basis as worked hours per total available working time. Or, if each individual in the population is assumed to be either a worker or a childrearer, $\tau_\mathrm{t}$ represents the ratio of workers to total population ($L_\mathrm{t}/N_\mathrm{t}$). The first order condition simplifies to 
 
 \begin{equation} \label{eq:first_order_condition_simplified}
-	\frac{\partial u/ \partial\tilde b}{\partial u/ \partial\tilde c} = \frac{w_\mathrm{t}}{\nu},
+	\frac{\partial u_\mathrm{t}/ \partial\tilde b_\mathrm{t}}{\partial u_\mathrm{t}/ \partial\tilde c_\mathrm{t}} = \frac{w_\mathrm{t}}{\nu},
 \end{equation}
 
-\noindent where $w$ is the wage rate (in 2005\$/year-worker) and $\nu$ is a birth efficiency (in births/year-capita). $w$ and $\nu$ come from time constraints **** Caleb: Are these really both \emph{time} constraint equations? **** in the economy, given by:
+\noindent where $w_\mathrm{t}$ is the wage rate (in 2005\$/year-worker) and $\nu$ is a birth efficiency (in births/year-capita). $w_\mathrm{t}$ and $\nu$ come from time constraints **** Caleb: Are these really both \emph{time} constraint equations? **** in the economy, given by:
 
 \begin{equation}\label{eq:pop_work}
 	L_\mathrm{t} = \tau_\mathrm{t} N_\mathrm{t}
@@ -127,7 +127,7 @@ The first order condition on the utility function (Equation \ref{eq:utility_func
 	b_\mathrm{t} = \nu (1-\tau_\mathrm{t})
 \end{equation}
 
-\noindent $N$ is the total population (in persons), and $L$ is the total amount of available labor in the economy (in workers). So, $(1-\tau)$ represents the fraction of available time spent on childrearing (unitless or time childrearing per total time). It is worth noting that the units of $\tau$ can also be defined in terms of workers/capita, as shown in Equation~\ref{eq:pop_work}.
+\noindent $N_\mathrm{t}$ is the total population (in persons), and $L_\mathrm{t}$ is the total amount of available labor in the economy (in workers/year). So, $(1-\tau_\mathrm{t})$ represents the fraction of available time spent on childrearing (unitless or time childrearing per total time). It is worth noting that the units of $\tau_\mathrm{t}$ can also be defined in terms of workers/capita, as shown in Equation~\ref{eq:pop_work}.
 
 Applying the first order condition (Equation \ref{eq:first_order_condition_simplified}) with time constraints **** Caleb: time constraints only? **** yields an equation that describes preferences for consumption and childrearing:
 
@@ -144,7 +144,7 @@ Applying the first order condition (Equation \ref{eq:first_order_condition_simpl
   First~order~condition~equation~with~G
 \end{equation}
 
-Labor is split between two sectors; one devoted to innovation and producing new ideas ($A$) and the other devoted to producing goods ($Y$). The split between these sectors is based on the wages paid to each as shown in the equations below:
+Labor is split between two sectors; one devoted to innovation and producing new ideas ($A_\mathrm{t}$) and the other devoted to producing goods ($Y_\mathrm{t}$). The split between these sectors can be expressed in terms of the wages paid to workers in each sector as shown in the equations below:
 
 \begin{equation} \label{eq:knowledge_comp}
 	w_\mathrm{A,t} L_\mathrm{A,t} = \pi_\mathrm{t} Y_\mathrm{t}
@@ -154,7 +154,7 @@ Labor is split between two sectors; one devoted to innovation and producing new 
 	w_\mathrm{Y,t} L_\mathrm{Y,t} = (1-\pi_\mathrm{t}) Y_\mathrm{t}
 \end{equation}
 
-\noindent **** Caleb: Shouldn't $\zeta Y_\mathrm{t}$ replace $Y_\mathrm{t}$ in the above equations? **** where $w_\mathrm{A}$ and $w_\mathrm{Y}$ are the wages paid to workers in the knowledge and goods producing sectors respectively (in 2005\$/year-worker), and $L_\mathrm{A}$ and $L_\mathrm{Y}$ represent the number of workers employed in each of the sectors (in workers/year). The dimensionless variable $\pi$ is the fraction of the economy's total output ($Y$) that is devoted to compensating inventors in the knowledge sector. The total labor supply ($L$) is constrained as the sum of the labor supply in the two sectors.
+\noindent **** Caleb: Shouldn't $\zeta Y_\mathrm{t}$ replace $Y_\mathrm{t}$ in the above equations? **** where $w_\mathrm{A,t}$ and $w_\mathrm{Y,t}$ are the wages paid to workers in the knowledge and goods producing sectors respectively (in 2005\$/year-worker), and $L_\mathrm{A,t}$ and $L_\mathrm{Y,t}$ represent the number of workers employed in each of the sectors (in workers/year). The dimensionless variable $\pi$ is the fraction of the economy's total output ($Y_\mathrm{t}$) that is devoted to compensating inventors in the knowledge sector. The total labor supply ($L_\mathrm{t}$) is constrained as the sum of the labor supply in the two sectors.
 
 \begin{equation} \label{eq:labor_supply}
 	L_\mathrm{t} = L_\mathrm{A,t} + L_\mathrm{Y,t}
@@ -176,48 +176,52 @@ In equilibrium, it is expected that wages paid to workers in each sector will be
 	w_\mathrm{A,t} = w_\mathrm{Y,t} = w_\mathrm{t}
 \end{equation}
 
-Wage equality (Equation~\ref{eq:wage_equality}) allows $\pi$ to be directly proportional to the fraction of the total employed population working in the knowledge sector in static equilibrium.
+Wage equality (Equation~\ref{eq:wage_equality}) allows $\pi_\mathrm{t}$ to be directly proportional to the fraction of the total employed population working in the knowledge sector in static equilibrium.
 
 \begin{equation} \label{eq:pi}
 	\pi_\mathrm{t} = \frac{L_\mathrm{A,t}}{L_\mathrm{t}}
 \end{equation}
 
-Two differential equations describe the growth of knowledge and population over time. The rate of change in the indexed stock of knowledge ($a$) is given by
+Two differential equations describe the growth of knowledge ($A_\mathrm{t}$) and population ($N_\mathrm{t}$) over time. The rate of change in the indexed stock of knowledge ($a_\mathrm{t}$) is given by
 
 \begin{equation} \label{eq:da_dt}
 	\frac{\mathrm{d}a_\mathrm{t}}{\mathrm{d}t} = \delta l_\mathrm{A,t}^\lambda a_\mathrm{t}^\phi
 \end{equation}
 
-\noindent where $\delta$, $\lambda$, and $\phi$ are constants, and $l_\mathrm{A}$ is the indexed labor in the knowledge sector of the economy.
+\noindent where $\delta$, $\lambda$, and $\phi$ are constants, and $l_\mathrm{A,t}$ is the indexed labor in the knowledge sector of the economy.
 
-The rate of change of indexed population ($n$) is a function of birth and mortality rates ($b$ and $d$ in births/year-capita and deaths/year-capita, respectively):
+The rate of change of indexed population ($n$) is a function of birth and mortality rates ($b_\mathrm{t}$ and $d_\mathrm{t}$ in births/year-capita and deaths/year-capita, respectively):
 
 \begin{equation} \label{eq:dn_dt}
 	\frac{\mathrm{d}n_\mathrm{t}}{\mathrm{d}t} = b_\mathrm{t} n_\mathrm{t} - d_\mathrm{t} n_\mathrm{t},
 \end{equation}
 
-\noindent **** migration? **** where $b$ is the birth rate from Equation~\ref{eq:utility_function}, $n_\mathrm{t}$ is the indexed population, and $d_\mathrm{t}$ is the mortality rate in deaths/year-capita. The form of the mortality equation is taken from \citet{Jones:2001wn} as
+\noindent **** Caleb: what about migration? **** where $b_\mathrm{t}$ is the birth rate from Equation~\ref{eq:utility_function}, $n_\mathrm{t}$ is the indexed population, and $d_\mathrm{t}$ is the mortality rate in deaths/year-capita. The form of the mortality equation is taken from \citet{Jones:2001wn} as
 
 \begin{equation} \label{eq:mortality_rate}
 	d_\mathrm{t} = \frac{1}{\omega_\mathrm{1} z_\mathrm{t}^{\omega_\mathrm{2}} + \omega_\mathrm{3} z_\mathrm{t}} + \bar d,
 \end{equation}
 
-\noindent where $d_\mathrm{t}$ is the mortality rate and $\bar d$ is the long-run mortality rate, both in units of deaths/year-capita. $\omega_\mathrm{1}$, $\omega_\mathrm{2}$, and $\omega_\mathrm{3}$ are fitted parameters. The ratio of consumption to the subsistence level is given by $z$:
+\noindent where $d_\mathrm{t}$ is the mortality rate and $\bar d$ is the long-run mortality rate **** Caleb: what is the value of $\bar{d}$? ****, both in units of deaths/year-capita. $\omega_\mathrm{1}$, $\omega_\mathrm{2}$, and $\omega_\mathrm{3}$ are fitted parameters. The ratio of consumption to the subsistence level is given by $z_\mathrm{t}$:
 
 \begin{equation} \label{eq:z}
 	z_\mathrm{t} = \frac{c_\mathrm{t}}{\bar c} - 1
 \end{equation}
 
-\noindent which is an indicator of the mortality rate through Equation~\ref{eq:mortality_rate}.
+\noindent **** Caleb: should that be $\tilde{c}_\mathrm{t}$ in the numerator of Equation~\ref{eq:z}? **** which is an indicator of the mortality rate through Equation~\ref{eq:mortality_rate}.
 
 %++++++++++++++++++++++++++++++
 \subsection{Tuning: basic model}
-\label{sec:Tuning_basic_model}
+\label{sec:basic_model_tuning}
 %++++++++++++++++++++++++++++++
 
-To tune the basic model to match U.S. historical data from 1980--2011, we estimated values for the fitting parameters, including $\beta$ from Equation~\ref{eq:Jones_production_function}; $\bar c$ and $\bar b$ from Equations \ref{eq:c_tilde} and \ref{eq:b_tilde}, respectively; $\mu$, $\nu$, and $G$ from Equation~\ref{eq:FOC_with_G}; $\zeta$ from Equation~\ref{eq:knowledge_comp}; $\delta$, $\lambda$, and $\phi$ from Equation \ref{eq:da_dt}; and $\omega_1$, $\omega_2$, and $\omega_3$ from Equation \ref{eq:mortality_rate}. We tuned the basic model with least-squares optimization by comparing outputs of the model ($y_\mathrm{t}$, $c_\mathrm{t}$, $\pi_\mathrm{t}$, $l_\mathrm{Y,t}$, $l_\mathrm{A,t}$, $b_{\mathrm{t}}$, and $d_\mathrm{t}$) to historical data. The following subsections discuss historical data and the optimization process.
+To tune the basic model to match U.S. historical data from 1980--2011, we estimate values for the fitting parameters, including $\beta$ from Equation~\ref{eq:Jones_production_function}; $\bar c$ and $\bar b$ from Equations \ref{eq:c_tilde} and \ref{eq:b_tilde}, respectively; $\mu$, $\nu$, and $G$ from Equation~\ref{eq:FOC_with_G}; $\zeta$ from Equation~\ref{eq:knowledge_comp}; $\delta$, $\lambda$, and $\phi$ from Equation \ref{eq:da_dt}; and $\omega_1$, $\omega_2$, and $\omega_3$ from Equation \ref{eq:mortality_rate}. We tuned the basic model with least-squares optimization by comparing outputs of the model ($y_\mathrm{t}$, $c_\mathrm{t}$, $\pi_\mathrm{t}$, $l_\mathrm{Y,t}$, $l_\mathrm{A,t}$, $b_{\mathrm{t}}$, and $d_\mathrm{t}$) to historical data. The following subsections discuss historical data, development of ``ground truth'' time series, and the parameter estimation process.
 
-\subsubsection{Historical Data}
+%------------------------------
+\subsubsection{Historical data}
+\label{sec:basic_model_historical_data}
+%------------------------------
+
 We collected historical time series data for United States on economic output ($Y_\mathrm{t}$), total labor force ($L_\mathrm{t}$), knowledge sector labor force ($L_\mathrm{A,t}$), population ($N_\mathrm{t}$), births ($B_\mathrm{t}$), deaths ($D_\mathrm{t}$), and wages ($w_\mathrm{t}$). Historical data was obtained for the years 1980--2011 unless otherwise noted. 
 
 We measure economic output ($Y_\mathrm{t}$) by gross domestic product (GDP). We obtained GDP data, in real 2005 U.S. dollars per year, from the World Bank's Global Economic Prospects (GEP) database \citep{WorldBankGEP:2013a} **** Caleb: Is this reference correct? ****.
@@ -236,20 +240,29 @@ We define wages ($w_\mathrm{t}$) as the yearly salarly that is earned by someone
 
 **** Heun: create graph of historical historical data. Perhaps a Lattice plot of some type? ****
 
+%------------------------------
 \subsubsection{``Ground truth'' information}
+\label{sec:basic_model_ground_truth}
+%------------------------------
+
 Based on the historical data outlined above, we calculated ``historical'' time series for other important parameters in the model. To obtain $b_\mathrm{t}$ in units of births/year-person, we divided the CDC birth data ($B_\mathrm{t}$) by the total population ($N_\mathrm{t}$) for each year. To obtain $d_\mathrm{t}$ in units of deaths/year-person, we divided the CDC mortality data ($D_\mathrm{t}$) by the total population ($N_\mathrm{t}$) for each year.
 
 Per capita income data were multiplied by the total population and then divided by the labor force to obtain a wage time series ($w_\mathrm{t}$) in 2005\$/year-worker. Using Equation \ref{eq:pop_work}, we calculated historical values for $\tau_\mathrm{t}$. Using the historical $\tau_\mathrm{t}$ values and Equation \ref{eq:consumption_constraint} we were able to calculate historical values of consumption ($c_\mathrm{t}$). 
 
-We used 1980 values of $\tau_\mathrm{t}$ and $b_\mathrm{t}$ to calculate a value for $\nu$ **** Heun: give the value of $\nu$ here **** that we hold constant through time. We used 1980 values for $L_\mathrm{A,1980}$ and $L_{1980}$ to calculate an invariant value for $\pi_\mathrm{t}$. **** Caleb: Is $\pi$ really invariant through the simulation? If so, we need to remove the subscript ``t'' everywhere. **** **** Heun: Give the value of $\pi$ here. ****
+We used 1980 values of $\tau_\mathrm{t}$ and $b_\mathrm{t}$ to calculate a value for $\nu$ **** Heun: give the value of $\nu$ here **** that we hold constant through time. We used 1980 values for $L_\mathrm{A,1980}$ and $L_{1980}$ to calculate an invariant value for $\pi_\mathrm{t}$. **** Caleb: Is $\pi$ really invariant through the simulation? If so, we need to remove the subscript ``t'' everywhere. **** **** Heun: Give the value of $\pi$ or $\pi_\mathrm{t}$ here. ****
 
 To determine values of the three mortality function fitting parameters ($\omega_\mathrm{1}$, $\omega_\mathrm{2}$, and $\omega_\mathrm{3}$), we used a least-squares minimization. Historical values of $z_\mathrm{t}$ were calculated from Equation \ref{eq:z} by using the calculated historical values of consumption ($c_\mathrm{t}$). These historical $z_\mathrm{t}$ values were used to calculated a predicted $d_\mathrm{t}$ value that was then compared to the historical $d_\mathrm{t}$ values for the minimzation. 
 
-**** Heun: show graph here ****
-
 To determine $\eta$ and $\gamma$
 
-\subsubsection{Optimization}
+**** Heun: show graph here ****
+
+%------------------------------
+\subsubsection{Parameter estimation}
+\label{sec:basic_model_parameter_estimation}
+%------------------------------
+
+**** Heun: Create a table of the estimated parameters. ****
 
 
 
@@ -259,7 +272,7 @@ To determine $\eta$ and $\gamma$
 \label{sec:Results_basic_model}
 %++++++++++++++++++++++++++++++
 
-**** MKH to develop graphs and other results based on Caleb's existing work ****
+**** Heun: develop graphs and other results based on Caleb's work with the basic model. ****
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -269,7 +282,7 @@ To determine $\eta$ and $\gamma$
 
 %++++++++++++++++++++++++++++++
 \subsection{Enhanced model development}
-\label{sec:Enhanced_model_development}
+\label{sec:enhanced_model_development}
 %++++++++++++++++++++++++++++++
 
 We now enhance the basic model with both energy flows and capital stock.
@@ -283,14 +296,30 @@ We now enhance the basic model with both energy flows and capital stock.
 
 %++++++++++++++++++++++++++++++
 \subsection{Tuning: enhanced model}
-\label{sec:Tuning_enhanced_model}
+\label{sec:enhanced_model_tuning}
 %++++++++++++++++++++++++++++++
 
 **** Caleb: discuss the process you used to tune the enhanced model. ****
 
+%------------------------------
+\subsubsection{Historical data}
+\label{sec:enhanced_model_historical_data}
+%------------------------------
+
+%------------------------------
+\subsubsection{``Ground truth'' information}
+\label{sec:enhanced_model_ground_truth}
+%------------------------------
+
+%------------------------------
+\subsubsection{Parameter estimation}
+\label{sec:enhanced_model_parameter_estimation}
+%------------------------------
+
+
 %++++++++++++++++++++++++++++++
 \subsection{Results: enhanced model}
-\label{sec:Results_enhanced_model}
+\label{sec:enhanced_model_results}
 %++++++++++++++++++++++++++++++
 
 **** MKH to develop graphs and other results based on Caleb's existing work ****
