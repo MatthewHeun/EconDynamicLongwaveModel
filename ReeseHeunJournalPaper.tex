@@ -58,15 +58,13 @@ The basic model includes neither energy flows nor capital stock.
   \end{center}
 \end{figure}
 
-For \citet{Jones:2001wn}, economic production is given by
+For \citet{Jones:2001wn}, economic production ($y$) is given by
 
 \begin{equation} \label{eq:Jones_production_function}
 	y_\mathrm{t} = a_\mathrm{t} ^\sigma l_\mathrm{Y,t} ^\beta t_\mathrm{t} ^{1-\beta} \epsilon_\mathrm{t}
 \end{equation}
 
-\noindent where $a_\mathrm{t}$ is the indexed stock of ideas, $l_\mathrm{Y,t}$ is indexed labor in the goods producing sector, $t_\mathrm{t}$ is indexed land (always 1.0), and $\epsilon_\mathrm{t}$ is an exogenous shock parameter. 
-
-Lowercase variable names represent unitless, indexed quantities. The indexed factors of production ($a$, $l$, and $t$) at time $\mathrm{t}$ are non-dimensionalized by indexing relative to a base year (subscript ``0''):
+\noindent where $a$ is the indexed stock of ideas, $l_\mathrm{Y}$ is indexed labor in the goods producing sector, $t$ is indexed land (always 1.0), and $\varepsilon$ is an exogenous shock parameter. The subscript t indicates time (measured in years). Lowercase variable names represent unitless, indexed quantities. The indexed factors of production ($a$, $l$, and $t$) are defined relative to a base year ($\mathrm{t} = 0$):
 
 \begin{equation} \label{eq:index_y}
 	y_\mathrm{t} \equiv \frac{Y_\mathrm{t}}{Y_\mathrm{0}}
@@ -81,7 +79,7 @@ Lowercase variable names represent unitless, indexed quantities. The indexed fac
 \end{equation}
 
 \begin{equation} \label{eq:index_t}
-	t_\mathrm{t} \equiv \frac{T_\mathrm{t}}{T_\mathrm{0}}
+	t_\mathrm{t} \equiv \frac{T_\mathrm{t}}{T_\mathrm{0}} = 1.0
 \end{equation}
 
 \noindent with $Y$ representing economic output (in 2005\$/year), $A$ representing the stock of knowledge and ideas (in ideas), $L_\mathrm{Y}$ representing labor in the production sector (in workers/year), and $T$ representing the stock of available land (in m$^2$).
@@ -92,7 +90,7 @@ Our model for preferences between consumption and childrearing is based on the u
 	u(c_\mathrm{t}, b_\mathrm{t}) = u_\mathrm{c} + u_\mathrm{b} = \frac{1-\mu}{1-\gamma} \left(\frac{k_\mathrm{c} \tilde c_\mathrm{t}}{U_\mathrm{c,0}} \right)^{1-\gamma} + \frac{\mu}{1-\eta} \left(\frac{k_\mathrm{b} \tilde b_\mathrm{t}}{U_\mathrm{b,0}} \right)^{1-\eta}
 \end{equation}
 
-\noindent where $\mu$, $\gamma$, and $\eta$ are dimensionless parameters having values between 0 and 1; $k_\mathrm{c}$ and $k_\mathrm{b}$ represent the utility an individual obtains per unit consumption or birth (in units of utils/\$ and utils/birth, respectively); and $U_{\mathrm{c,0}}$ and $U_{\mathrm{b,0}}$ are the utility derived from consumption and childrearing in the first year of the simulation, respectively (in units of utils/year). The variable $\tilde c_\mathrm{t}$ is the amount of the individual's consumption in 2005\$/year-capita and $\tilde b_\mathrm{t}$ is the number of births in births/year-capita. $\tilde c_\mathrm{t}$ represents the amount of consumption above subsistence level ($\bar c$ in 2005\$/year-capita) and $\tilde b_\mathrm{t}$ represents the amount of births above some long-run birth rate ($\bar b$, in births/year-capita). $u_\mathrm{c}$ and $u_\mathrm{b}$ are the utilities obtained from consumption and births, represented by the left and right terms respectively on the right side of Equation \ref{eq:utility_function}.
+\noindent where $\mu$, $\gamma$, and $\eta$ are dimensionless parameters with values between 0 and 1; $k_\mathrm{c}$ and $k_\mathrm{b}$ represent the utility an individual obtains per unit consumption or birth (in units of utils/\$ and utils/birth, respectively); and $U_{\mathrm{c,0}}$ and $U_{\mathrm{b,0}}$ are the utility derived from consumption and childrearing in the first year of the simulation, respectively (in units of utils/year). The variable $\tilde c$ is the rate of the individual's consumption in 2005\$/year-capita and $\tilde b$ is the rate of births in births/year-capita. $\tilde c$ represents the rate of consumption above subsistence level ($\bar c$ in 2005\$/year-capita), and $\tilde b$ represents the rate of births above some long-run birth rate ($\bar b$, in births/year-capita). $u_\mathrm{c}$ and $u_\mathrm{b}$ are the utilities obtained from consumption and births, represented by the first and second terms, respectively, on the right side of Equation~\ref{eq:utility_function}.
 
 \begin{equation} \label{eq:c_tilde}
 	\tilde c_\mathrm{t} \equiv c_\mathrm{t} - \bar c
@@ -102,13 +100,13 @@ Our model for preferences between consumption and childrearing is based on the u
 	\tilde b_\mathrm{t} \equiv b_\mathrm{t} - \bar b
 \end{equation}
 
-The first order condition on the utility function indicates that a person will obtain equal incremental utility from spending additional time consuming or rearing children:
+The first order condition on the utility function (Equation \ref{eq:utility_function}) indicates that a person will obtain equal incremental utility from spending additional time consuming or rearing children:
 
 \begin{equation} \label{eq:first_order_condition_def}
 	\frac{\partial u_{c}}{\partial \tau} = \frac{\partial u_{b}}{\partial \tau}
 \end{equation}
 
-\noindent The first order condition simplifies to 
+\noindent where $\tau \in (0,1)$. $\tau$ can be interpreted on a per-worker basis as worked hours per total available working time. Or, if each individual in the population is assumed to be either a worker or a childrearer, $\tau$ represents the ratio of workers to total population ($L/N$). The first order condition simplifies to 
 
 \begin{equation} \label{eq:first_order_condition_simplified}
 	\frac{\partial u/ \partial\tilde b}{\partial u/ \partial\tilde c} = \frac{w_\mathrm{t}}{\nu},
@@ -128,7 +126,7 @@ The first order condition on the utility function indicates that a person will o
 	b_\mathrm{t} = \nu (1-\tau_\mathrm{t})
 \end{equation}
 
-\noindent where $\tau$ is a number between 0 and 1 representing the fraction of available time that people spend on labor (unitless or time working per total time), $N$ is the total population (in persons), and $L$ is the total amount of available labor in the economy (in workers). So, $(1-\tau)$ represents the fraction of available time spent on childrearing (unitless or time childrearing per total time). It is worth noting that the units of $\tau$ can also be defined in terms of workers/capita, as shown in equation \ref{eq:pop_work}.
+\noindent $N$ is the total population (in persons), and $L$ is the total amount of available labor in the economy (in workers). So, $(1-\tau)$ represents the fraction of available time spent on childrearing (unitless or time childrearing per total time). It is worth noting that the units of $\tau$ can also be defined in terms of workers/capita, as shown in Equation \ref{eq:pop_work}.
 
 Applying the first order condition (Equation \ref{eq:first_order_condition_simplified}) and including time constraints yields an equation that describes preferences for consumption and childrearing:
 
@@ -211,7 +209,7 @@ The rate of change of indexed population ($n$) is a function of birth and mortal
 To tune the basic model we needed to determine values of each of each of the fitting parameters, or the parameters which do not vary with time in the case of the Jones model. We sought to do this by comparing the various outputs predicted by our model to historical data and then using the least-squares optimization method. The following subsections discuss data collection and the optimization process.
 
 \subsubsection{Data collection}
-We collected historical time series data for the United States on economic output (Y), total labor force (L), knowledge sector labor force (L$_\mathrm{A}$), population (N), births (b), deaths (d), and wages (w). In all cases historical data for the United States was obtained for the years 1980-2011 unless otherwise noted. 
+We collected historical time series data for the United States on economic output ($Y$), total labor force ($L$), knowledge sector labor force (L$_\mathrm{A}$), population ($N$), births ($b$), deaths ($d$), and wages ($w$). In all cases historical data for the United States was obtained for the years 1980-2011 unless otherwise noted. 
 
 We measured economic output by using gross domestic product (GDP) and obtained GDP data, in real 2005 U.S. dollars per year, from the World Bank's Global Economic Prospects (GEP) database. 
 
@@ -227,12 +225,12 @@ We defined deaths as the number of deaths within the United States each year. We
 
 We defined wages as the yearly salarly that is made by someone working in either the knowledge or manufacturing sector (since the wages will be equivalent in dynamic equilibrium). Wage data was taken from the United States Census Bureau's annual population survey, which had data on average per capita income in the United States. The per capita income data was multiplied by the total population and then divided by the labor force to obtain wage data in 2005 dollars per year-worker.
 
-Based on the historical data outlined above, we were also able to calculate "historical" time series for other variables. Using equation \ref{eq:pop_work}, we calculated historical values for $\tau_\mathrm{t}$. Using the historical $\tau_\mathrm{t}$ values and equation \ref{eq:consumption_constraint} we were able to calculate historical values of consumption. 
+Based on the historical data outlined above, we were also able to calculate ``historical'' time series for other variables. Using Equation \ref{eq:pop_work}, we calculated historical values for $\tau_\mathrm{t}$. Using the historical $\tau_\mathrm{t}$ values and Equation \ref{eq:consumption_constraint} we were able to calculate historical values of consumption. 
 
-\subsubsection{"Ground truth" information}
-Based on the historical data we collected, we wanted to determine as much ground truth information as possible for the variables that were not meant to change over time. We used 1980 values of $\tau$ and b to calculate a ground truth value for $\nu$. We also used 1980 values for L$_\mathrm{A}$ and L to calculate a ground truth value for $\mathrm{pi}$.
+\subsubsection{``Ground truth'' information}
+Based on the historical data we collected, we wanted to determine as much ground truth information as possible for the variables that were not meant to change over time. We used 1980 values of $\tau$ and $b$ to calculate a ground truth value for $\nu$. We also used 1980 values for $L_\mathrm{A}$ and $L$ to calculate a ground truth value for $\pi$.
 
-To determine values of the three mortality function fitting parameters ($\omega_\mathrm{1}$, $\omega_\mathrm{2}$, and $\omega_\mathrm{3}$) we used a least-squares minimization. Historical values of z were calculated from equation \ref{eq:z} by using the calculated historical values of consumption. These historical z values were used to calculated a predicted d value that was then compared to the historical d values for the minimzation. 
+To determine values of the three mortality function fitting parameters ($\omega_\mathrm{1}$, $\omega_\mathrm{2}$, and $\omega_\mathrm{3}$) we used a least-squares minimization. Historical values of z were calculated from Equation \ref{eq:z} by using the calculated historical values of consumption. These historical z values were used to calculated a predicted $d$ value that was then compared to the historical $d$ values for the minimzation. 
 
 To determine $\eta$ and $\gamma$
 
