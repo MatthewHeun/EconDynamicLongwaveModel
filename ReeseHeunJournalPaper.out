@@ -1,0 +1,18 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Sources of data}{}% 2
+\BOOKMARK [1][-]{section.3}{Basic model \(without energy or capital stock\)}{}% 3
+\BOOKMARK [2][-]{subsection.3.1}{Basic model development}{section.3}% 4
+\BOOKMARK [2][-]{subsection.3.2}{Tuning: basic model}{section.3}% 5
+\BOOKMARK [3][-]{subsubsection.3.2.1}{Historical data}{subsection.3.2}% 6
+\BOOKMARK [3][-]{subsubsection.3.2.2}{``Ground truth'' information}{subsection.3.2}% 7
+\BOOKMARK [3][-]{subsubsection.3.2.3}{Parameter estimation}{subsection.3.2}% 8
+\BOOKMARK [2][-]{subsection.3.3}{Results: basic model}{section.3}% 9
+\BOOKMARK [1][-]{section.4}{Enhanced model \(with energy and capital stock\)}{}% 10
+\BOOKMARK [2][-]{subsection.4.1}{Enhanced model development}{section.4}% 11
+\BOOKMARK [2][-]{subsection.4.2}{Tuning: enhanced model}{section.4}% 12
+\BOOKMARK [3][-]{subsubsection.4.2.1}{Historical data}{subsection.4.2}% 13
+\BOOKMARK [3][-]{subsubsection.4.2.2}{``Ground truth'' information}{subsection.4.2}% 14
+\BOOKMARK [3][-]{subsubsection.4.2.3}{Parameter estimation}{subsection.4.2}% 15
+\BOOKMARK [2][-]{subsection.4.3}{Results: enhanced model}{section.4}% 16
+\BOOKMARK [1][-]{section.5}{Implications}{}% 17
+\BOOKMARK [1][-]{section.6}{Conclusion}{}% 18

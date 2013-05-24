@@ -113,7 +113,7 @@ The first order condition on the utility function (Equation \ref{eq:utility_func
 	\frac{\partial u_\mathrm{t}/ \partial\tilde b_\mathrm{t}}{\partial u_\mathrm{t}/ \partial\tilde c_\mathrm{t}} = \frac{w_\mathrm{t}}{\nu},
 \end{equation}
 
-\noindent where $w_\mathrm{t}$ is the wage rate (in 2005\$/year-worker) and $\nu$ is a birth efficiency (in births/year-capita). $w_\mathrm{t}$ and $\nu$ come from time constraints **** Caleb: Are these really both \emph{time} constraint equations? **** in the economy, given by:
+\noindent where $w_\mathrm{t}$ is the wage rate (in 2005\$/year-worker) and $\nu$ is a birth efficiency (in births/year-capita). $w_\mathrm{t}$ and $\nu$ appear in Equations \ref{eq:consumption_constraint} and \ref{eq:birth_constraint}, given by:
 
 \begin{equation}\label{eq:pop_work}
 	L_\mathrm{t} = \tau_\mathrm{t} N_\mathrm{t}
@@ -129,14 +129,12 @@ The first order condition on the utility function (Equation \ref{eq:utility_func
 
 \noindent $N_\mathrm{t}$ is the total population (in persons), and $L_\mathrm{t}$ is the total amount of available labor in the economy (in workers/year). So, $(1-\tau_\mathrm{t})$ represents the fraction of available time spent on childrearing (unitless or time childrearing per total time). It is worth noting that the units of $\tau_\mathrm{t}$ can also be defined in terms of workers/capita, as shown in Equation~\ref{eq:pop_work}.
 
-Applying the first order condition (Equation \ref{eq:first_order_condition_simplified}) with time constraints **** Caleb: time constraints only? **** yields an equation that describes preferences for consumption and childrearing:
+Applying the first order condition (Equation \ref{eq:first_order_condition_simplified}) with Equations \ref{eq:consumption_constraint} and \ref{eq:birth_constraint} yields an equation that describes preferences for consumption and childrearing:
 
 \begin{equation} \label{eq:FOC_and_time_constraints}
-	\frac{1}{\alpha \mu} \frac{U_\mathrm{b,0}}{k_\mathrm{b}} \left( \frac{k_\mathrm{b}}{U_\mathrm{b,0}} \tilde b_\mathrm{t} \right) ^{\eta} 
+	\frac{1}{\nu \mu} \frac{U_\mathrm{b,0}}{k_\mathrm{b}} \left( \frac{k_\mathrm{b}}{U_\mathrm{b,0}} \tilde b_\mathrm{t} \right) ^{\eta} 
 	= \frac{1}{w_\mathrm{t}(1-\mu)} \frac{U_\mathrm{c,0}}{k_\mathrm{c}}  \left( \frac{k_\mathrm{c}}{U_\mathrm{c,0}} \tilde c_\mathrm{t} \right)^\gamma .
 \end{equation}
-
-**** Caleb: Should $\alpha$ be replaced by $\nu$ in the above equation? **** 
 
 **** Caleb: Weren't we going to include thg $G$ term in Equation \ref{eq:FOC_and_time_constraints}? Include below. ****
 
@@ -208,7 +206,7 @@ The rate of change of indexed population ($n$) is a function of birth and mortal
 	z_\mathrm{t} = \frac{c_\mathrm{t}}{\bar c} - 1
 \end{equation}
 
-\noindent **** Caleb: should that be $\tilde{c}_\mathrm{t}$ in the numerator of Equation~\ref{eq:z}? **** which is an indicator of the mortality rate through Equation~\ref{eq:mortality_rate}.
+\noindent which is an indicator of the mortality rate through Equation~\ref{eq:mortality_rate}.
 
 %++++++++++++++++++++++++++++++
 \subsection{Tuning: basic model}
@@ -224,11 +222,11 @@ To tune the basic model to match U.S. historical data from 1980--2011, we estima
 
 We collected historical time series data for United States on economic output ($Y_\mathrm{t}$), total labor force ($L_\mathrm{t}$), knowledge sector labor force ($L_\mathrm{A,t}$), population ($N_\mathrm{t}$), births ($B_\mathrm{t}$), deaths ($D_\mathrm{t}$), and wages ($w_\mathrm{t}$). Historical data was obtained for the years 1980--2011 unless otherwise noted. 
 
-We measure economic output ($Y_\mathrm{t}$) by gross domestic product (GDP). We obtained GDP data, in real 2005 U.S. dollars per year, from the World Bank's Global Economic Prospects (GEP) database \citep{WorldBankGEP:2013a} **** Caleb: Is this reference correct? ****.
+We measure economic output ($Y_\mathrm{t}$) by gross domestic product (GDP). We obtained GDP data, in real 2005 U.S. dollars per year, from the World Bank's Global Economic Prospects (GEP) database \citep{WorldBankGEP:2013a}.
 
-We obtained total labor force data ($L_\mathrm{t}$) from the United States Bureau of Labor Statistics (BLS) in units of total number of workers/employed persons \citep{BLS:2013a} **** Caleb: Is this the correct reference? ****. 
+We obtained total labor force data ($L_\mathrm{t}$) from the United States Bureau of Labor Statistics (BLS) in units of total number of employed persons \citep{BLS:2013a}. 
 
-We quantify the size of the knowledge sector labor force ($L_\mathrm{A,t}$) by the total number of researchers, where researchers, i.e., people working in research and development (R\&D) positions in STEM (science, technology, engineering, mathematics) fields. (Note that \citet{Jones:2001wn} does not provide a specific definition of knowledge sector labor.) Data on the knowledge sector labor force was obtained from the Organisation of Economic Co-operation and Development (OECD) time series on research and development R\&D personel. **** Caleb: need reference. **** Data are available from 1981--2007, with odd years only between 1985 and 1999, so we extrapolated **** Caleb: was this a linear extrapolation? **** forward from 2007 to 2011 and backward from 1981 to 1980.
+We quantify the size of the knowledge sector labor force ($L_\mathrm{A,t}$) by the total number of researchers, where researchers, i.e., people working in research and development (R\&D) positions in STEM (science, technology, engineering, mathematics) fields. (Note that \citet{Jones:2001wn} does not provide a specific definition of knowledge sector labor.) Data on the knowledge sector labor force was obtained from the Organisation of Economic Co-operation and Development (OECD) time series on research and development R\&D personel. Data are available from 1981--2007, with odd years only between 1985 and 1999, so we extrapolated linearly forward from 2007 to 2011 and backward from 1981 to 1980. We interpolated linearly for even years between 1985 and 1999.
 
 We define population ($N_\mathrm{t}$) as the total number of people living in the United States each year. We obtained population data from the World Bank's World Development Indicators (WDI) database \citep{WorldBankWDI:2013a}.
 
