@@ -16,6 +16,7 @@ LongwaveModelPaper.pdf
 *.tikz
 *.aux
 *.spl
+*.out
 *-concordance.tex
 *-tikzDictionary
 *.tex
