@@ -224,7 +224,7 @@ The rate of change of indexed population ($n$) is a function of birth and mortal
 	d_\mathrm{t} = \frac{1}{\omega_\mathrm{1} z_\mathrm{t}^{\omega_\mathrm{2}} + \omega_\mathrm{3} z_\mathrm{t}} + \bar d,
 \end{equation}
 
-\noindent where $d_\mathrm{t}$ is the mortality rate and $\bar d$ is the long-run mortality rate **** Caleb: what is the value of $\bar{d}$? ****, both in units of deaths/year-capita. $\omega_\mathrm{1}$, $\omega_\mathrm{2}$, and $\omega_\mathrm{3}$ are fitted parameters. The ratio of consumption to the subsistence level is given by $z_\mathrm{t}$:
+\noindent where $d_\mathrm{t}$ is the mortality rate and $\bar d$ is the long-run mortality rate, taken to be 0 as \citet{Jones:2001wn}, both in units of deaths/year-capita. $\omega_\mathrm{1}$, $\omega_\mathrm{2}$, and $\omega_\mathrm{3}$ are fitted parameters. The ratio of consumption to the subsistence level is given by $z_\mathrm{t}$:
 
 \begin{equation} \label{eq:z}
 	z_\mathrm{t} = \frac{c_\mathrm{t}}{\bar c} - 1
@@ -271,9 +271,9 @@ Based on the historical data outlined above, we calculated ``historical'' time s
 
 Per capita income data were multiplied by the total population and then divided by the labor force to obtain a wage time series ($w_\mathrm{t}$) in 2005\$/year-worker. Using Equation \ref{eq:pop_work}, we calculated historical values for $\tau_\mathrm{t}$. Using the historical $\tau_\mathrm{t}$ values and Equation \ref{eq:consumption_constraint} we were able to calculate historical values of consumption ($c_\mathrm{t}$). 
 
-We used 1980 values of $\tau_\mathrm{t}$ and $b_\mathrm{t}$ to calculate a value for $\nu$ **** Heun: give the value of $\nu$ here **** that we hold constant through time. We used 1980 values for $L_\mathrm{A,1980}$ and $L_{1980}$ to calculate an invariant value for $\pi_\mathrm{t}$. **** Caleb: Is $\pi$ really invariant through the simulation? If so, we need to remove the subscript ``t'' everywhere. **** **** Heun: Give the value of $\pi$ or $\pi_\mathrm{t}$ here. ****
+We used $\tau_\mathrm{1980}$ and $b_\mathrm{1980}$ to calculate a value for $\nu$ (0.02872 births/year-capita) that we hold constant through time. We used $L_\mathrm{A,1980}$ and $L_{1980}$ to calculate an invariant value for $\pi$ (0.006518). **** Heun Write R code to calculate these numbers. ****
 
-To determine values of the three mortality function fitting parameters ($\omega_\mathrm{1}$, $\omega_\mathrm{2}$, and $\omega_\mathrm{3}$), we used a least-squares minimization. Historical values of $z_\mathrm{t}$ were calculated from Equation \ref{eq:z} by using the calculated historical values of consumption ($c_\mathrm{t}$). These historical $z_\mathrm{t}$ values were used to calculated a predicted $d_\mathrm{t}$ value that was then compared to the historical $d_\mathrm{t}$ values for the minimzation. 
+To determine values of the three mortality function fitting parameters ($\omega_\mathrm{1}$, $\omega_\mathrm{2}$, and $\omega_\mathrm{3}$), we used least-squares minimization. Historical values of $z_\mathrm{t}$ were calculated from Equation \ref{eq:z} by using the calculated historical values of consumption ($c_\mathrm{t}$). These historical $z_\mathrm{t}$ values were used to calculated a predicted $d_\mathrm{t}$ value that was then compared to the historical $d_\mathrm{t}$ values for the minimzation. 
 
 To determine $\eta$ and $\gamma$
 
