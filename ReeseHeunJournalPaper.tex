@@ -136,20 +136,22 @@ Applying the first order condition (Equation \ref{eq:first_order_condition_simpl
 	= \frac{1}{w_\mathrm{t}(1-\mu)} \frac{U_\mathrm{c,0}}{k_\mathrm{c}}  \left( \frac{k_\mathrm{c}}{U_\mathrm{c,0}} \tilde c_\mathrm{t} \right)^\gamma .
 \end{equation}
 
-**** Caleb: Weren't we going to include thg $G$ term in Equation \ref{eq:FOC_and_time_constraints}? Include below. ****
+\noindent where $\gamma$, $\eta$, and $\mu$ are constants; $k_\mathrm{b}$ and $k_\mathrm{c}$ represent the utility per unit birth and utility per unit of consumption; and $U_\mathrm{b,0}$ and $U_\mathrm{c,0}$ are the total utilities derived from births and consumption respectively in the first year of the simulation. Since $U_\mathrm{b,0}$, $U_\mathrm{c,0}$, $k_\mathrm{b}$, $k_\mathrm{c}$, and $\mu$ are all constants that can be moved to the front of either side of the equation, we grouped these parameters together into a new parameter called $G$.
 
 \begin{equation} \label{eq:FOC_with_G}
-  First~order~condition~equation~with~G
+ 	\tilde b_\mathrm{t}^\eta = \frac{\tilde c_\mathrm{t}^\gamma}{w_\mathrm{t}} G
 \end{equation}
+
+\noindent where $G$ is also constant over time.
 
 Labor is split between two sectors; one devoted to innovation and producing new ideas ($A_\mathrm{t}$) and the other devoted to producing goods ($Y_\mathrm{t}$). The split between these sectors can be expressed in terms of the wages paid to workers in each sector as shown in the equations below:
 
 \begin{equation} \label{eq:knowledge_comp}
-	w_\mathrm{A,t} L_\mathrm{A,t} = \pi_\mathrm{t} \zeta Y_\mathrm{t}
+	w_\mathrm{A,t} L_\mathrm{A,t} = \pi \zeta Y_\mathrm{t}
 \end{equation}
 
 \begin{equation} \label{eq:labor_comp}
-	w_\mathrm{Y,t} L_\mathrm{Y,t} = (1-\pi_\mathrm{t}) \zeta Y_\mathrm{t}
+	w_\mathrm{Y,t} L_\mathrm{Y,t} = (1-\pi) \zeta Y_\mathrm{t}
 \end{equation}
 
 \noindent where $w_\mathrm{A,t}$ and $w_\mathrm{Y,t}$ are the wages paid to workers in the knowledge and goods producing sectors respectively (in 2005\$/year-worker), and $L_\mathrm{A,t}$ and $L_\mathrm{Y,t}$ represent the number of workers employed in each of the sectors (in workers/year). $\zeta$ represents the fraction of economic output ($Y_\mathrm{t}$) that goes toward wages. The dimensionless variable $\pi$ is the fraction of the economy's total output ($Y_\mathrm{t}$) that is devoted to compensating inventors in the knowledge sector. The total labor supply ($L_\mathrm{t}$) is constrained as the sum of the labor supply in the two sectors.
@@ -177,24 +179,30 @@ In equilibrium, it is expected that wages paid to workers in each sector will be
 Wage equality (Equation~\ref{eq:wage_equality}) allows $\pi_\mathrm{t}$ to be directly proportional to the fraction of the total employed population working in the knowledge sector in static equilibrium.
 
 \begin{equation} \label{eq:pi}
-	\pi_\mathrm{t} = \frac{L_\mathrm{A,t}}{L_\mathrm{t}}
+	\pi = \frac{L_\mathrm{A,t}}{L_\mathrm{t}}
 \end{equation}
 
 Two differential equations describe the growth of knowledge ($A_\mathrm{t}$) and population ($N_\mathrm{t}$) over time. The rate of change in the indexed stock of knowledge ($a_\mathrm{t}$) is given by
 
 \begin{equation} \label{eq:da_dt}
-	\frac{\mathrm{d}a_\mathrm{t}}{\mathrm{d}t} = \delta l_\mathrm{A,t}^\lambda a_\mathrm{t}^\phi
+	\frac{\mathrm{d}a_\mathrm{t}}{\mathrm{d}t} = \delta' l_\mathrm{A,t}^\lambda a_\mathrm{t}^\phi
 \end{equation}
 
-\noindent where $\delta$, $\lambda$, and $\phi$ are constants, and $l_\mathrm{A,t}$ is the indexed labor in the knowledge sector of the economy.
+\noindent where $\lambda$, and $\phi$ are constants, and $l_\mathrm{A,t}$ is the indexed labor in the knowledge sector of the economy. $\delta'$ is given by,
+
+\begin{equation} \label{eq:delta}
+	\delta' = \delta L_\mathrm{A,0}^\lambda A_\mathrm{0}^{(\phi - 1)}
+\end{equation}
+
+\noindent where $\delta$ is a constant and $L_\mathrm{A,0}$ and $A_\mathrm{0}$ represent the labor in the knowledge sector and stock of knowledge in the first year of the simulation. 
 
 The rate of change of indexed population ($n$) is a function of birth and mortality rates ($b_\mathrm{t}$ and $d_\mathrm{t}$ in births/year-capita and deaths/year-capita, respectively):
 
 \begin{equation} \label{eq:dn_dt}
-	\frac{\mathrm{d}n_\mathrm{t}}{\mathrm{d}t} = b_\mathrm{t} n_\mathrm{t} - d_\mathrm{t} n_\mathrm{t},
+	\frac{\mathrm{d}n_\mathrm{t}}{\mathrm{d}t} = (b_\mathrm{t} - d_\mathrm{t} + m) n_\mathrm{t},
 \end{equation}
 
-\noindent **** Caleb: what about migration? **** where $b_\mathrm{t}$ is the birth rate from Equation~\ref{eq:utility_function}, $n_\mathrm{t}$ is the indexed population, and $d_\mathrm{t}$ is the mortality rate in deaths/year-capita. The form of the mortality equation is taken from \citet{Jones:2001wn} as
+\noindent where $b_\mathrm{t}$ is the birth rate from Equation~\ref{eq:utility_function}, $n_\mathrm{t}$ is the indexed population, $d_\mathrm{t}$ is the mortality rate in deaths/year-capita, and $m$ is the average rate of net migration in the United States. The form of the mortality equation is taken from \citet{Jones:2001wn} as
 
 \begin{equation} \label{eq:mortality_rate}
 	d_\mathrm{t} = \frac{1}{\omega_\mathrm{1} z_\mathrm{t}^{\omega_\mathrm{2}} + \omega_\mathrm{3} z_\mathrm{t}} + \bar d,
@@ -213,7 +221,7 @@ The rate of change of indexed population ($n$) is a function of birth and mortal
 \label{sec:basic_model_tuning}
 %++++++++++++++++++++++++++++++
 
-To tune the basic model to match U.S. historical data from 1980--2011, we estimate values for the fitting parameters, including $\beta$ from Equation~\ref{eq:Jones_production_function}; $\bar c$ and $\bar b$ from Equations \ref{eq:c_tilde} and \ref{eq:b_tilde}, respectively; $\mu$, $\nu$, and $G$ from Equation~\ref{eq:FOC_with_G}; $\zeta$ from Equation~\ref{eq:knowledge_comp}; $\delta$, $\lambda$, and $\phi$ from Equation \ref{eq:da_dt}; and $\omega_1$, $\omega_2$, and $\omega_3$ from Equation \ref{eq:mortality_rate}. We tuned the basic model with least-squares optimization by comparing outputs of the model ($y_\mathrm{t}$, $c_\mathrm{t}$, $\pi_\mathrm{t}$, $l_\mathrm{Y,t}$, $l_\mathrm{A,t}$, $b_{\mathrm{t}}$, and $d_\mathrm{t}$) to historical data. The following subsections discuss historical data, development of ``ground truth'' time series, and the parameter estimation process.
+To tune the basic model to match U.S. historical data from 1980--2011, we estimate values for the fitting parameters, including $\beta$ and $\sigma$ from Equation~\ref{eq:Jones_production_function}; $\bar c$ and $\bar b$ from Equations \ref{eq:c_tilde} and \ref{eq:b_tilde}, respectively; $\tau_\mathrm{t}$ for all years based on year 1980 ($\tau_\mathrm{1980} = L_\mathrm{A,1980}/L_\mathrm{1980}$); $\mu$, $\nu$, and $G$ from Equation~\ref{eq:FOC_with_G}; $\zeta$ from Equation~\ref{eq:knowledge_comp}; $\pi$ from Equation \ref{eq:pi}; $\lambda$ and $\phi$ from Equation \ref{eq:da_dt}; $\delta$ and $A_\mathrm{0}$ from Equation \ref{eq:delta}; $m$ from Equation \ref{eq:dn_dt}; and $\omega_1$, $\omega_2$, $\omega_3$, and $\bar d$ from Equation \ref{eq:mortality_rate}. We tuned the basic model with least-squares optimization by comparing outputs of the model ($y_\mathrm{t}$, $w_\mathrm{t}$, $c_\mathrm{t}$, $\tau_\mathrm{t}$, $l_\mathrm{Y,t}$, $l_\mathrm{A,t}$, $n_\mathrm{t}$, $b_{\mathrm{t}}$, and $d_\mathrm{t}$) to historical data. The following subsections discuss historical data, development of ``ground truth'' time series, and the parameter estimation process.
 
 %------------------------------
 \subsubsection{Historical data}
