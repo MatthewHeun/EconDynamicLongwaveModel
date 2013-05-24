@@ -4,8 +4,13 @@
 \documentclass[letterpaper,12pt]{article}
 \usepackage{dgjournal}          
 \usepackage{mathptmx}
-\usepackage{graphicx}
+\usepackage{graphicx} % Allows use of width and scale options for \includegraphics
+\usepackage{hyperref} % To create hyperlinks in the paper
+\usepackage{soul} % Provides strikethrough text
 \usepackage[authoryear,comma,longnamesfirst,sectionbib]{natbib} 
+%% The lineno packages adds line numbers. Start line numbering with
+%% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
+%% for the whole article with \linenumbers after \end{frontmatter}.
 \usepackage{lineno}
 \linenumbers % Turns on line numbering for the entire document.
 
