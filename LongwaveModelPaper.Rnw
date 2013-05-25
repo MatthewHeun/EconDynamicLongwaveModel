@@ -70,24 +70,31 @@ scaleTickSize <- -0.5 #50% of normal size and pointing INWARD!
 # Load raw data
 rawData <- read.table(file="data/USData.txt", header=TRUE, row.names=1, sep="\t")
 data <- rawData #Duplicate the raw data into a new data.frame that we'll manipulate.
+# Calculate other raw data items
 L_Y <- data["L"] - data["L_A"]; names(L_Y)  <- "L_Y"
+data <- cbind(data, L_Y)
 # Calculate indexed data
 firstYear <- "1980"
-Y_0  <- data[firstYear, "Y"]
-N_0 <- data[firstYear, "N"]
-L_Y_0 <- L_Y[firstYear,"L_Y"]
-y <- data["Y"] / Y_0; names(y) <- "y"
-n <- data["N"] / N_0; names(n) <- "n"
-l_Y <- (data["L"] - data["L_A"]) / L_Y_0; names(l_Y) <- "l_Y"
+Y_0  <- data[firstYear, "Y"]  # Initial GDP
+N_0 <- data[firstYear, "N"]   # Initial population
+L_Y_0 <- L_Y[firstYear,"L_Y"] # Initial L_Y
+y <- data["Y"] / Y_0; names(y) <- "y" # Indexed GDP
+n <- data["N"] / N_0; names(n) <- "n" # Indexed population
+l_Y <- (data["L"] - data["L_A"]) / L_Y_0; names(l_Y) <- "l_Y" # Indexed workers
 
-data <- cbind(data, L_Y, y, n, l_Y)
+# Calculate per-capita information
+b <- data["B"] / data["N"]; names(b) <- "b" # Per-capita births
+d <- data["D"] / data["N"]; names(d) <- "d" # Per-capita deaths
+
+
+data <- cbind(data, y, n, l_Y, b, d)
 
 
 
 @
 
 <<US_DATA, results='asis', label="tab:US_Data", eval=TRUE>>=
-dataXtable <- xtable(x=data[, 10:13], caption="Data for the U.S.", label=paste("tab:US_Data"))
+dataXtable <- xtable(x=data[, 10:15], caption="Data for the U.S.", label=paste("tab:US_Data"))
 print(dataXtable, caption.placement="top", sanitize.rownames.function = identity, size="\\tiny")
 @
 
