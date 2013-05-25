@@ -64,9 +64,31 @@ defaultKeyYLoc <- 0.95 #y position of the key. This default is good for 9-panel 
 # Other graph parameters that apply to all graphs
 scaleTextSize <- 0.8  #Multiple of normal size
 scaleTickSize <- -0.5 #50% of normal size and pointing INWARD!
+@
 
+<<Historical_Time_Series, eval=TRUE>>=
 # Load raw data
-rawData <- read.table(file="data/USData.txt", header=TRUE, sep="\t")
+rawData <- read.table(file="data/USData.txt", header=TRUE, row.names=1, sep="\t")
+data <- rawData #Duplicate the raw data into a new data.frame that we'll manipulate.
+L_Y <- data["L"] - data["L_A"]; names(L_Y)  <- "L_Y"
+# Calculate indexed data
+firstYear <- "1980"
+Y_0  <- data[firstYear, "Y"]
+N_0 <- data[firstYear, "N"]
+L_Y_0 <- L_Y[firstYear,"L_Y"]
+y <- data["Y"] / Y_0; names(y) <- "y"
+n <- data["N"] / N_0; names(n) <- "n"
+l_Y <- (data["L"] - data["L_A"]) / L_Y_0; names(l_Y) <- "l_Y"
+
+data <- cbind(data, L_Y, y, n, l_Y)
+
+
+
+@
+
+<<US_DATA, results='asis', label="tab:US_Data", eval=TRUE>>=
+dataXtable <- xtable(x=data[, 10:13], caption="Data for the U.S.", label=paste("tab:US_Data"))
+print(dataXtable, caption.placement="top", sanitize.rownames.function = identity, size="\\tiny")
 @
 
 <<Test_DAE_Solver>>=
