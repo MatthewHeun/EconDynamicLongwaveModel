@@ -387,14 +387,21 @@ data <- cbind(data, y, n, l_Y)
 
 Based on the historical data outlined above, we calculated ``historical'' time series for other important parameters in the model. To obtain $b_\mathrm{t}$ in units of births/year-person, we divided the CDC birth data ($B_\mathrm{t}$) by the total population ($N_\mathrm{t}$) for each year. To obtain $d_\mathrm{t}$ in units of deaths/year-person, we divided the CDC mortality data ($D_\mathrm{t}$) by the total population ($N_\mathrm{t}$) for each year.
 
-<<Calculate_b_d>>=
+<<calculate_b_and_d>>=
 # Calculate per-capita information
 b <- data["B"] / data["N"]; names(b) <- "b" # Per-capita births
 d <- data["D"] / data["N"]; names(d) <- "d" # Per-capita deaths
-data <- cbind(data, y, n, l_Y, b, d)
+data <- cbind(data, b, d)
 @
 
-Per capita income data were multiplied by the total population and then divided by the labor force to obtain a wage time series ($w_\mathrm{t}$) in 2005\$/year-worker. Using Equation \ref{eq:pop_work}, we calculated historical values for $\tau_\mathrm{t}$. Using the historical $\tau_\mathrm{t}$ values and Equation \ref{eq:consumption_constraint} we were able to calculate historical values of consumption ($c_\mathrm{t}$). 
+Using Equation \ref{eq:pop_work}, we calculated historical values for $\tau_\mathrm{t}$. Per capita income data were divided by $\tau_\mathrm{t}$ to obtain a wage time series ($w_\mathrm{t}$) in units of 2005\$/year-worker. Using the historical $\tau_\mathrm{t}$ values and Equation \ref{eq:consumption_constraint} we were able to calculate historical values of consumption ($c_\mathrm{t}$).
+
+<<calculate_tau_w_worker_and_c>>=
+tau <- data["L"] / data["N"]; names(tau) <- "tau" # Fraction of workers in each year
+w_worker <- data["w_capita"] / tau; names(w_worker) <- "w_worker" # wage per worker
+c <- w_worker * tau; names(c) <- "c" # consumption per capita
+data <- cbind(data, tau, w_worker, c)
+@
 
 We used $\tau_\mathrm{1980}$ and $b_\mathrm{1980}$ to calculate a value for $\nu$ (0.02872 births/year-capita) that we hold constant through time. We used $L_\mathrm{A,1980}$ and $L_{1980}$ to calculate an invariant value for $\pi$ (0.006518). $\pi$ was used along with the historical wage and labor data to calculate an invariant value for $\zeta$ (0.6794) **** Heun Write R code to calculate these numbers. ****
 ****SEE JonesModelGroundTruthParameters IN THE REPOSITORY****
@@ -405,7 +412,7 @@ Since $\bar c$ represents the subsistence level of consumption, we chose a value
 
 
 <<US_data_table, results='asis', label="tab:US_Data">>=
-dataXtable <- xtable(x=data[, 10:15], caption="Data for the U.S.", label=paste("tab:US_Data"))
+dataXtable <- xtable(x=data[, 10:18], caption="Data for the U.S.", label=paste("tab:US_Data"))
 print(dataXtable, caption.placement="top", sanitize.rownames.function = identity, size="\\tiny")
 @
 
