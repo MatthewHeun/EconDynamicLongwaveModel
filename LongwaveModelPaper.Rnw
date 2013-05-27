@@ -361,20 +361,21 @@ We define wages ($w_\mathrm{t}$) as the yearly salarly that is earned by a worke
 
 <<Historical_Time_Series>>=
 # Load raw data
-rawData <- read.table(file="data/USData.txt", header=TRUE, row.names=1, sep="\t")
-data <- rawData # Duplicate the raw data into a new data.frame that we'll manipulate.
+rawHistoricalData <- read.table(file="data/USData.txt", header=TRUE, row.names=1, sep="\t")
+# Duplicate the raw data into a new data.frame that we'll extend with calculated historical data.
+calculatedHistoricalData <- rawHistoricalData
 # Calculate other raw data items
-L_Y <- data["L"] - data["L_A"]; names(L_Y)  <- "L_Y"
-data <- cbind(data, L_Y)
+L_Y <- calculatedHistoricalData["L"] - calculatedHistoricalData["L_A"]; names(L_Y)  <- "L_Y"
+calculatedHistoricalData <- cbind(calculatedHistoricalData, L_Y)
 # Calculate indexed data
 firstYear <- "1980"
-Y_0  <- data[firstYear, "Y"]  # Initial GDP
-N_0 <- data[firstYear, "N"]   # Initial population
+Y_0  <- calculatedHistoricalData[firstYear, "Y"]  # Initial GDP
+N_0 <- calculatedHistoricalData[firstYear, "N"]   # Initial population
 L_Y_0 <- L_Y[firstYear,"L_Y"] # Initial L_Y
-y <- data["Y"] / Y_0; names(y) <- "y" # Indexed GDP
-n <- data["N"] / N_0; names(n) <- "n" # Indexed population
-l_Y <- (data["L_Y"]) / L_Y_0; names(l_Y) <- "l_Y" # Indexed workers in the manufacturing sector.
-data <- cbind(data, y, n, l_Y)
+y <- calculatedHistoricalData["Y"] / Y_0; names(y) <- "y" # Indexed GDP
+n <- calculatedHistoricalData["N"] / N_0; names(n) <- "n" # Indexed population
+l_Y <- (calculatedHistoricalData["L_Y"]) / L_Y_0; names(l_Y) <- "l_Y" # Indexed workers in the manufacturing sector.
+calculatedHistoricalData <- cbind(calculatedHistoricalData, y, n, l_Y)
 @
 
 
@@ -389,30 +390,34 @@ Based on the historical data outlined above, we calculated ``historical'' time s
 
 <<calculate_b_and_d>>=
 # Calculate per-capita information
-b <- data["B"] / data["N"]; names(b) <- "b" # Per-capita births
-d <- data["D"] / data["N"]; names(d) <- "d" # Per-capita deaths
-data <- cbind(data, b, d)
+b <- calculatedHistoricalData["B"] / calculatedHistoricalData["N"]; names(b) <- "b" # Births/year-capita
+d <- calculatedHistoricalData["D"] / calculatedHistoricalData["N"]; names(d) <- "d" # Deaths/year-capita
+calculatedHistoricalData <- cbind(calculatedHistoricalData, b, d)
 @
 
 Using Equation \ref{eq:pop_work}, we calculated historical values for $\tau_\mathrm{t}$. Per capita income data were divided by $\tau_\mathrm{t}$ to obtain a wage time series ($w_\mathrm{t}$) in units of 2005\$/year-worker. Using the historical $\tau_\mathrm{t}$ values and Equation \ref{eq:consumption_constraint}, we calculated historical values of consumption ($c_\mathrm{t}$) in units of 2005\$/year-capita. Note that consumption ($c_\mathrm{t}$) is equal to per-capita wages.
 
 <<calculate_tau_w_worker_and_c>>=
-tau <- data["L"] / data["N"]; names(tau) <- "tau" # Fraction of workers in each year
-w_worker <- data["w_capita"] / tau; names(w_worker) <- "w_worker" # wage per worker
-c <- w_worker * tau; names(c) <- "c" # consumption per capita
-data <- cbind(data, tau, w_worker, c)
+tau <- calculatedHistoricalData["L"] / calculatedHistoricalData["N"]; names(tau) <- "tau" # Fraction of workers in each year
+w_worker <- calculatedHistoricalData["w_capita"] / tau; names(w_worker) <- "w_worker" # wage/year-worker
+c <- w_worker * tau; names(c) <- "c" # consumption per year-capita. Same as wages/year-capita.
+calculatedHistoricalData <- cbind(calculatedHistoricalData, tau, w_worker, c)
 @
 
-We used $\tau_\mathrm{1980}$ and $b_\mathrm{1980}$ to calculate a value for $\nu$ (0.02872 births/year-capita) that we hold constant through time. We used $L_\mathrm{A,1980}$ and $L_{1980}$ to calculate an invariant value for $\pi$ (0.006518). $\pi$ was used along with the historical wage and labor data to calculate an invariant value for $\zeta$ (0.6794) **** Heun Write R code to calculate these numbers. ****
+We used $\tau_\mathrm{1980}$ and $b_\mathrm{1980}$ to calculate a value for $\nu$ (0.02872 births/year-capita) that is held constant through time. We used $L_\mathrm{A,1980}$ and $L_{1980}$ to calculate an invariant value for $\pi$ (0.006518). $\pi$ was used along with the historical wage and labor data to calculate an invariant value for $\zeta$ (0.6794) **** Heun Write R code to calculate these numbers. ****
 ****SEE JonesModelGroundTruthParameters IN THE REPOSITORY****
+
+<<calculate_nu_pi_and_zeta>>=
+
+@
 
 We used the value of $\bar b$ from \citet{Jones:2001wn}, which is 0. Jones choses this value because it is related to the asymptotic birth rate as consumption goes to infinity, and people will be inclined towards not having children at infinite consumption. ****Heun see pg. 16 of Jones at the bottom if you want to check this out for yourself****
 
 Since $\bar c$ represents the subsistence level of consumption, we chose a value corresponding to the subsistence level of consumption in the year 1980 (the first year of our simulation). The value of $\bar c$ was set to be 5655 2005\$/year-capita. This value is based on the poverty line value in the year 1980 and assuming an average family size of 3.
 
 
-<<US_data_table, results='asis', label="tab:US_Data">>=
-dataXtable <- xtable(x=data[, 10:18], caption="Data for the U.S.", label=paste("tab:US_Data"))
+<<US_data_table, results='asis'>>=
+dataXtable <- xtable(x=calculatedHistoricalData[, 10:18], caption="Historical data for the U.S.", label=paste("tab:Historical_US_Data"))
 print(dataXtable, caption.placement="top", sanitize.rownames.function = identity, size="\\tiny")
 @
 
@@ -535,14 +540,28 @@ We now enhance the basic model with both energy flows and capital stock.
 \label{sec:Raw_Data}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The following table shows raw data for the U.S.
+Table~\ref{tab:Raw_US_Data} shows raw historical time series data for the U.S.
 
-<<Raw_US_Data, results='asis', label="tab:Raw_US_Data", eval=TRUE>>=
-rawDataXtable <- xtable(x=rawData, caption="Raw data for the U.S.", label=paste("tab:Raw_US_Data"))
-print(rawDataXtable, caption.placement="top", sanitize.rownames.function = identity, size="\\tiny")
+<<Raw_US_Data, results='asis', eval=TRUE>>=
+usDataMassaged <- rawHistoricalData # We'll mess around with usDataMassaged to make it easier to read
+usDataMassaged["Y"] <- usDataMassaged["Y"] / 1e9 # Y is now in billion 2005$/year
+usDataMassaged["L"] <- usDataMassaged["L"] / 1e6 # total employment mow in millions/year
+usDataMassaged["L_A"] <- usDataMassaged["L_A"] / 1e6 # total STEM researchers now in millions/year
+usDataMassaged["N"] <- usDataMassaged["N"] / 1e6 # total population now in millions
+usDataMassaged["B"] <- usDataMassaged["B"] / 1e6 # births now in millions/year
+usDataMassaged["D"] <- usDataMassaged["D"] / 1e6 # deaths now in millions/year
+usDataMassaged["K"] <- usDataMassaged["K"] / 1e9 # capital stock now in billion 2005$
+usDataMassaged["E"] <- usDataMassaged["E"] / 1e3 # energy now in TJ/year
+colnames(usDataMassaged) <- c("$Y_\\mathrm{t}$", "$w_\\mathrm{t}$", "$L_\\mathrm{t}$", "$L_\\mathrm{A,t}$", 
+                              "$N_\\mathrm{t}$", "$B_\\mathrm{t}$", "$D_\\mathrm{t}$", "$K_\\mathrm{t}$", 
+                              "$E_\\mathrm{t}$")
+rawDataXtable <- xtable(x=usDataMassaged, 
+                        caption="U.S. raw historical data. GDP ($Y_\\mathrm{t}$) in billion 2005\\$/year; wages ($w_\\mathrm{t}$) in 2005\\$/year-capita; total population ($L_\\mathrm{t}$), researchers in STEM disciplines ($L_\\mathrm{A,t}$), births ($B_\\mathrm{t}$), and deaths ($D_\\mathrm{t}$) in millions/year; population ($N_\\mathrm{t}$) in millions; capital stock ($K_\\mathrm{t}$) in billion 2005\\$; and energy ($E_\\mathrm{t}$) in TJ/year.",
+                        label="tab:Raw_US_Data",
+                        digits=c(0, 2, 0, 1, 3, 1, 3, 3, 2, 2)
+                        )
+print(rawDataXtable, caption.placement="top", sanitize.colnames.function = identity, size="\\tiny")
 @
-
-
 
 %% BibTeX support
 \bibliographystyle{DeGruyter}
