@@ -378,15 +378,12 @@ l_Y <- (calculatedHistoricalData["L_Y"]) / L_Y_0; names(l_Y) <- "l_Y" # Indexed 
 calculatedHistoricalData <- cbind(calculatedHistoricalData, y, n, l_Y)
 @
 
-
 **** Heun: create graph of historical historical data. Perhaps a Lattice plot of some type? ****
 
 %------------------------------
 \subsubsection{``Ground truth'' information}
 \label{sec:basic_model_ground_truth}
 %------------------------------
-
-Based on the historical data outlined above, we calculated ``historical'' time series for other important parameters in the model. To obtain $b_\mathrm{t}$ in units of births/year-person, we divided the CDC birth data ($B_\mathrm{t}$) by the total population ($N_\mathrm{t}$) for each year. To obtain $d_\mathrm{t}$ in units of deaths/year-person, we divided the CDC mortality data ($D_\mathrm{t}$) by the total population ($N_\mathrm{t}$) for each year.
 
 <<calculate_b_and_d>>=
 # Calculate per-capita information
@@ -395,7 +392,7 @@ d <- calculatedHistoricalData["D"] / calculatedHistoricalData["N"]; names(d) <- 
 calculatedHistoricalData <- cbind(calculatedHistoricalData, b, d)
 @
 
-Using Equation \ref{eq:pop_work}, we calculated historical values for $\tau_\mathrm{t}$. Per capita income data were divided by $\tau_\mathrm{t}$ to obtain a wage time series ($w_\mathrm{t}$) in units of 2005\$/year-worker. Using the historical $\tau_\mathrm{t}$ values and Equation \ref{eq:consumption_constraint}, we calculated historical values of consumption ($c_\mathrm{t}$) in units of 2005\$/year-capita. Note that consumption ($c_\mathrm{t}$) is equal to per-capita wages.
+Based on the historical data outlined above, we calculated ``historical'' time series for other important parameters in the model. To obtain $b_\mathrm{t}$ in units of births/year-person, we divided the CDC birth data ($B_\mathrm{t}$) by the total population ($N_\mathrm{t}$) for each year. To obtain $d_\mathrm{t}$ in units of deaths/year-person, we divided the CDC mortality data ($D_\mathrm{t}$) by the total population ($N_\mathrm{t}$) for each year.
 
 <<calculate_tau_w_worker_and_c>>=
 tau <- calculatedHistoricalData["L"] / calculatedHistoricalData["N"]; names(tau) <- "tau" # Fraction of workers in each year
@@ -404,12 +401,16 @@ c <- w_worker * tau; names(c) <- "c" # consumption per year-capita. Same as wage
 calculatedHistoricalData <- cbind(calculatedHistoricalData, tau, w_worker, c)
 @
 
-We used $\tau_\mathrm{1980}$ and $b_\mathrm{1980}$ to calculate a value for $\nu$ (0.02872 births/year-capita) that is held constant through time. We used $L_\mathrm{A,1980}$ and $L_{1980}$ to calculate an invariant value for $\pi$ (0.006518). $\pi$ was used along with the historical wage and labor data to calculate an invariant value for $\zeta$ (0.6794) **** Heun Write R code to calculate these numbers. ****
-****SEE JonesModelGroundTruthParameters IN THE REPOSITORY****
+Using Equation \ref{eq:pop_work}, we calculated historical values for $\tau_\mathrm{t}$. Per capita income data were divided by $\tau_\mathrm{t}$ to obtain a wage time series ($w_\mathrm{t}$) in units of 2005\$/year-worker. Using the historical $\tau_\mathrm{t}$ values and Equation \ref{eq:consumption_constraint}, we calculated historical values of consumption ($c_\mathrm{t}$) in units of 2005\$/year-capita. Note that consumption ($c_\mathrm{t}$) is equal to per-capita wages.
 
 <<calculate_nu_pi_and_zeta>>=
-
+nu <- calculatedHistoricalData["b"] / (1.0 - calculatedHistoricalData["tau"]); names(nu) <- "nu" # Historical nu
+nu_0 <- nu[firstYear, "nu"]
 @
+
+We used $\tau_\mathrm{1980}$ and $b_\mathrm{1980}$ and Equation~\ref{eq:birth_constraint} to calculate a value for $\nu$ (\Sexpr{nu_0}~births/year-capita) that is held constant through time. We used $L_\mathrm{A,1980}$ and $L_{1980}$ to calculate an invariant value for $\pi$ (0.006518). $\pi$ was used along with the historical wage and labor data to calculate an invariant value for $\zeta$ (0.6794) **** Heun Write R code to calculate these numbers. ****
+****SEE JonesModelGroundTruthParameters IN THE REPOSITORY****
+
 
 We used the value of $\bar b$ from \citet{Jones:2001wn}, which is 0. Jones choses this value because it is related to the asymptotic birth rate as consumption goes to infinity, and people will be inclined towards not having children at infinite consumption. ****Heun see pg. 16 of Jones at the bottom if you want to check this out for yourself****
 
@@ -432,7 +433,7 @@ print(dataXtable, caption.placement="top", sanitize.rownames.function = identity
 
 To estimate the parameters outlined in section \ref{sec:basic_model_historical_data}, a least-squares minimization technique was used on different portions of the model. For the purposes of our estimation techniques, we can break the equation set down into three parts: a mortality portion, a utility function portion, and a production portion. ****These names could be changed, I just had to make something up****
 
-The mortality portion of the model consists of Equations \ref{eq:mortality_rate} and \ref{eq:z}. Knowing historical values for $c_\mathrm{t}$ and $\bar c$ allowed us to calculate historical values of $z_\mathrm{t}$. These historical $z_\mathrm{t}$ values were used to calculate a predicted $d_\mathrm{t}$ value that was then compared to the historical $d_\mathrm{t}$ values for the minimzation. To determine values of the three mortality function fitting parameters ($\omega_\mathrm{1}$, $\omega_\mathrm{2}$, and $\omega_\mathrm{3}$), we used least-squares minimization when comparing the predicted $d_\mathrm{t}$ to the historical values. Since you have two equations and three unknowns, one of the $\omega$ values can be allowed to float. For the purposes of our parameter estimation, we let $\omega_\mathrm{2}$ and performed the least-squares minimzation on $\omega_\mathrm{1}$ and $\omega_\mathrm{3}$.
+The mortality portion of the model consists of Equations \ref{eq:mortality_rate} and \ref{eq:z}. Knowing historical values for $c_\mathrm{t}$ and $\bar c$ allowed us to calculate historical values of $z_\mathrm{t}$. These historical $z_\mathrm{t}$ values were used to calculate a predicted $d_\mathrm{t}$ value that was then compared to the historical $d_\mathrm{t}$ values for the minimzation. To determine values of the three mortality function fitting parameters ($\omega_\mathrm{1}$, $\omega_\mathrm{2}$, and $\omega_\mathrm{3}$), we used least-squares minimization when comparing the predicted $d_\mathrm{t}$ to the historical values. Since you have two equations and three unknowns, one of the $\omega$ values can be allowed to float. For the purposes of our parameter estimation, we let $\omega_\mathrm{2}$ float and performed the least-squares minimzation on $\omega_\mathrm{1}$ and $\omega_\mathrm{3}$.
 ****SEE 'JonesModelMortalityParameters' IN THE REPOSITORY****
 
 To determine $\eta$, $\gamma$, and $G$ we also used the least-squares minimization technique. These parameters were determined from the utility function portion of the model, which simply consists of Equation \ref{eq:FOC_with_G}. Here you end up with one equation and three unknowns, so $G$ was allowed to be determined by $\eta$ and $\gamma$. We compared historical data on $b_\mathrm{t}$, $w_\mathrm{t}$, and calculated historical $c_\mathrm{t}$ to the corresponding predicted outputs for the minimization. This portion of the model proved to be the most difficult to optimize as the best value of $\eta$ appears to be right around one of its bounding values (very close to 1). A plot of the sum of the squared errors on $b_\mathrm{t}$, $c_\mathrm{t}$, and $w_\mathrm{t}$ for varying values of $\gamma$ and $\eta$ reveal that the best value of $\eta$ actually lies above 1 ****Put SSE 3D plot here****. Since values outside 1 are not included in the set that $\eta$ is on, we chose a reasonable value for $\eta$ (0.95 in this case, as to be slightly away from the boundary) and then optimized for $\gamma$ at this point (which was determined to be 0.3294). The value for $G$ determined by $\eta$ and $\gamma$ was 34.85, where $G$ is defined in Equation \ref{eq:G}.
