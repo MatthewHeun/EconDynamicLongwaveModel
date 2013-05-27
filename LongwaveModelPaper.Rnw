@@ -394,7 +394,7 @@ d <- data["D"] / data["N"]; names(d) <- "d" # Per-capita deaths
 data <- cbind(data, b, d)
 @
 
-Using Equation \ref{eq:pop_work}, we calculated historical values for $\tau_\mathrm{t}$. Per capita income data were divided by $\tau_\mathrm{t}$ to obtain a wage time series ($w_\mathrm{t}$) in units of 2005\$/year-worker. Using the historical $\tau_\mathrm{t}$ values and Equation \ref{eq:consumption_constraint} we were able to calculate historical values of consumption ($c_\mathrm{t}$).
+Using Equation \ref{eq:pop_work}, we calculated historical values for $\tau_\mathrm{t}$. Per capita income data were divided by $\tau_\mathrm{t}$ to obtain a wage time series ($w_\mathrm{t}$) in units of 2005\$/year-worker. Using the historical $\tau_\mathrm{t}$ values and Equation \ref{eq:consumption_constraint}, we calculated historical values of consumption ($c_\mathrm{t}$) in units of 2005\$/year-capita. Note that consumption ($c_\mathrm{t}$) is equal to per-capita wages.
 
 <<calculate_tau_w_worker_and_c>>=
 tau <- data["L"] / data["N"]; names(tau) <- "tau" # Fraction of workers in each year
