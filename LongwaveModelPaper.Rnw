@@ -194,7 +194,7 @@ For \citet{Jones:2001wn}, economic production ($y$) is given by
 	t_\mathrm{t} \equiv \frac{T_\mathrm{t}}{T_\mathrm{0}} = 1.0
 \end{equation}
 
-\noindent with $Y_\mathrm{t}$ representing economic output (in 2005\$/year), $A_\mathrm{t}$ representing the stock of knowledge (in units of ideas), $L_\mathrm{Y,t}$ representing labor in the production sector (in workers/year), and $T_\mathrm{t}$ representing the stock of available land (in m$^2$).
+\noindent with $Y_\mathrm{t}$ representing economic output (in 2005\$/year), $A_\mathrm{t}$ representing the stock of knowledge (in units of ideas), $L_\mathrm{Y,t}$ representing labor in the production sector (in workers), and $T_\mathrm{t}$ representing the stock of available land (in m$^2$).
 
 Our model for preferences between consumption and childrearing is based on the utility function from \citet{Jones:2001wn}:
 
@@ -238,7 +238,7 @@ The first order condition on the utility function (Equation \ref{eq:utility_func
 	b_\mathrm{t} = \nu (1-\tau_\mathrm{t})
 \end{equation}
 
-\noindent $N_\mathrm{t}$ is the total population (in persons), and $L_\mathrm{t}$ is the total amount of available labor in the economy (in workers/year). So, $(1-\tau_\mathrm{t})$ represents the fraction of available time spent on childrearing (unitless or time childrearing per total time). It is worth noting that the units of $\tau_\mathrm{t}$ can also be defined in terms of workers/capita, as shown in Equation~\ref{eq:pop_work}.
+\noindent $N_\mathrm{t}$ is the total population (in persons), and $L_\mathrm{t}$ is the total amount of available labor in the economy (in workers). So, $(1-\tau_\mathrm{t})$ represents the fraction of available time spent on childrearing (unitless or time childrearing per total time). It is worth noting that the units of $\tau_\mathrm{t}$ can also be workers/capita, as shown in Equation~\ref{eq:pop_work}.
 
 Applying the first order condition (Equation \ref{eq:first_order_condition_simplified}) with Equations \ref{eq:consumption_constraint} and \ref{eq:birth_constraint} yields an equation that describes preferences for consumption and childrearing:
 
@@ -269,7 +269,7 @@ Labor is split between two sectors; one devoted to innovation and producing new 
 	w_\mathrm{Y,t} L_\mathrm{Y,t} = (1-\pi) \zeta Y_\mathrm{t}
 \end{equation}
 
-\noindent where $w_\mathrm{A,t}$ and $w_\mathrm{Y,t}$ are the wages paid to workers in the knowledge and goods producing sectors respectively (in 2005\$/year-worker), and $L_\mathrm{A,t}$ and $L_\mathrm{Y,t}$ represent the number of workers employed in each of the sectors (in workers/year). $\zeta$ represents the fraction of economic output ($Y_\mathrm{t}$) that goes toward wages. The dimensionless variable $\pi$ is the fraction of the economy's total output ($Y_\mathrm{t}$) that is devoted to compensating inventors in the knowledge sector. The total labor supply ($L_\mathrm{t}$) is constrained as the sum of the labor supply in the two sectors.
+\noindent where $w_\mathrm{A,t}$ and $w_\mathrm{Y,t}$ are the wages paid to workers in the knowledge and goods producing sectors respectively (in 2005\$/year-worker), and $L_\mathrm{A,t}$ and $L_\mathrm{Y,t}$ represent the number of workers employed in each of the sectors (in workers). $\zeta$ represents the fraction of economic output ($Y_\mathrm{t}$) that goes toward wages. The dimensionless variable $\pi$ is the fraction of the economy's total output ($Y_\mathrm{t}$) that is devoted to compensating inventors in the knowledge sector. The total labor supply ($L_\mathrm{t}$) is constrained as the sum of the labor supply in the two sectors.
 
 \begin{equation} \label{eq:labor_supply}
 	L_\mathrm{t} = L_\mathrm{A,t} + L_\mathrm{Y,t}
@@ -396,8 +396,8 @@ Based on the historical data outlined above, we calculated ``historical'' time s
 
 <<calculate_tau_w_worker_and_c>>=
 tau <- calculatedHistoricalData["L"] / calculatedHistoricalData["N"]; names(tau) <- "tau" # Fraction of workers in each year
-w_worker <- calculatedHistoricalData["w_capita"] / tau; names(w_worker) <- "w_worker" # wage/year-worker
-c <- w_worker * tau; names(c) <- "c" # consumption per year-capita. Same as wages/year-capita.
+w_worker <- calculatedHistoricalData["w_capita"] / tau; names(w_worker) <- "w_worker" # 2005$/year-worker
+c <- w_worker * tau; names(c) <- "c" # consumption in 2005$/year-capita. Same as wages in 2005$/year-capita.
 calculatedHistoricalData <- cbind(calculatedHistoricalData, tau, w_worker, c)
 @
 
@@ -408,20 +408,34 @@ nu <- calculatedHistoricalData["b"] / (1.0 - calculatedHistoricalData["tau"]); n
 nu_0 <- nu[firstYear, "nu"]
 pi <- calculatedHistoricalData["L_A"] / calculatedHistoricalData["L"]; names(pi) <- "pi" # Historical pi
 pi_0 <- pi[firstYear, "pi"]
-calculatedHistoricalData <- cbind(calculatedHistoricalData, nu, pi)
+
+# Problems here. 
+# 
+# 1) the line below (using "w_worker") works fine, but gives the answer that zeta_1980 = 1.52, whereas Caleb 
+#    obtained zeta_1980 = 0.67. I think the difference is caused by the fact that Caleb erroneously used "w_capita" 
+#    instead of "w_worker" in the EES sheet named "JonesModelGroundTruthParameters.EES".
+# 2) when I use "w_capita" (to verify that I obtain Caleb's values with the erroneous variable), I get NA values 
+#    for the data.frame wALA. This is weird and surprising. Both "w_capita" and "w_worker" are column titles in 
+#    the calculatedHistoricalData data.frame.  As such, they should be available for calculations. 
+#    I don't know why this is happening.
+
+wALA <- calculatedHistoricalData["w_worker"] * calculatedHistoricalData["L_A"]; names(wALA) <- "wALA"
+# wALA <- calculatedHistoricalData["w_capita"] * calculatedHistoricalData["L_A"]; names(wALA) <- "wALA"
+piY <- pi * calculatedHistoricalData["Y"]; names(piY) <- "piY"
+zeta <- wALA / piY; names(zeta) <- "zeta"
+calculatedHistoricalData <- cbind(calculatedHistoricalData, nu, pi, zeta)
 @
 
-We used $\tau_\mathrm{1980}$ and $b_\mathrm{1980}$ with Equation~\ref{eq:birth_constraint} to calculate a value for $\nu_{1980}$ (\Sexpr{nu_0}~births/year-capita) that is held constant through time. We used $L_\mathrm{A,1980}$ and $L_{1980}$ with Equation~\ref{eq:pi} to calculate a value for $\pi$ (\Sexpr{pi_0}) that is held constant through time. $\pi$ was used along with the historical wage and labor data to calculate an invariant value for $\zeta$ (0.6794) **** Heun Write R code to calculate these numbers. ****
-****SEE JonesModelGroundTruthParameters IN THE REPOSITORY****
+We used $\tau_\mathrm{1980}$ and $b_\mathrm{1980}$ with Equation~\ref{eq:birth_constraint} to calculate a value for $\nu_{1980}$ (\Sexpr{nu_0}~births/year-capita) that is held constant through time. We used $L_\mathrm{A,1980}$ and $L_{1980}$ with Equation~\ref{eq:pi} to calculate a unitless value for $\pi$ (\Sexpr{pi_0}) that is held constant through time. $\pi$ was used along with the historical wage and labor data to calculate an invariant value for $\zeta$ (0.6794) **** Heun Write R code to calculate these numbers. ****
+% **** SEE JonesModelGroundTruthParameters.EES IN THE REPOSITORY ****
 
-
-We used the value of $\bar b$ from \citet{Jones:2001wn}, which is 0. Jones choses this value because it is related to the asymptotic birth rate as consumption goes to infinity, and people will be inclined towards not having children at infinite consumption. ****Heun see pg. 16 of Jones at the bottom if you want to check this out for yourself****
+Following \citet[p.~16]{Jones:2001wn}, we take $\bar{b} = 0$, because it is the asymptotic birth rate as consumption goes to infinity, and people will be inclined towards not having children at infinite consumption. ****Heun see pg. 16 of Jones at the bottom if you want to check this out for yourself****
 
 Since $\bar c$ represents the subsistence level of consumption, we chose a value corresponding to the subsistence level of consumption in the year 1980 (the first year of our simulation). The value of $\bar c$ was set to be 5655 2005\$/year-capita. This value is based on the poverty line value in the year 1980 and assuming an average family size of 3.
 
 
 <<US_data_table, results='asis'>>=
-dataXtable <- xtable(x=calculatedHistoricalData[, 10:20], caption="Historical data for the U.S.", label=paste("tab:Historical_US_Data"))
+dataXtable <- xtable(x=calculatedHistoricalData[, 10:21], caption="Historical data for the U.S.", label=paste("tab:Historical_US_Data"))
 print(dataXtable, caption.placement="top", sanitize.rownames.function = identity, size="\\tiny")
 @
 
@@ -560,7 +574,7 @@ colnames(usDataMassaged) <- c("$Y_\\mathrm{t}$", "$w_\\mathrm{t}$", "$L_\\mathrm
                               "$N_\\mathrm{t}$", "$B_\\mathrm{t}$", "$D_\\mathrm{t}$", "$K_\\mathrm{t}$", 
                               "$E_\\mathrm{t}$")
 rawDataXtable <- xtable(x=usDataMassaged, 
-                        caption="U.S. raw historical data. GDP ($Y_\\mathrm{t}$) in billion 2005\\$/year; wages ($w_\\mathrm{t}$) in 2005\\$/year-capita; total population ($L_\\mathrm{t}$), researchers in STEM disciplines ($L_\\mathrm{A,t}$), births ($B_\\mathrm{t}$), and deaths ($D_\\mathrm{t}$) in millions/year; population ($N_\\mathrm{t}$) in millions; capital stock ($K_\\mathrm{t}$) in billion 2005\\$; and energy ($E_\\mathrm{t}$) in TJ/year.",
+                        caption="U.S. raw historical data. GDP ($Y_\\mathrm{t}$) in billion 2005\\$/year; wages ($w_\\mathrm{t}$) in 2005\\$/year-capita; total population ($L_\\mathrm{t}$) in millions of workers; researchers in STEM disciplines ($L_\\mathrm{A,t}$) in millions of workers; births ($B_\\mathrm{t}$) and deaths ($D_\\mathrm{t}$) in millions/year; population ($N_\\mathrm{t}$) in millions (capita); capital stock ($K_\\mathrm{t}$) in billion 2005\\$; and energy ($E_\\mathrm{t}$) in TJ/year.",
                         label="tab:Raw_US_Data",
                         digits=c(0, 2, 0, 1, 3, 1, 3, 3, 2, 2)
                         )
