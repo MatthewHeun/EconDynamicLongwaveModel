@@ -429,7 +429,7 @@ calculatedHistoricalData <- cbind(calculatedHistoricalData, nu, pi, zeta)
 We used $\tau_\mathrm{1980}$ and $b_\mathrm{1980}$ with Equation~\ref{eq:birth_constraint} to calculate a value for $\nu_{1980}$ (\Sexpr{nu_0}~births/year-capita) that is held constant through time. We used $L_\mathrm{A,1980}$ and $L_{1980}$ with Equation~\ref{eq:pi} to calculate a unitless value for $\pi$ (\Sexpr{pi_0}) that is held constant through time. $\pi$ was used along with the historical wage and labor data to calculate an invariant value for $\zeta$ (0.6794) **** Heun Write R code to calculate these numbers. ****
 % **** SEE JonesModelGroundTruthParameters.EES IN THE REPOSITORY ****
 
-Following \citet[p.~16]{Jones:2001wn}, we take $\bar{b} = 0$, because it is the asymptotic birth rate as consumption goes to infinity, and people will be inclined towards not having children at infinite consumption. ****Heun see pg. 16 of Jones at the bottom if you want to check this out for yourself****
+Following \citet[p.~16]{Jones:2001wn}, we take $\bar{b} = 0$ for the asymptotic birth rate as consumption goes to infinity.
 
 Since $\bar c$ represents the subsistence level of consumption, we chose a value corresponding to the subsistence level of consumption in the year 1980 (the first year of our simulation). The value of $\bar c$ was set to be 5655 2005\$/year-capita. This value is based on the poverty line value in the year 1980 and assuming an average family size of 3.
 
