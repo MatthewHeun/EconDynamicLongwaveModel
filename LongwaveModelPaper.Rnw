@@ -138,9 +138,6 @@ mtext("IVP DAE", side=3, outer=TRUE, line=-1)
 \item{\st{Heun: Fix CDC reference to include volume and issue.}}
 \end{itemize}
 
-
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 \label{sec:introduction}
@@ -411,16 +408,15 @@ pi_0 <- pi[firstYear, "pi"]
 
 # Problems here. 
 # 
-# 1) the line below (using "w_worker") works fine, but gives the answer that zeta_1980 = 1.52, whereas Caleb 
-#    obtained zeta_1980 = 0.67. I think the difference is caused by the fact that Caleb erroneously used "w_capita" 
-#    instead of "w_worker" in the EES sheet named "JonesModelGroundTruthParameters.EES".
-# 2) when I use "w_capita" (to verify that I obtain Caleb's values with the erroneous variable), I get NA values 
-#    for the data.frame wALA. This is weird and surprising. Both "w_capita" and "w_worker" are column titles in 
-#    the calculatedHistoricalData data.frame.  As such, they should be available for calculations. 
-#    I don't know why this is happening.
-
-wALA <- calculatedHistoricalData["w_worker"] * calculatedHistoricalData["L_A"]; names(wALA) <- "wALA"
-# wALA <- calculatedHistoricalData["w_capita"] * calculatedHistoricalData["L_A"]; names(wALA) <- "wALA"
+# 1) the line below (using "w_worker") works fine, but gives the answer that 
+#    zeta_1980 = 1.52, whereas Caleb obtained zeta_1980 = 0.67. 
+#    I think the difference is caused by the fact that Caleb erroneously 
+#    used "w_capita" instead of "w_worker" in the EES sheet named 
+#   "JonesModelGroundTruthParameters.EES".
+# 2) when I use "w_capita" (to verify that I obtain Caleb's values with the erroneous variable), 
+#    I obtain 0.6794, same as Caleb.
+wALA <- calculatedHistoricalData["w_capita"] * calculatedHistoricalData["L_A"]; names(wALA) <- "wALA"
+# wALA <- calculatedHistoricalData["w_worker"] * calculatedHistoricalData["L_A"]; names(wALA) <- "wALA"
 piY <- pi * calculatedHistoricalData["Y"]; names(piY) <- "piY"
 zeta <- wALA / piY; names(zeta) <- "zeta"
 calculatedHistoricalData <- cbind(calculatedHistoricalData, nu, pi, zeta)
