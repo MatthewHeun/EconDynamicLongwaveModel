@@ -258,11 +258,11 @@ Applying the first order condition (Equation \ref{eq:first_order_condition_simpl
 
 Labor is split between two sectors; one devoted to innovation and producing new ideas ($A_\mathrm{t}$) and the other devoted to producing goods ($Y_\mathrm{t}$). The split between these sectors can be expressed in terms of the wages paid to workers in each sector as shown in the equations below:
 
-\begin{equation} \label{eq:knowledge_comp}
+\begin{equation} \label{eq:knowledge_compensation}
 	w_\mathrm{A,t} L_\mathrm{A,t} = \pi \zeta Y_\mathrm{t}
 \end{equation}
 
-\begin{equation} \label{eq:labor_comp}
+\begin{equation} \label{eq:labor_compensation}
 	w_\mathrm{Y,t} L_\mathrm{Y,t} = (1-\pi) \zeta Y_\mathrm{t}
 \end{equation}
 
@@ -402,9 +402,9 @@ Using Equation \ref{eq:pop_work}, we calculated historical values for $\tau_\mat
 
 <<calculate_nu_pi_and_zeta>>=
 nu <- calculatedHistoricalData["b"] / (1.0 - calculatedHistoricalData["tau"]); names(nu) <- "nu" # Historical nu
-nu_0 <- nu[firstYear, "nu"]
+nu_1980 <- nu[firstYear, "nu"]
 pi <- calculatedHistoricalData["L_A"] / calculatedHistoricalData["L"]; names(pi) <- "pi" # Historical pi
-pi_0 <- pi[firstYear, "pi"]
+pi_1980 <- pi[firstYear, "pi"]
 
 # Problems here. 
 # 
@@ -415,14 +415,15 @@ pi_0 <- pi[firstYear, "pi"]
 #   "JonesModelGroundTruthParameters.EES".
 # 2) when I use "w_capita" (to verify that I obtain Caleb's values with the erroneous variable), 
 #    I obtain 0.6794, same as Caleb.
-wALA <- calculatedHistoricalData["w_capita"] * calculatedHistoricalData["L_A"]; names(wALA) <- "wALA"
-# wALA <- calculatedHistoricalData["w_worker"] * calculatedHistoricalData["L_A"]; names(wALA) <- "wALA"
+# wALA <- calculatedHistoricalData["w_capita"] * calculatedHistoricalData["L_A"]; names(wALA) <- "wALA"
+wALA <- calculatedHistoricalData["w_worker"] * calculatedHistoricalData["L_A"]; names(wALA) <- "wALA"
 piY <- pi * calculatedHistoricalData["Y"]; names(piY) <- "piY"
 zeta <- wALA / piY; names(zeta) <- "zeta"
+zeta_1980 <- zeta[firstYear, "zeta"]
 calculatedHistoricalData <- cbind(calculatedHistoricalData, nu, pi, zeta)
 @
 
-We used $\tau_\mathrm{1980}$ and $b_\mathrm{1980}$ with Equation~\ref{eq:birth_constraint} to calculate a value for $\nu_{1980}$ (\Sexpr{nu_0}~births/year-capita) that is held constant through time. We used $L_\mathrm{A,1980}$ and $L_{1980}$ with Equation~\ref{eq:pi} to calculate a unitless value for $\pi$ (\Sexpr{pi_0}) that is held constant through time. $\pi$ was used along with the historical wage and labor data to calculate an invariant value for $\zeta$ (0.6794) **** Heun Write R code to calculate these numbers. ****
+We used $\tau_\mathrm{1980}$ and $b_\mathrm{1980}$ with Equation~\ref{eq:birth_constraint} to calculate a value for $\nu_{1980}$ (\Sexpr{nu_1980}~births/year-capita) that is held constant through time. We used $L_\mathrm{A,1980}$ and $L_{1980}$ with Equation~\ref{eq:pi} to calculate a unitless value for $\pi$ (\Sexpr{pi_1980}) that is held constant through time. Equation~\ref{eq:knowledge_compensation} was used with $\pi_\mathrm{1980}$ and wage and labor data for 1980 in to calculate an invariant value for $\zeta$ (\Sexpr{zeta_1980}) **** Heun Write R code to calculate these numbers. ****
 % **** SEE JonesModelGroundTruthParameters.EES IN THE REPOSITORY ****
 
 Following \citet[p.~16]{Jones:2001wn}, we take $\bar{b} = 0$ for the asymptotic birth rate as consumption goes to infinity.
