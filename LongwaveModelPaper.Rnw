@@ -23,29 +23,41 @@ require(ggplot2)
 require(car)
 require(mosaic)
 require(xtable)
-require(reshape2) # Provides access to data melting. See http://cran.r-project.org/web/packages/reshape2/reshape2.pdf
-# tikz allows use of LaTeX formatting and font in graphs. Allows for a consistent look across the paper.
-# See http://r-forge.r-project.org/R/?group_id=440 for instructions on installing tikzDevice.
+# Provides access to data melting. 
+# See http://cran.r-project.org/web/packages/reshape2/reshape2.pdf
+require(reshape2) 
+# tikz allows use of LaTeX formatting and font in graphs. 
+# Allows for a consistent look across the paper.
+# See http://r-forge.r-project.org/R/?group_id=440 for instructions 
+# on installing tikzDevice.
 require(tikzDevice) 
-trellis.par.set(theme=theme.mosaic())
+#trellis.par.set(theme=theme.mosaic())
 options(width=75)
 options(show.signif.stars=TRUE)
 opts_chunk$set(
-  # ********************************************************************************************************
+  # *************************************************************
   eval=TRUE,
-  # ********************************************************************************************************
-  dev='tikz',    #Allows LaTeX code in graphical output. E.g., "$y$" for a variable name in the legend for a graph.
+  # *************************************************************
+  # Allows LaTeX code in graphical output. 
+  # E.g., "$y$" for a variable name in the legend for a graph.
+  dev='tikz',    
   tidy=FALSE,
   comment=NA,
-  #Tells whether to cache output from chunks are saved. Cacheing saves time. 
-  #However, references to LaTeX tables DO NOT WORK if cacheing is turned on (i.e., cache=TRUE).
+  # Tells whether to cache output from chunks are saved. Cacheing saves time. 
+  # However, references to LaTeX tables DO NOT WORK if cacheing 
+  # is turned on (i.e., cache=TRUE).
   cache=FALSE,
-  warning=FALSE,  #Tells whether to show warnings in the output.
-  message=FALSE, #Turns off messages for all chunks. Set TRUE on an individual chunk to see it.
-  echo=FALSE     #Tells whether to echo code for all chunks. Set TRUE on an individual chunk to see its code.
+  warning=TRUE,  # Tells whether to show warnings in the output.
+  # Turns off messages for all chunks. Set TRUE on an individual 
+  # chunk to see it.
+  message=FALSE, 
+  # Tells whether to echo code for all chunks. 
+  # Set TRUE on an individual chunk to see its code.
+  echo=FALSE     
 )
 
-########### Several global parameters for graphs. Set here and use below to ensure consistent appearance of graphs.
+# Several global parameters for graphs. 
+# Set here and use below to ensure consistent appearance of graphs.
 maxWidth <- 6.5 #Inches
 # Full page lattice plot sizes
 threePanelGraphWidth <- maxWidth
@@ -57,66 +69,68 @@ presentationGraph2ColWidth <- 2 #Inches
 presentationGraph1ColWidth <- 2*presentationGraph2ColWidth
 keyTextSize <- 0.85 #85% of normal size
 keyColumns <- 1 #Want only 1 column in the key for lattice graphs
-defaultKeyXLoc <- 0.01 #x position of the key. This default is good for 9-panel graphs.
-defaultKeyYLoc <- 0.95 #y position of the key. This default is good for 9-panel graphs.
+# x and y positions of the key. This default is good for 9-panel graphs.
+defaultKeyXLoc <- 0.01 
+defaultKeyYLoc <- 0.95 
 # Other graph parameters that apply to all graphs
-scaleTextSize <- 0.8  #Multiple of normal size
-scaleTickSize <- -0.5 #50% of normal size and pointing INWARD!
+# Multiple of normal size
+scaleTextSize <- 0.8  
+# 50% of normal size and pointing INWARD!
+scaleTickSize <- -0.5 
 @
 
 \begin{document}
 
 
 <<Test_DAE_Solver, eval=FALSE>>=
-###########################
-# Example of an ODE using the van der Pol equation from the examples in 
-# Soetaert, Karline, Thomas Petzoldt, and R Woodrow Setzer. 2010. “Solving Differential Equations in R.” 
-# The R Journal 2 (2) (December 30): 1–11.
-##
-vdpol <- function (t, y, mu) {
-          # Dereference the names into something more readable.
-          y1 <- y["y1"]
-          y2 <- y["y2"]
-          # Calculate derivatives
-          dy1dt <- y2
-          dy2dt <- mu * (1 - y1^2) * y2 - y1
-          # Build an outgoing list of the derivatives
-          out <- list(c(dy1dt=dy1dt, dy2dt=dy2dt))
-          return(out)
-}
-
-yini <- c(y1 = 2, y2 = 0)
-stiff    <- ode(y = yini, func = vdpol, times = 0:3000,                parms = 1000)
-nonstiff <- ode(y = yini, func = vdpol, times = seq(0, 30, by = 0.01), parms = 1)
-head(stiff, n = 3)
-plot(stiff,    type = "l", which = "y1", lwd = 2, ylab = "y", main = "IVP ODE, stiff")
-plot(nonstiff, type = "l", which = "y1", lwd = 2, ylab = "y", main = "IVP ODE, nonstiff")
-
-###########################
-# Example of solving a DAE using the Rober problem from the examples in 
-# Soetaert, Karline, Thomas Petzoldt, and R Woodrow Setzer. 2010. “Solving Differential Equations in R.” 
-# The R Journal 2 (2) (December 30): 1–11.
-##
-daefun <- function(t, y, dy, parms) {
-            # Reassign variables to readable names
-            y1 <- y["y1"]; y2 <- y["y2"]; y3 <- y["y3"]
-            dy1dt <- dy[1]; dy2dt <- dy[2] # no named parameters
-            # Calculate residuals
-            res1 <- - 0.04 * y1 + 1e4 * y2 * y3 - dy1dt
-            res2 <- 0.04 * y1 - 1e4 * y2 * y3 - 3e7 * y2^2 - dy2dt
-            res3 <- y1 + y2 + y3 - 1
-            # Bundle for output
-            out <- list(c(R1=res1, R2=res2, R3=res3), error = as.vector(res3))
-            return(out)
-}
-yini <- c(y1=1, y2=0, y3=0) 
-dyini <- c(-0.04, 0.04, 0)
-times <- 10 ^ seq(-6, 6, 0.1)
-print(system.time(out <- daspk(y=yini, dy=dyini, times=times, res=daefun, parms=NULL)))
-plot(out, ylab="conc.", xlab="time", type="l", lwd=2, log="x")
-mtext("IVP DAE", side=3, outer=TRUE, line=-1)
+# ###########################
+# # Example of an ODE using the van der Pol equation from the examples in 
+# # Soetaert, Karline, Thomas Petzoldt, and R Woodrow Setzer. 2010. “Solving Differential Equations in R.” 
+# # The R Journal 2 (2) (December 30): 1–11.
+# ##
+# vdpol <- function (t, y, mu) {
+#           # Dereference the names into something more readable.
+#           y1 <- y["y1"]
+#           y2 <- y["y2"]
+#           # Calculate derivatives
+#           dy1dt <- y2
+#           dy2dt <- mu * (1 - y1^2) * y2 - y1
+#           # Build an outgoing list of the derivatives
+#           out <- list(c(dy1dt=dy1dt, dy2dt=dy2dt))
+#           return(out)
+# }
+# 
+# yini <- c(y1 = 2, y2 = 0)
+# stiff    <- ode(y = yini, func = vdpol, times = 0:3000,                parms = 1000)
+# nonstiff <- ode(y = yini, func = vdpol, times = seq(0, 30, by = 0.01), parms = 1)
+# head(stiff, n = 3)
+# plot(stiff,    type = "l", which = "y1", lwd = 2, ylab = "y", main = "IVP ODE, stiff")
+# plot(nonstiff, type = "l", which = "y1", lwd = 2, ylab = "y", main = "IVP ODE, nonstiff")
+# 
+# ###########################
+# # Example of solving a DAE using the Rober problem from the examples in 
+# # Soetaert, Karline, Thomas Petzoldt, and R Woodrow Setzer. 2010. “Solving Differential Equations in R.” 
+# # The R Journal 2 (2) (December 30): 1–11.
+# ##
+# daefun <- function(t, y, dy, parms) {
+#             # Reassign variables to readable names
+#             y1 <- y["y1"]; y2 <- y["y2"]; y3 <- y["y3"]
+#             dy1dt <- dy[1]; dy2dt <- dy[2] # no named parameters
+#             # Calculate residuals
+#             res1 <- - 0.04 * y1 + 1e4 * y2 * y3 - dy1dt
+#             res2 <- 0.04 * y1 - 1e4 * y2 * y3 - 3e7 * y2^2 - dy2dt
+#             res3 <- y1 + y2 + y3 - 1
+#             # Bundle for output
+#             out <- list(c(R1=res1, R2=res2, R3=res3), error = as.vector(res3))
+#             return(out)
+# }
+# yini <- c(y1=1, y2=0, y3=0) 
+# dyini <- c(-0.04, 0.04, 0)
+# times <- 10 ^ seq(-6, 6, 0.1)
+# print(system.time(out <- daspk(y=yini, dy=dyini, times=times, res=daefun, parms=NULL)))
+# plot(out, ylab="conc.", xlab="time", type="l", lwd=2, log="x")
+# mtext("IVP DAE", side=3, outer=TRUE, line=-1)
 @
-
 
 
 %% Do NOT include any frontmatter information; including the title, author names,
@@ -170,7 +184,8 @@ The basic model includes neither energy flows nor capital stock.
 For \citet{Jones:2001wn}, economic production ($y$) is given by
 
 \begin{equation} \label{eq:Jones_production_function}
-  y_\mathrm{t} = a_\mathrm{t} ^\sigma l_\mathrm{Y,t} ^\beta t_\mathrm{t} ^{1-\beta} \epsilon_\mathrm{t}
+  y_\mathrm{t} = a_\mathrm{t} ^\sigma l_\mathrm{Y,t} ^\beta 
+                  t_\mathrm{t} ^{1-\beta} \epsilon_\mathrm{t}
 \end{equation}
 
 \noindent where $a_\mathrm{t}$ is the indexed stock of ideas, $l_\mathrm{Y,t}$ is indexed labor in the goods producing sector, $t_\mathrm{t}$ is indexed land (always 1.0), and $\varepsilon_\mathrm{t}$ is an exogenous shock parameter. The subscript ``t'' indicates time (measured in years). Any symbol in a equation with subscript ``$\mathrm{t}$'' indicates a time-varying quantity. Symbols without subscript ``$\mathrm{t}$'' indicate time-invariant quantities. Lowercase variable names represent unitless, indexed quantities. The indexed factors of production ($a_\mathrm{t}$, $l_\mathrm{t}$, and $t_\mathrm{t}$) are defined relative to a base year ($\mathrm{t} = 0$):
@@ -333,7 +348,7 @@ The rate of change of indexed population ($n$) is a function of birth and mortal
 \label{sec:basic_model_tuning}
 %++++++++++++++++++++++++++++++
 
-To tune the basic model to match U.S. historical data from 1980--2011, we estimate values for the fitting parameters, including $\beta$ and $\sigma$ from Equation~\ref{eq:Jones_production_function}; $\bar c$ and $\bar b$ from Equations \ref{eq:c_tilde} and \ref{eq:b_tilde}, respectively; $\nu$ from Equation \ref{eq:birth_constraint}; $\eta$, $\gamma$, and $G$ from Equation~\ref{eq:FOC_with_G}; $\zeta$ from Equation~\ref{eq:knowledge_comp}; $\pi$ from Equation \ref{eq:pi}; $\lambda$ and $\phi$ from Equation \ref{eq:da_dt}; $\delta$ and $A_\mathrm{0}$ from Equation \ref{eq:delta}; $m$ from Equation \ref{eq:dn_dt}; and $\omega_1$, $\omega_2$, $\omega_3$, and $\bar d$ from Equation \ref{eq:mortality_rate}. We tuned the basic model with least-squares optimization by comparing outputs of the model ($y_\mathrm{t}$, $w_\mathrm{t}$, $c_\mathrm{t}$, $\tau_\mathrm{t}$, $l_\mathrm{Y,t}$, $l_\mathrm{A,t}$, $n_\mathrm{t}$, $b_{\mathrm{t}}$, and $d_\mathrm{t}$) to historical data. The following subsections discuss historical data, development of ``ground truth'' time series, and the parameter estimation process.
+To tune the basic model to match U.S. historical data from 1980--2011, we estimate values for the fitting parameters, including $\beta$ and $\sigma$ from Equation~\ref{eq:Jones_production_function}; $\bar c$ and $\bar b$ from Equations \ref{eq:c_tilde} and \ref{eq:b_tilde}, respectively; $\nu$ from Equation \ref{eq:birth_constraint}; $\eta$, $\gamma$, and $G$ from Equation~\ref{eq:FOC_with_G}; $\zeta$ from Equation~\ref{eq:knowledge_compensation}; $\pi$ from Equation \ref{eq:pi}; $\lambda$ and $\phi$ from Equation \ref{eq:da_dt}; $\delta$ and $A_\mathrm{0}$ from Equation \ref{eq:delta}; $m$ from Equation \ref{eq:dn_dt}; and $\omega_1$, $\omega_2$, $\omega_3$, and $\bar d$ from Equation \ref{eq:mortality_rate}. We tuned the basic model with least-squares optimization by comparing outputs of the model ($y_\mathrm{t}$, $w_\mathrm{t}$, $c_\mathrm{t}$, $\tau_\mathrm{t}$, $l_\mathrm{Y,t}$, $l_\mathrm{A,t}$, $n_\mathrm{t}$, $b_{\mathrm{t}}$, and $d_\mathrm{t}$) to historical data. The following subsections discuss historical data, development of ``ground truth'' time series, and the parameter estimation process.
 
 %------------------------------
 \subsubsection{Historical data}
@@ -389,18 +404,25 @@ d <- calculatedHistoricalData["D"] / calculatedHistoricalData["N"]; names(d) <- 
 calculatedHistoricalData <- cbind(calculatedHistoricalData, b, d)
 @
 
-Based on the historical data outlined above, we calculated ``historical'' time series for other important parameters in the model. To obtain $b_\mathrm{t}$ in units of births/year-person, we divided the CDC birth data ($B_\mathrm{t}$) by the total population ($N_\mathrm{t}$) for each year. To obtain $d_\mathrm{t}$ in units of deaths/year-person, we divided the CDC mortality data ($D_\mathrm{t}$) by the total population ($N_\mathrm{t}$) for each year.
+Based on the historical data outlined above, we calculated 
+``historical'' time series for other important parameters 
+in the model. To obtain $b_\mathrm{t}$ in units of 
+births/year-person, we divided the CDC birth data ($B_\mathrm{t}$) 
+by the total population ($N_\mathrm{t}$) for each year. 
+To obtain $d_\mathrm{t}$ in units of deaths/year-person, 
+we divided the CDC mortality data ($D_\mathrm{t}$) by 
+the total population ($N_\mathrm{t}$) for each year.
 
 <<calculate_tau_w_worker_and_c>>=
 tau <- calculatedHistoricalData["L"] / calculatedHistoricalData["N"]; names(tau) <- "tau" # Fraction of workers in each year
-w_worker <- calculatedHistoricalData["w_capita"] / tau; names(w_worker) <- "w_worker" # 2005$/year-worker
-c <- w_worker * tau; names(c) <- "c" # consumption in 2005$/year-capita. Same as wages in 2005$/year-capita.
-calculatedHistoricalData <- cbind(calculatedHistoricalData, tau, w_worker, c)
+c <- calculatedHistoricalData["w_worker"] * tau; names(c) <- "c" # consumption in 2005$/year-capita. Same as wages in 2005$/year-capita.
+calculatedHistoricalData <- cbind(calculatedHistoricalData, tau, c)
 @
 
 Using Equation \ref{eq:pop_work}, we calculated historical values for $\tau_\mathrm{t}$. Per capita income data were divided by $\tau_\mathrm{t}$ to obtain a wage time series ($w_\mathrm{t}$) in units of 2005\$/year-worker. Using the historical $\tau_\mathrm{t}$ values and Equation \ref{eq:consumption_constraint}, we calculated historical values of consumption ($c_\mathrm{t}$) in units of 2005\$/year-capita. Note that consumption ($c_\mathrm{t}$) is equal to per-capita wages.
 
 <<calculate_nu_pi_and_zeta>>=
+# **** SEE JonesModelGroundTruthParameters.EES IN THE REPOSITORY ****
 nu <- calculatedHistoricalData["b"] / (1.0 - calculatedHistoricalData["tau"]); names(nu) <- "nu" # Historical nu
 nu_1980 <- nu[firstYear, "nu"]
 pi <- calculatedHistoricalData["L_A"] / calculatedHistoricalData["L"]; names(pi) <- "pi" # Historical pi
@@ -423,16 +445,29 @@ zeta_1980 <- zeta[firstYear, "zeta"]
 calculatedHistoricalData <- cbind(calculatedHistoricalData, nu, pi, zeta)
 @
 
-We used $\tau_\mathrm{1980}$ and $b_\mathrm{1980}$ with Equation~\ref{eq:birth_constraint} to calculate a value for $\nu_{1980}$ (\Sexpr{nu_1980}~births/year-capita) that is held constant through time. We used $L_\mathrm{A,1980}$ and $L_{1980}$ with Equation~\ref{eq:pi} to calculate a unitless value for $\pi$ (\Sexpr{pi_1980}) that is held constant through time. Equation~\ref{eq:knowledge_compensation} was used with $\pi_\mathrm{1980}$ and wage and labor data for 1980 in to calculate an invariant value for $\zeta$ (\Sexpr{zeta_1980}) **** Heun Write R code to calculate these numbers. ****
-% **** SEE JonesModelGroundTruthParameters.EES IN THE REPOSITORY ****
+We used $\tau_\mathrm{1980}$ and $b_\mathrm{1980}$ with 
+Equation~\ref{eq:birth_constraint} to calculate a value for 
+$\nu_{1980}$ (\Sexpr{nu_1980}~births/year-capita) that is 
+held constant through time. We used $L_\mathrm{A,1980}$ 
+and $L_{1980}$ with Equation~\ref{eq:pi} to calculate a 
+unitless value for $\pi$ (\Sexpr{pi_1980}) that is held 
+constant through time. Equation~\ref{eq:knowledge_compensation} 
+was used with $\pi_\mathrm{1980}$ and wage and labor data 
+for 1980 in to calculate an invariant value for $\zeta$ 
+(\Sexpr{zeta_1980}).
 
-Following \citet[p.~16]{Jones:2001wn}, we take $\bar{b} = 0$ for the asymptotic birth rate as consumption goes to infinity.
+Following \citet[p.~16]{Jones:2001wn}, we take $\bar{b} = 0$ 
+for the asymptotic birth rate as consumption goes to infinity.
 
-Since $\bar c$ represents the subsistence level of consumption, we chose a value corresponding to the subsistence level of consumption in the year 1980 (the first year of our simulation). The value of $\bar c$ was set to be 5655 2005\$/year-capita. This value is based on the poverty line value in the year 1980 and assuming an average family size of 3.
-
+Because $\bar c$ represents the subsistence level of consumption, 
+we chose a value corresponding to the subsistence level of 
+consumption in the year 1980 (the first year of our simulation). 
+The value of $\bar{c}$ was set to be 5655 2005\$/year-capita, 
+based on the poverty line value in the year 1980 and 
+assuming an average family size of 3.
 
 <<US_data_table, results='asis'>>=
-dataXtable <- xtable(x=calculatedHistoricalData[, 10:21], caption="Historical data for the U.S.", label=paste("tab:Historical_US_Data"))
+dataXtable <- xtable(x=calculatedHistoricalData[, 10:20], caption="Historical data for the U.S.", label=paste("tab:Historical_US_Data"))
 print(dataXtable, caption.placement="top", sanitize.rownames.function = identity, size="\\tiny")
 @
 
@@ -571,7 +606,7 @@ colnames(usDataMassaged) <- c("$Y_\\mathrm{t}$", "$w_\\mathrm{t}$", "$L_\\mathrm
                               "$N_\\mathrm{t}$", "$B_\\mathrm{t}$", "$D_\\mathrm{t}$", "$K_\\mathrm{t}$", 
                               "$E_\\mathrm{t}$")
 rawDataXtable <- xtable(x=usDataMassaged, 
-                        caption="U.S. raw historical data. GDP ($Y_\\mathrm{t}$) in billion 2005\\$/year; wages ($w_\\mathrm{t}$) in 2005\\$/year-capita; total population ($L_\\mathrm{t}$) in millions of workers; researchers in STEM disciplines ($L_\\mathrm{A,t}$) in millions of workers; births ($B_\\mathrm{t}$) and deaths ($D_\\mathrm{t}$) in millions/year; population ($N_\\mathrm{t}$) in millions (capita); capital stock ($K_\\mathrm{t}$) in billion 2005\\$; and energy ($E_\\mathrm{t}$) in TJ/year.",
+                        caption="U.S. raw historical data. GDP ($Y_\\mathrm{t}$) in billion 2005\\$/year; wages ($w_\\mathrm{t}$) in 2005\\$/year-worker; total population ($L_\\mathrm{t}$) in millions of workers; researchers in STEM disciplines ($L_\\mathrm{A,t}$) in millions of workers; births ($B_\\mathrm{t}$) and deaths ($D_\\mathrm{t}$) in millions/year; population ($N_\\mathrm{t}$) in millions (capita); capital stock ($K_\\mathrm{t}$) in billion 2005\\$; and energy ($E_\\mathrm{t}$) in TJ/year.",
                         label="tab:Raw_US_Data",
                         digits=c(0, 2, 0, 1, 3, 1, 3, 3, 2, 2)
                         )
