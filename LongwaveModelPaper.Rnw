@@ -149,6 +149,7 @@ scaleTickSize <- -0.5
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{itemize}
+\item{Reese: Supply data and references for $m\mathrm{t}$.}
 \item{Reese: Supply sources for capital stock ($K$) and energy ($E$) data.}
 \item{Reese: Supply wages workbook.}
 \item{\st{Heun: Fix CDC reference to include volume and issue.}}
@@ -241,7 +242,7 @@ $k_\mathrm{c}$ and $k_\mathrm{b}$ represent the utility
   (in units of utils/\$ and utils/birth, respectively); and 
 $U_{\mathrm{c,0}}$ and $U_{\mathrm{b,0}}$ are the utility derived from 
   consumption and childrearing, respectively, 
-  at $\mathrm{t} = t_\mathrm{0}$ (in units of utils/year). 
+  at $\mathrm{t} = \mathrm{t_0} = 1980$ (in units of utils/year). 
 $\tilde c_\mathrm{t}$ is the rate of the individual's consumption 
   in 2005\$/year-capita and 
 $\tilde b_\mathrm{t}$ is the rate of births in births/year-capita. 
@@ -486,6 +487,7 @@ knowledge sector labor force ($L_\mathrm{A,t}$),
 population ($N_\mathrm{t}$), 
 births ($B_\mathrm{t}$), 
 deaths ($D_\mathrm{t}$), 
+migration ($M\mathrm{t}$),
 wages ($w_\mathrm{t}$), 
 capital stock ($K_\mathrm{t}$), and 
 energy ($E_\mathrm{t}$, thermal equivalent). 
@@ -535,6 +537,9 @@ We acquired data on the number of deaths from
 the Center for Diesease Control (CDC) time series on deaths 
 in the U.S. \citep{Murphy:2013vg, Hoyert:2012tv}.
 
+**** Heun: Add paragraph about migration data here. Be sure to 
+include a reference. ****
+
 We define wages ($w_\mathrm{t}$) as 
 the yearly salarly that is earned by a worker in 
 either the knowledge ($A$) or manufacturing ($Y$) sector 
@@ -566,6 +571,29 @@ l_Y <- (calculatedHistoricalData["L_Y"]) / L_Y_0; names(l_Y) <- "l_Y" # Indexed 
 calculatedHistoricalData <- cbind(calculatedHistoricalData, y, n, l_Y)
 @
 
+Table~\ref{tab:Raw_US_Data} shows raw historical time series data for the U.S.
+
+<<Raw_US_Data, results='asis', eval=TRUE>>=
+usDataMassaged <- rawHistoricalData # We'll mess around with usDataMassaged to make it easier to read
+usDataMassaged["Y"] <- usDataMassaged["Y"] / 1e9 # Y is now in billion 2005$/year
+usDataMassaged["L"] <- usDataMassaged["L"] / 1e6 # total employment mow in millions/year
+usDataMassaged["L_A"] <- usDataMassaged["L_A"] / 1e6 # total STEM researchers now in millions/year
+usDataMassaged["N"] <- usDataMassaged["N"] / 1e6 # total population now in millions
+usDataMassaged["B"] <- usDataMassaged["B"] / 1e6 # births now in millions/year
+usDataMassaged["D"] <- usDataMassaged["D"] / 1e6 # deaths now in millions/year
+usDataMassaged["K"] <- usDataMassaged["K"] / 1e9 # capital stock now in billion 2005$
+usDataMassaged["E"] <- usDataMassaged["E"] / 1e3 # energy now in TJ/year
+colnames(usDataMassaged) <- c("$Y_\\mathrm{t}$", "$w_\\mathrm{t}$", "$L_\\mathrm{t}$", "$L_\\mathrm{A,t}$", 
+                              "$N_\\mathrm{t}$", "$B_\\mathrm{t}$", "$D_\\mathrm{t}$", "$K_\\mathrm{t}$", 
+                              "$E_\\mathrm{t}$")
+rawDataXtable <- xtable(x=usDataMassaged, 
+                        caption="U.S. raw historical data. GDP ($Y_\\mathrm{t}$) in billion 2005\\$/year; wages ($w_\\mathrm{t}$) in 2005\\$/year-worker; total population ($L_\\mathrm{t}$) in millions of workers; researchers in STEM disciplines ($L_\\mathrm{A,t}$) in millions of workers; births ($B_\\mathrm{t}$) and deaths ($D_\\mathrm{t}$) in millions/year; population ($N_\\mathrm{t}$) in millions (capita); capital stock ($K_\\mathrm{t}$) in billion 2005\\$; and energy ($E_\\mathrm{t}$) in TJ/year.",
+                        label="tab:Raw_US_Data",
+                        digits=c(0, 2, 0, 1, 3, 1, 3, 3, 2, 2)
+                        )
+print(rawDataXtable, caption.placement="top", sanitize.colnames.function = identity, size="\\tiny")
+@
+
 **** Heun: create graph of historical historical data. 
 Perhaps a Lattice plot of some type? ****
 
@@ -575,16 +603,33 @@ Perhaps a Lattice plot of some type? ****
 \label{sec:ground_truth}
 %------------------------------
 
+Based on the historical time series data outlined above, 
+we calculated ``historical'' time series (i.e., ``ground truth'' 
+information) for other important parameters in the model, namely 
+$b_\mathrm{t}$, 
+$d_\mathrm{t}$, 
+$\tau_\mathrm{t}$, 
+$w_\mathrm{t}$,
+$c_\mathrm{t}$
+$\nu$,
+$\pi$, 
+$\zeta$,
+$\bar{b}$,
+$\bar{c}$, and 
+$z\mathrm{t}$. 
+
 <<calculate_b_and_d>>=
 # Calculate per-capita information
-b <- calculatedHistoricalData["B"] / calculatedHistoricalData["N"]; names(b) <- "b" # Births/year-capita
-d <- calculatedHistoricalData["D"] / calculatedHistoricalData["N"]; names(d) <- "d" # Deaths/year-capita
+# Births/year-capita
+b <- calculatedHistoricalData["B"] / calculatedHistoricalData["N"]
+names(b) <- "b" 
+# Deaths/year-capita
+d <- calculatedHistoricalData["D"] / calculatedHistoricalData["N"]
+names(d) <- "d" 
 calculatedHistoricalData <- cbind(calculatedHistoricalData, b, d)
 @
 
-Based on the historical time series data outlined above, 
-we calculated ``historical'' time series for other important parameters 
-in the model. To obtain $b_\mathrm{t}$ in units of 
+To obtain $b_\mathrm{t}$ in units of 
 births/year-person, we divided the CDC birth data ($B_\mathrm{t}$) 
 by the total population ($N_\mathrm{t}$) for each year. 
 To obtain $d_\mathrm{t}$ in units of deaths/year-person, 
@@ -638,19 +683,35 @@ was used with $\pi_\mathrm{1980}$ and wage and labor data
 for 1980 in to calculate an invariant value for $\zeta$ 
 (\Sexpr{zeta_1980}).
 
-Following \citet[p.~16]{Jones:2001wn}, we take $\bar{b} = 0$ 
-for the asymptotic birth rate as consumption goes to infinity.
+<<b_bar_c_bar_z>>=
+# Asymptotic birth rate as consumption goes to infinity
+b_bar = 0.0
+# Consumption for subsistence level
+############## Perform this calculation here #################
+c_bar = 5655 # 2005$/year
+z <- calculatedHistoricalData["c"] / c_bar - 1
+names(z) <- "z" 
+calculatedHistoricalData <- cbind(calculatedHistoricalData, z)
+@
 
-Because $\bar c$ represents the subsistence level of consumption, 
+Following \citet[p.~16]{Jones:2001wn}, we take $\bar{b} = \Sexpr{b_bar}$ 
+for the asymptotic birth rate as $c \rightarrow \infty$.
+
+Because $\bar{c}$ represents the subsistence level of consumption, 
 we chose a value corresponding to the subsistence level of 
 consumption in the year 1980 (the first year of our simulation). 
-The value of $\bar{c}$ was set to be 5655 2005\$/year-capita, 
+The value of $\bar{c}$ was set to be \Sexpr{c_bar} 2005\$/year-capita, 
 based on the poverty line value in the year 1980 and 
 assuming an average family size of 3.
 
+We used Equation~\ref{eq:z} with historical values for 
+$c_\mathrm{t}$ and $\bar{c}$ to calculate ground
+truth values of $z_\mathrm{t}$. 
+
+
 <<US_data_table, results='asis'>>=
-dataXtable <- xtable(x=calculatedHistoricalData[, 10:20], 
-                     caption="Historical data for the U.S.", label=paste("tab:Historical_US_Data"))
+dataXtable <- xtable(x=calculatedHistoricalData[, 10:21], 
+                     caption="Ground truth data for the U.S.", label=paste("tab:Ground_truth_US_Data"))
 print(dataXtable, caption.placement="top", sanitize.rownames.function = identity, size="\\tiny")
 @
 
@@ -663,21 +724,25 @@ print(dataXtable, caption.placement="top", sanitize.rownames.function = identity
 %++++++++++++++++++++++++++++++
 
 To tune the basic model to match U.S. historical data from 1980--2011, 
-we estimate values for the fitting parameters, including 
+we estimate values for the fitting parameters in three portions of the model:
 \begin{itemize}
-\item{$\beta$ and $\sigma$ from Equation~\ref{eq:Jones_production_function};}
-\item{$\bar c$ and $\bar b$ from Equations \ref{eq:c_tilde} and 
-  \ref{eq:b_tilde}, respectively;}
-\item{$\nu$ from Equation \ref{eq:birth_constraint};}
-\item{$\eta$, $\gamma$, and $G$ from Equation~\ref{eq:FOC_with_G};}
-\item{$\zeta$ from Equation~\ref{eq:knowledge_compensation};}
-\item{$\pi$ from Equation \ref{eq:pi};}
-\item{$\lambda$ and $\phi$ from Equation \ref{eq:da_dt};}
-\item{$\delta$ and $A_\mathrm{0}$ from Equation \ref{eq:delta};}
-\item{$m$ from Equation \ref{eq:dn_dt}; and}
-\item{$\omega_1$, $\omega_2$, $\omega_3$, and $\bar d$ from 
-  Equation~\ref{eq:mortality_rate}.}
+\item{Mortality}
+  \begin{itemize}
+  \item{$\omega_1$, $\omega_2$, and $\omega_3$ from 
+    Equation~\ref{eq:mortality_rate}}
+  \end{itemize}
+\item{Utility}
+  \begin{itemize}
+    \item{$\eta$, $\gamma$, and $G$ from Equation~\ref{eq:FOC_with_G}}
+  \end{itemize}
+\item{Production}
+  \begin{itemize}
+    \item{$\beta$ and $\sigma$ from Equation~\ref{eq:Jones_production_function}}
+    \item{$\lambda$ and $\phi$ from Equation~\ref{eq:da_dt}}
+    \item{$\delta$ and $A_\mathrm{0}$ from Equation~\ref{eq:delta}}
+  \end{itemize}
 \end{itemize}
+
 We tuned the basic model with least-squares optimization by comparing 
 outputs of the model 
 ($y_\mathrm{t}$, 
@@ -689,34 +754,19 @@ $l_\mathrm{A,t}$,
 $n_\mathrm{t}$, 
 $b_{\mathrm{t}}$, and 
 $d_\mathrm{t}$) 
-to historical data. 
+to historical data or ground truth information as appropriate. 
 The following subsections discuss the parameter estimation process.
 
-
 %------------------------------
-\subsubsection{Parameter estimation}
-\label{sec:basic_model_parameter_estimation}
-%------------------------------
-
-To estimate the parameters outlined in Section 
-\ref{sec:basic_model_parameter_estimation}, a least-squares 
-minimization technique was used on different portions 
-of the model. For the purposes of our estimation techniques, 
-we can decompose the model into three parts: 
-mortality, 
-utility function, and 
-production. 
-We discuss each portion below.
-
-%..............................
-\paragraph{Mortality}
+\subsubsection{Mortality}
 \label{sec:mortality}
-%..............................
+%------------------------------
+
+<<mortality>>=
+@
 
 The mortality portion of the model consists of 
 Equations~\ref{eq:mortality_rate} and \ref{eq:z}. 
-Knowing historical values for $c_\mathrm{t}$ and $\bar{c}$ 
-allowed us to calculate historical values of $z_\mathrm{t}$. 
 These historical $z_\mathrm{t}$ values were used to calculate 
 a predicted $d_\mathrm{t}$ value that was then compared to 
 the historical $d_\mathrm{t}$ values for the minimzation. 
@@ -731,10 +781,54 @@ and performed the least-squares minimzation on
 $\omega_\mathrm{1}$ and $\omega_\mathrm{3}$.
 ****SEE 'JonesModelMortalityParameters' IN THE REPOSITORY****
 
-To determine $\eta$, $\gamma$, and $G$ we also used the least-squares minimization technique. These parameters were determined from the utility function portion of the model, which simply consists of Equation \ref{eq:FOC_with_G}. Here you end up with one equation and three unknowns, so $G$ was allowed to be determined by $\eta$ and $\gamma$. We compared historical data on $b_\mathrm{t}$, $w_\mathrm{t}$, and calculated historical $c_\mathrm{t}$ to the corresponding predicted outputs for the minimization. This portion of the model proved to be the most difficult to optimize as the best value of $\eta$ appears to be right around one of its bounding values (very close to 1). A plot of the sum of the squared errors on $b_\mathrm{t}$, $c_\mathrm{t}$, and $w_\mathrm{t}$ for varying values of $\gamma$ and $\eta$ reveal that the best value of $\eta$ actually lies above 1 ****Put SSE 3D plot here****. Since values outside 1 are not included in the set that $\eta$ is on, we chose a reasonable value for $\eta$ (0.95 in this case, as to be slightly away from the boundary) and then optimized for $\gamma$ at this point (which was determined to be 0.3294). The value for $G$ determined by $\eta$ and $\gamma$ was 34.85, where $G$ is defined in Equation \ref{eq:G}.
+********* Heun ended here. Need to perform this parameter estimation **********
+
+%------------------------------
+\subsubsection{Utility}
+\label{sec:utility}
+%------------------------------
+
+To determine $\eta$, $\gamma$, and $G$ we also used the 
+least-squares minimization technique. These parameters were 
+determined from the utility function portion of the model, 
+which simply consists of Equation \ref{eq:FOC_with_G}. 
+Here you end up with one equation and three unknowns, 
+so $G$ was allowed to be determined by $\eta$ and $\gamma$. 
+We compared historical data on $b_\mathrm{t}$, 
+$w_\mathrm{t}$, and calculated historical $c_\mathrm{t}$ 
+to the corresponding predicted outputs for the minimization. 
+This portion of the model proved to be the most difficult to 
+optimize as the best value of $\eta$ appears to be right 
+around one of its bounding values (very close to 1). 
+A plot of the sum of the squared errors on $b_\mathrm{t}$, 
+$c_\mathrm{t}$, and $w_\mathrm{t}$ for varying values of 
+$\gamma$ and $\eta$ reveal that the best value of $\eta$ 
+actually lies above 1 ****Put SSE 3D plot here****. 
+Since values outside 1 are not included in the set that 
+$\eta$ is on, we chose a reasonable value for $\eta$ 
+(0.95 in this case, as to be slightly away from the boundary) 
+and then optimized for $\gamma$ at this point 
+(which was determined to be 0.3294). The value for $G$ 
+determined by $\eta$ and $\gamma$ was 34.85, where $G$ 
+is defined in Equation \ref{eq:G}.
 ****SEE 'JonesModelUtilityParameters' IN THE REPOSITORY****
 
-The production function portion of the model included the determination of $\beta$, $\sigma$, $\lambda$, $\phi$, $\delta$, and $A_\mathrm{0}$. We were able to determine these parameters once the equation set was working and we could successfully step forward in time using the two differential equations (Equations \ref{eq:da_dt} and \ref{eq:dn_dt}). The sum of the squared errors was calculated for the indexed time series on Y, w, N, L, b, d, c, and $\tau$ and then a least squares minimization was performed on this total SSE value to determine the optimum values of $\beta$, $\sigma$, $\lambda$, $\phi$, $\delta$, and $A_\mathrm{0}$.
+%------------------------------
+\subsubsection{Production}
+\label{sec:production}
+%------------------------------
+
+The production function portion of the model included the 
+determination of $\beta$, $\sigma$, $\lambda$, $\phi$, $\delta$, 
+and $A_\mathrm{0}$. We were able to determine these parameters 
+once the equation set was working and we could successfully 
+step forward in time using the two differential equations 
+(Equations \ref{eq:da_dt} and \ref{eq:dn_dt}). The sum of the 
+squared errors was calculated for the indexed time series on 
+Y, w, N, L, b, d, c, and $\tau$ and then a least squares 
+minimization was performed on this total SSE value to determine 
+the optimum values of $\beta$, $\sigma$, $\lambda$, $\phi$, 
+$\delta$, and $A_\mathrm{0}$.
 ****SEE 'JonesModelv33' IN THE REPOSITORY****
 
 **** Heun: Create a table of the estimated parameters. ****
@@ -745,7 +839,8 @@ The production function portion of the model included the determination of $\bet
 \label{sec:Results_basic_model}
 %++++++++++++++++++++++++++++++
 
-**** Heun: develop graphs and other results based on Caleb's work with the basic model. ****
+**** Heun: develop graphs and other results based on 
+Caleb's work with the basic model. ****
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -817,13 +912,21 @@ We now enhance the basic model with both energy flows and capital stock.
 \label{sec:Acknowledgements}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-**** Comment before submission **** Funding for Caleb Reese was provided by the Integrated Science Research Institute (ISRI) at Calvin College. Partial funding for Matthew Kuperus Heun was provided by a Calvin College Research Fellowship. 
+**** Comment before submission **** 
+Funding for Caleb Reese was provided by the 
+Integrated Science Research Institute (ISRI) at Calvin College. 
+Partial funding for Matthew Kuperus Heun was provided by 
+a Calvin College Research Fellowship. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Reproducible Research}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-**** Comment before submission **** In the spirit of Reproducible Research \citep{Gandrud:2013vx}, all data, spreadsheets, \texttt{R} code \citep{R}, \texttt{EES} code \citep{EES}, and other materials associated with this paper can be found at\\*
+**** Comment before submission **** 
+In the spirit of Reproducible Research \citep{Gandrud:2013vx}, 
+all data, spreadsheets, \texttt{R} code \citep{R}, 
+\texttt{EES} code \citep{EES}, and other materials associated 
+with this paper can be found at\\*
 \protect\url{https://github.com/MatthewHeun/EconDynamicLongwaveModel}.
 
 
@@ -838,28 +941,7 @@ We now enhance the basic model with both energy flows and capital stock.
 \label{sec:Raw_Data}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Table~\ref{tab:Raw_US_Data} shows raw historical time series data for the U.S.
 
-<<Raw_US_Data, results='asis', eval=TRUE>>=
-usDataMassaged <- rawHistoricalData # We'll mess around with usDataMassaged to make it easier to read
-usDataMassaged["Y"] <- usDataMassaged["Y"] / 1e9 # Y is now in billion 2005$/year
-usDataMassaged["L"] <- usDataMassaged["L"] / 1e6 # total employment mow in millions/year
-usDataMassaged["L_A"] <- usDataMassaged["L_A"] / 1e6 # total STEM researchers now in millions/year
-usDataMassaged["N"] <- usDataMassaged["N"] / 1e6 # total population now in millions
-usDataMassaged["B"] <- usDataMassaged["B"] / 1e6 # births now in millions/year
-usDataMassaged["D"] <- usDataMassaged["D"] / 1e6 # deaths now in millions/year
-usDataMassaged["K"] <- usDataMassaged["K"] / 1e9 # capital stock now in billion 2005$
-usDataMassaged["E"] <- usDataMassaged["E"] / 1e3 # energy now in TJ/year
-colnames(usDataMassaged) <- c("$Y_\\mathrm{t}$", "$w_\\mathrm{t}$", "$L_\\mathrm{t}$", "$L_\\mathrm{A,t}$", 
-                              "$N_\\mathrm{t}$", "$B_\\mathrm{t}$", "$D_\\mathrm{t}$", "$K_\\mathrm{t}$", 
-                              "$E_\\mathrm{t}$")
-rawDataXtable <- xtable(x=usDataMassaged, 
-                        caption="U.S. raw historical data. GDP ($Y_\\mathrm{t}$) in billion 2005\\$/year; wages ($w_\\mathrm{t}$) in 2005\\$/year-worker; total population ($L_\\mathrm{t}$) in millions of workers; researchers in STEM disciplines ($L_\\mathrm{A,t}$) in millions of workers; births ($B_\\mathrm{t}$) and deaths ($D_\\mathrm{t}$) in millions/year; population ($N_\\mathrm{t}$) in millions (capita); capital stock ($K_\\mathrm{t}$) in billion 2005\\$; and energy ($E_\\mathrm{t}$) in TJ/year.",
-                        label="tab:Raw_US_Data",
-                        digits=c(0, 2, 0, 1, 3, 1, 3, 3, 2, 2)
-                        )
-print(rawDataXtable, caption.placement="top", sanitize.colnames.function = identity, size="\\tiny")
-@
 
 %% BibTeX support
 \bibliographystyle{DeGruyter}
