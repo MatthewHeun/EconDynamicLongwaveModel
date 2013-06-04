@@ -77,6 +77,12 @@ defaultKeyYLoc <- 0.95
 scaleTextSize <- 0.8  
 # 50% of normal size and pointing INWARD!
 scaleTickSize <- -0.5 
+
+# A function to pretty-print numbers
+pprint <- function(num, digits = 2){
+  out <- formatC(num, digit=digits, format="f")
+  return(out)
+}
 @
 
 \begin{document}
@@ -451,7 +457,7 @@ The form of the mortality equation is taken from \citet{Jones:2001wn} as
 
 \begin{equation} \label{eq:mortality_rate}
 	d_\mathrm{t} = \frac{1}{\omega_\mathrm{1} z_\mathrm{t}^{\omega_\mathrm{2}} 
-                  + \omega_\mathrm{3} z_\mathrm{t}} + \bar d
+                  + \omega_\mathrm{3} z_\mathrm{t}} + \bar{d}
 \end{equation}
 
 \noindent where 
@@ -660,37 +666,39 @@ Note that consumption ($c_\mathrm{t}$) is equal to per-capita wages.
 # **** SEE JonesModelGroundTruthParameters.EES IN THE REPOSITORY ****
 nu <- calculatedHistoricalData["b"] / (1.0 - calculatedHistoricalData["tau"]); 
 names(nu) <- "nu" # Historical nu
-nu_1980 <- nu[firstYear, "nu"]
+nu_0 <- nu[firstYear, "nu"]
 pi <- calculatedHistoricalData["L_A"] / calculatedHistoricalData["L"]
 names(pi) <- "pi" # Historical pi
-pi_1980 <- pi[firstYear, "pi"]
+pi_0 <- pi[firstYear, "pi"]
 wALA <- calculatedHistoricalData["w_worker"] * calculatedHistoricalData["L_A"]; 
 names(wALA) <- "wALA"
 piY <- pi * calculatedHistoricalData["Y"]; names(piY) <- "piY"
 zeta <- wALA / piY; names(zeta) <- "zeta"
-zeta_1980 <- zeta[firstYear, "zeta"]
+zeta_0 <- zeta[firstYear, "zeta"]
 calculatedHistoricalData <- cbind(calculatedHistoricalData, nu, pi, zeta)
 @
 
 We used $\tau_\mathrm{1980}$ and $b_\mathrm{1980}$ with 
 Equation~\ref{eq:birth_constraint} to calculate a value for 
-$\nu$ (\Sexpr{nu_1980}~births/year-capita) that is 
+$\nu$ (\Sexpr{nu_0}~births/year-capita) that is 
 held constant through time. We used $L_\mathrm{A,1980}$ 
 and $L_{1980}$ with Equation~\ref{eq:pi} to calculate a 
-unitless value for $\pi$ (\Sexpr{pi_1980}) that is held 
+unitless value for $\pi$ (\Sexpr{pi_0}) that is held 
 constant through time. Equation~\ref{eq:knowledge_compensation} 
 was used with $\pi_\mathrm{1980}$ and wage and labor data 
 for 1980 in to calculate an invariant value for $\zeta$ 
-(\Sexpr{zeta_1980}).
+(\Sexpr{zeta_0}).
 
-<<b_bar_c_bar_z>>=
+<<calculat_b_bar_c_bar_d_bar_z>>=
 # Asymptotic birth rate as consumption goes to infinity
 b_bar = 0.0
 # Consumption for subsistence level
 ############## Perform this calculation here #################
 c_bar = 5655 # 2005$/year
+d_bar <- 0
 z <- calculatedHistoricalData["c"] / c_bar - 1
 names(z) <- "z" 
+z_0 <- z[firstYear, "z"]
 calculatedHistoricalData <- cbind(calculatedHistoricalData, z)
 @
 
@@ -762,26 +770,61 @@ The following subsections discuss the parameter estimation process.
 \label{sec:mortality}
 %------------------------------
 
-<<mortality>>=
+<<mortality_parameter_estimation>>=
+d_0 <- calculatedHistoricalData[firstYear, "d"]
+mortalityModel <- d ~ 1.0 / (omega_1*z^omega_2 + (1.0 / (z_0*(d_0-d_bar)) - omega_1*z_0^(omega_2-1.0))*z) + d_bar
+  control <- nls.control(maxiter=200, 
+                         tol=1e-05, 
+                         minFactor=1/1024,
+                         printEval=FALSE, #Tells whether to print details of curve fit process.
+                         warnOnly=TRUE)
+start <- list(omega_1=116 , omega_2=-0.63)
+dModel <- nls(formula=mortalityModel, data=calculatedHistoricalData, start=start, control=control)
+omega_1 <- coef(dModel)["omega_1"]
+omega_2 <- coef(dModel)["omega_2"]
+omega_3.est <- deltaMethod(dModel, "1/(z_0*(d_0-d_bar)) - omega_1*z_0^(omega_2-1.0)")
+omega_3 <- omega_3.est[1, "Estimate"]
 @
+
+%****SEE 'JonesModelMortalityParameters' IN THE REPOSITORY****
 
 The mortality portion of the model consists of 
 Equations~\ref{eq:mortality_rate} and \ref{eq:z}. 
-These historical $z_\mathrm{t}$ values were used to calculate 
-a predicted $d_\mathrm{t}$ value that was then compared to 
-the historical $d_\mathrm{t}$ values for the minimzation. 
-To determine values of the three mortality function fitting 
-parameters ($\omega_\mathrm{1}$, $\omega_\mathrm{2}$, 
-and $\omega_\mathrm{3}$), we used least-squares minimization 
-when comparing the predicted $d_\mathrm{t}$ to the historical 
-values. Because you have two equations and three unknowns, one 
-of the $\omega$ values can be allowed to float. For the purposes 
-of our parameter estimation, we let $\omega_\mathrm{2}$ float 
-and performed the least-squares minimzation on 
-$\omega_\mathrm{1}$ and $\omega_\mathrm{3}$.
-****SEE 'JonesModelMortalityParameters' IN THE REPOSITORY****
+Applying Equation~\ref{eq:mortality_rate} at 
+$\mathrm{t} = \mathrm{t_0} = 1980$ and solving 
+for $\omega_\mathrm{3}$ yields
 
-********* Heun ended here. Need to perform this parameter estimation **********
+\begin{equation} \label{eq:omega_3}
+  \omega_3 = \frac{1}{z_0(d_0 - \bar{d})} 
+              - \omega_1 z_0^{(\omega_2 - 1)}
+\end{equation}
+
+Substituting Equation~\ref{eq:omega_3} into 
+Equation~\ref{eq:mortality_rate} gives
+
+\begin{equation} \label{eq:mortality_fit_model}
+  d_\mathrm{t} = \frac{1}{\omega_\mathrm{1} z_\mathrm{t}^{\omega_\mathrm{2}} 
+                  +  \left( \frac{1}{z_0(d_0 - \bar{d})} 
+                            - \omega_1 z_0^{(\omega_2 - 1)} \right) 
+                  z_\mathrm{t} } + \bar{d}
+\end{equation}
+
+\noindent which can be used in the \texttt{R} \citep{R} function 
+\texttt{nls} to estimate 
+$\omega_1~=~\Sexpr{pprint(omega_1, digits=1)}$, 
+$\omega_2~=~\Sexpr{pprint(omega_2, digits=3)}$, and 
+$\omega_3~=~\Sexpr{pprint(omega_3, digits=1)}$.
+$\omega_1$, $\omega_2$, and $\omega_3$ are all 
+significant at the 1\% level. Figure~**** compares predicted
+and actual mortality rates.
+
+<<Mortality_Graph, fig.pos="H", fig.width=maxWidth, fig.height=1, fig.cap="Mortality model results.">>=
+d_pred <- predict(dModel)
+d_act <- calculatedHistoricalData["d"]; names(d_act) <- "d_act"
+dGraphData <- cbind(d_act, d_pred, calculatedHistoricalData["z"])
+xyplot(d_act+d_pred~z, data=dGraphData)
+
+@
 
 %------------------------------
 \subsubsection{Utility}
