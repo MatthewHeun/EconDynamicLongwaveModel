@@ -62,6 +62,8 @@ opts_chunk$set(
 maxWidth <- 6.5 #Inches
 textScaling <- 1.0 # For graphs
 # Full page lattice plot sizes
+singleGraphWidth <- maxWidth
+singleGraphHeight <- 4.5 #Inches
 threePanelGraphWidth <- maxWidth
 threePanelGraphHeight <- 3.17 #Inches
 ninePanelGraphWidth <- maxWidth     
@@ -840,7 +842,7 @@ $\omega_1$, $\omega_2$, and $\omega_3$ are all
 significant at the 1\% level. Figure~\ref{fig:mortality_graph} compares predicted
 and actual mortality rates as a function of $z_\mathrm{t}$.
 
-<<mortality_graph, fig.pos="H", fig.width=maxWidth, fig.height=4.5, fig.cap="Mortality model results.">>=
+<<mortality_graph, fig.pos="H", fig.width=singleGraphWidth, fig.height=singleGraphHeight, fig.cap="Mortality model results.">>=
 d_pred <- predict(dModel)
 d_act <- calculatedHistoricalData["d"]; names(d_act) <- "d_act"
 dGraphData <- cbind(d_act, d_pred, calculatedHistoricalData["z"])
@@ -878,12 +880,13 @@ xyplot(d_act+d_pred~z, data=dGraphData,
 <<utility_parameter_estimation>>=
 utilityModel <- b_tilde ~ (w_worker/w_worker_0)^eta * (c_tilde/c_tilde_0)^(gamma/eta) * b_tilde_0
 start <- list(eta=0.95, gamma=0.33)
+# eta <- 0.95
+# start <- list(gamma=0.33)
 uModel <- nls(formula=utilityModel, data=calculatedHistoricalData, start=start, control=control)
 eta <- coef(uModel)["eta"]
 gamma <- coef(uModel)["gamma"]
-print(paste("eta =", eta))
-print(paste("gamma =", gamma))
 
+print(summary(uModel))
 @
 
 Utility model parameters $\eta$, $\gamma$, and $G$ 
@@ -893,7 +896,7 @@ $\mathrm{t} = \mathrm{t_0} = 1980$ and solving
 for $G$ yields
 
 \begin{equation} \label{eq:G_t0}
-  G = w_0 \frac{\tilde{b}_0^\eta}{\tilde{c}_0^\eta}
+  G = w_0 \; \frac{\tilde{b}_0^\eta}{\tilde{c}_0^\eta}
 \end{equation}
 
 Substituting Equation~\ref{eq:G_t0} into Equation~\ref{eq:FOC_with_G}
@@ -908,11 +911,27 @@ Solving for $\tilde{b}$ gives
 
 \noindent which can be used in the \texttt{R} \citep{R} function 
 \texttt{nls} to estimate 
-$\eta~=~\Sexpr{pprint(eta, digits=3)}$, and
-$\gamma~=~\Sexpr{pprint(gamma, digits=3)}$. Both parameters 
+$\eta=\Sexpr{pprint(eta, digits=3)}$, and
+$\gamma=\Sexpr{pprint(gamma, digits=3)}$. Both parameters 
 are significant at the **** level.
 
-
+<<utility_graph, fig.pos="H", fig.width=singleGraphWidth, fig.height=singleGraphHeight, fig.cap="Mortality model results.">>=
+# graphType <- "b" # b is for both line and symbol
+# lineTypes <- c(0, 1) # line types. See http://en.wikibooks.org/wiki/R_Programming/Graphics
+# lineWidths <- c(0, 2) # line widths. 0 means no line.
+# colors <- c("black", "black") # line and symbol colors
+# symbols <- c(1, NA)  # NA gives no symbol.
+# Now create the plot.
+xyplot(predict(uModel)~calculatedHistoricalData["b_tilde"], 
+       xlab=list(label="Actual $\\tilde{b}$", cex=textScaling), 
+       ylab=list(label="Predicted $\\tilde{b}$", cex=textScaling),
+       scales=list(cex=scaleTextSize * textScaling, # controls text size on scales.
+                   tck=scaleTickSize # controls tick mark length. < 0 for inside the graph.
+                   ),
+       lty=lineTypes, lwd=lineWidths, col=colors, # controls line parameters
+       pch=symbols, col.symbol=colors # controls symbol parameters
+       )
+@
 
 
 
