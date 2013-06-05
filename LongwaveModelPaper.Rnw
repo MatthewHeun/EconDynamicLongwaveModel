@@ -637,7 +637,7 @@ $z_\mathrm{t}$.
 # Births/year-capita
 b <- calculatedHistoricalData["B"] / calculatedHistoricalData["N"]
 names(b) <- "b" 
-b_0 <- b(firstYear, "b")
+b_0 <- b[firstYear, "b"]
 # Deaths/year-capita
 d <- calculatedHistoricalData["D"] / calculatedHistoricalData["N"]
 names(d) <- "d" 
@@ -876,11 +876,18 @@ xyplot(d_act+d_pred~z, data=dGraphData,
 %------------------------------
 
 <<utility_parameter_estimation>>=
+utilityModel <- b_tilde ~ (w_worker/w_worker_0)^eta * (c_tilde/c_tilde_0)^(gamma/eta) * b_tilde_0
+start <- list(eta=0.95, gamma=0.33)
+uModel <- nls(formula=utilityModel, data=calculatedHistoricalData, start=start, control=control)
+eta <- coef(uModel)["eta"]
+gamma <- coef(uModel)["gamma"]
+print(paste("eta =", eta))
+print(paste("gamma =", gamma))
 
 @
 
-Parameters $\eta$, $\gamma$, and $G$ in the utility model 
-are determined a least squares technique, also. Applying 
+Utility model parameters $\eta$, $\gamma$, and $G$ 
+are estimated a least squares technique. Applying 
 Equation~\ref{eq:FOC_with_G} at 
 $\mathrm{t} = \mathrm{t_0} = 1980$ and solving 
 for $G$ yields
@@ -890,7 +897,8 @@ for $G$ yields
 \end{equation}
 
 Substituting Equation~\ref{eq:G_t0} into Equation~\ref{eq:FOC_with_G}
-and solving for $\tilde{b}$ gives
+ensures that year $\mathrm{t} = \mathrm{t}_0$ will be matched. 
+Solving for $\tilde{b}$ gives
 
 \begin{equation} \label{eq:b_tilde_for_least_squares}
   \tilde{b} = \left( \frac{w}{w_0} \right)^\eta
@@ -898,6 +906,11 @@ and solving for $\tilde{b}$ gives
               \tilde{b}_0
 \end{equation}
 
+\noindent which can be used in the \texttt{R} \citep{R} function 
+\texttt{nls} to estimate 
+$\eta~=~\Sexpr{pprint(eta, digits=3)}$, and
+$\gamma~=~\Sexpr{pprint(gamma, digits=3)}$. Both parameters 
+are significant at the **** level.
 
 
 
