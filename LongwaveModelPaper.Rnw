@@ -820,16 +820,26 @@ $\omega_1$, $\omega_2$, and $\omega_3$ are all
 significant at the 1\% level. Figure~**** compares predicted
 and actual mortality rates.
 
-<<Mortality_Graph, fig.pos="H", fig.width=maxWidth, fig.height=4, fig.cap="Mortality model results.">>=
+<<mortality_Graph, fig.pos="H", fig.width=maxWidth, fig.height=4, fig.cap="Mortality model results.">>=
 d_pred <- predict(dModel)
 d_act <- calculatedHistoricalData["d"]; names(d_act) <- "d_act"
 dGraphData <- cbind(d_act, d_pred, calculatedHistoricalData["z"])
+graphType <- "b" # b is for both line and symbol
+lineTypes <- c(0, 1) # line types. See http://en.wikibooks.org/wiki/R_Programming/Graphics
+lineWidths <- c(0, 2) # line widths. 0 means no line.
+colors <- c("black", "black") # line and symbol colors
+symbols <- c(1, NA)  # NA gives no symbol.
+
 xyplot(d_act+d_pred~z, data=dGraphData,
+       type = graphType,
        xlab=list(label="$z_\\mathrm{t}$ [-]", cex=textScaling), 
        ylab=list(label="$d_\\mathrm{t}$ [deaths/year-capita]", cex=textScaling),
-       scales=list(cex=scaleTextSize * textScaling, #controls text size on scales.
-                   tck=scaleTickSize #controls tick mark length. < 0 for inside the graph.
-                   )
+       scales=list(cex=scaleTextSize * textScaling, # controls text size on scales.
+                   tck=scaleTickSize # controls tick mark length. < 0 for inside the graph.
+                   ),
+       lty=lineTypes, lwd=lineWidths, col=colors, # controls line parameters
+       pch=symbols, col.symbol=colors # controls symbol parameters
+
        )
 
 @
