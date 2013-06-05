@@ -626,8 +626,10 @@ $\nu$,
 $\pi$, 
 $\zeta$,
 $\bar{b}$,
-$\bar{c}$, and 
-$z\mathrm{t}$. 
+$\tilde{b}_\mathrm{t}$
+$\bar{c}$, 
+$\tilde{c}_\mathrm{t}$, and 
+$z_\mathrm{t}$. 
 
 <<calculate_b_and_d>>=
 # Calculate per-capita information
@@ -694,28 +696,38 @@ was used with $\pi_\mathrm{1980}$ and wage and labor data
 for 1980 in to calculate an invariant value for $\zeta$ 
 (\Sexpr{zeta_0}).
 
-<<calculat_b_bar_c_bar_d_bar_z>>=
+<<calculate_b_bar_b_tilde_c_bar_c_tilde_d_bar_z>>=
 # Asymptotic birth rate as consumption goes to infinity
 b_bar = 0.0
+# Birth rate above asymptote, b_tilde
+b_tilde <- calculatedHistoricalData["b"] - b_bar
+names(b_tilde) <- "b_tilde"
 # Consumption for subsistence level
 ############## Perform this calculation here #################
 c_bar = 5655 # 2005$/year
+# Consumption above subsistence level, c_tilde
+c_tilde <- calculatedHistoricalData["c"] - c_bar
+names(c_tilde) <- "c_tilde"
+# Asymptotic mortality rate
 d_bar <- 0
+# calculate z
 z <- calculatedHistoricalData["c"] / c_bar - 1
 names(z) <- "z" 
 z_0 <- z[firstYear, "z"]
-calculatedHistoricalData <- cbind(calculatedHistoricalData, z)
+calculatedHistoricalData <- cbind(calculatedHistoricalData, b_tilde, c_tilde, z)
 @
 
 Following \citet[p.~16]{Jones:2001wn}, we take $\bar{b} = \Sexpr{b_bar}$ 
-for the asymptotic birth rate as $c \rightarrow \infty$.
+for the asymptotic birth rate as $c \rightarrow \infty$. 
+$\tilde{b}_\mathrm{t}$ is calculated from Equation~\ref{eq:b_tilde}.
 
 Because $\bar{c}$ represents the subsistence level of consumption, 
 we chose a value corresponding to the subsistence level of 
 consumption in the year 1980 (the first year of our simulation). 
 The value of $\bar{c}$ was set to be \Sexpr{c_bar} 2005\$/year-capita, 
 based on the poverty line value in the year 1980 and 
-assuming an average family size of 3.
+assuming an average family size of 3. 
+$\tilde{c}_\mathrm{t}$ is calculated from Equation~\ref{eq:c_tilde}.
 
 We used Equation~\ref{eq:z} with historical values for 
 $c_\mathrm{t}$ and $\bar{c}$ to calculate ground
@@ -723,7 +735,7 @@ truth values of $z_\mathrm{t}$.
 
 
 <<US_data_table, results='asis'>>=
-dataXtable <- xtable(x=calculatedHistoricalData[, 10:21], 
+dataXtable <- xtable(x=calculatedHistoricalData[, 10:23], 
                      caption="Ground truth data for the U.S.", label=paste("tab:Ground_truth_US_Data"))
 print(dataXtable, caption.placement="top", sanitize.rownames.function = identity, size="\\tiny")
 @
@@ -816,9 +828,9 @@ Equation~\ref{eq:mortality_rate} gives
 
 \noindent which can be used in the \texttt{R} \citep{R} function 
 \texttt{nls} to estimate 
-$\omega_1~=~\Sexpr{pprint(omega_1, digits=1)}$, 
-$\omega_2~=~\Sexpr{pprint(omega_2, digits=3)}$, and 
-$\omega_3~=~\Sexpr{pprint(omega_3, digits=2)}$.
+$\omega_1~=~\Sexpr{pprint(omega_1, digits=1)}$ **** units ****, 
+$\omega_2~=~\Sexpr{pprint(omega_2, digits=3)}$ **** units ****, and 
+$\omega_3~=~\Sexpr{pprint(omega_3, digits=2)}$ **** units ****.
 $\omega_1$, $\omega_2$, and $\omega_3$ are all 
 significant at the 1\% level. Figure~\ref{fig:mortality_graph} compares predicted
 and actual mortality rates as a function of $z_\mathrm{t}$.
