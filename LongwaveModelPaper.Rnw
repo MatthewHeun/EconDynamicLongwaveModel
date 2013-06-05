@@ -7,6 +7,7 @@
 \usepackage{graphicx} % Allows use of width and scale options for \includegraphics
 \usepackage{hyperref} % To create hyperlinks in the paper
 \usepackage{soul} % Provides strikethrough text
+
 \usepackage[authoryear,comma,longnamesfirst,sectionbib]{natbib} 
 %% The lineno packages adds line numbers. Start line numbering with
 %% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
@@ -59,6 +60,7 @@ opts_chunk$set(
 # Several global parameters for graphs. 
 # Set here and use below to ensure consistent appearance of graphs.
 maxWidth <- 6.5 #Inches
+textScaling <- 1.0 # For graphs
 # Full page lattice plot sizes
 threePanelGraphWidth <- maxWidth
 threePanelGraphHeight <- 3.17 #Inches
@@ -818,11 +820,17 @@ $\omega_1$, $\omega_2$, and $\omega_3$ are all
 significant at the 1\% level. Figure~**** compares predicted
 and actual mortality rates.
 
-<<Mortality_Graph, fig.pos="H", fig.width=maxWidth, fig.height=1, fig.cap="Mortality model results.">>=
+<<Mortality_Graph, fig.pos="H", fig.width=maxWidth, fig.height=4, fig.cap="Mortality model results.">>=
 d_pred <- predict(dModel)
 d_act <- calculatedHistoricalData["d"]; names(d_act) <- "d_act"
 dGraphData <- cbind(d_act, d_pred, calculatedHistoricalData["z"])
-xyplot(d_act+d_pred~z, data=dGraphData)
+xyplot(d_act+d_pred~z, data=dGraphData,
+       xlab=list(label="$z_\\mathrm{t}$ [-]", cex=textScaling), 
+       ylab=list(label="$d_\\mathrm{t}$ [deaths/year-capita]", cex=textScaling),
+       scales=list(cex=scaleTextSize * textScaling, #controls text size on scales.
+                   tck=scaleTickSize #controls tick mark length. < 0 for inside the graph.
+                   )
+       )
 
 @
 
