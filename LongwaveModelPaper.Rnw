@@ -72,8 +72,11 @@ presentationGraph1ColWidth <- 2*presentationGraph2ColWidth
 keyTextSize <- 0.85 #85% of normal size
 keyColumns <- 1 #Want only 1 column in the key for lattice graphs
 # x and y positions of the key. This default is good for 9-panel graphs.
-defaultKeyXLoc <- 0.01 
-defaultKeyYLoc <- 0.95 
+keyTextSize <- 0.85 #85% of normal size
+keyColumns <- 1 #Want only 1 column in the key for lattice graphs
+defaultKeyXLoc <- 0.01 #x position of the key. This default is good for 9-panel graphs.
+defaultKeyYLoc <- 0.95 #y position of the key. This default is good for 9-panel graphs.
+
 # Other graph parameters that apply to all graphs
 # Multiple of normal size
 scaleTextSize <- 0.8  
@@ -815,12 +818,12 @@ Equation~\ref{eq:mortality_rate} gives
 \texttt{nls} to estimate 
 $\omega_1~=~\Sexpr{pprint(omega_1, digits=1)}$, 
 $\omega_2~=~\Sexpr{pprint(omega_2, digits=3)}$, and 
-$\omega_3~=~\Sexpr{pprint(omega_3, digits=1)}$.
+$\omega_3~=~\Sexpr{pprint(omega_3, digits=2)}$.
 $\omega_1$, $\omega_2$, and $\omega_3$ are all 
-significant at the 1\% level. Figure~**** compares predicted
-and actual mortality rates.
+significant at the 1\% level. Figure~\ref{fig:mortality_graph} compares predicted
+and actual mortality rates as a function of $z_\mathrm{t}$.
 
-<<mortality_Graph, fig.pos="H", fig.width=maxWidth, fig.height=4, fig.cap="Mortality model results.">>=
+<<mortality_graph, fig.pos="H", fig.width=maxWidth, fig.height=4.5, fig.cap="Mortality model results.">>=
 d_pred <- predict(dModel)
 d_act <- calculatedHistoricalData["d"]; names(d_act) <- "d_act"
 dGraphData <- cbind(d_act, d_pred, calculatedHistoricalData["z"])
@@ -838,10 +841,16 @@ xyplot(d_act+d_pred~z, data=dGraphData,
                    tck=scaleTickSize # controls tick mark length. < 0 for inside the graph.
                    ),
        lty=lineTypes, lwd=lineWidths, col=colors, # controls line parameters
-       pch=symbols, col.symbol=colors # controls symbol parameters
-
+       pch=symbols, col.symbol=colors, # controls symbol parameters
+       key=list(text=list(c("Historical data", "Mortality model")),
+                type=graphType,
+                cex=keyTextSize * textScaling, #controls size of text in the key
+                lines=list(lty=lineTypes, lwd=lineWidths), #controls line types
+                pch=symbols, col=colors, #controls symbol (plot characters) types
+                columns=keyColumns, 
+                x=0.66, 
+                y=defaultKeyYLoc) #controls columns and position of the key
        )
-
 @
 
 %------------------------------
