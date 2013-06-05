@@ -348,7 +348,7 @@ $k_\mathrm{c}$, and $\mu$ are all constants that can be moved to the
 front of either side of the equation, we grouped these parameters 
 together into a new parameter called $G$.
 
-\begin{equation} \label{eq:FOC_with_G}
+\begin{equation} \label{eq:FOC_with_G} % FOC means "first order condition"
  	\tilde b_\mathrm{t}^\eta = \frac{\tilde c_\mathrm{t}^\gamma}{w_\mathrm{t}} G
 \end{equation}
 
@@ -573,6 +573,7 @@ L_Y <- calculatedHistoricalData["L"] - calculatedHistoricalData["L_A"]; names(L_
 calculatedHistoricalData <- cbind(calculatedHistoricalData, L_Y)
 # Calculate indexed data
 firstYear <- "1980"
+w_worker_0 <- calculatedHistoricalData[firstYear, "w_worker"] # Initial wage
 Y_0  <- calculatedHistoricalData[firstYear, "Y"]  # Initial GDP
 N_0 <- calculatedHistoricalData[firstYear, "N"]   # Initial population
 L_Y_0 <- L_Y[firstYear,"L_Y"] # Initial L_Y
@@ -636,9 +637,11 @@ $z_\mathrm{t}$.
 # Births/year-capita
 b <- calculatedHistoricalData["B"] / calculatedHistoricalData["N"]
 names(b) <- "b" 
+b_0 <- b(firstYear, "b")
 # Deaths/year-capita
 d <- calculatedHistoricalData["D"] / calculatedHistoricalData["N"]
 names(d) <- "d" 
+d_0 <- d[firstYear, "d"]
 calculatedHistoricalData <- cbind(calculatedHistoricalData, b, d)
 @
 
@@ -702,12 +705,14 @@ b_bar = 0.0
 # Birth rate above asymptote, b_tilde
 b_tilde <- calculatedHistoricalData["b"] - b_bar
 names(b_tilde) <- "b_tilde"
+b_tilde_0 <- b_tilde[firstYear, "b_tilde"]
 # Consumption for subsistence level
 ############## Perform this calculation here #################
 c_bar = 5655 # 2005$/year
 # Consumption above subsistence level, c_tilde
 c_tilde <- calculatedHistoricalData["c"] - c_bar
 names(c_tilde) <- "c_tilde"
+c_tilde_0 <- c_tilde[firstYear, "c_tilde"]
 # Asymptotic mortality rate
 d_bar <- 0
 # calculate z
@@ -788,13 +793,12 @@ The following subsections discuss the parameter estimation process.
 %------------------------------
 
 <<mortality_parameter_estimation>>=
-d_0 <- calculatedHistoricalData[firstYear, "d"]
 mortalityModel <- d ~ 1.0 / (omega_1*z^omega_2 + (1.0 / (z_0*(d_0-d_bar)) - omega_1*z_0^(omega_2-1.0))*z) + d_bar
-  control <- nls.control(maxiter=200, 
-                         tol=1e-05, 
-                         minFactor=1/1024,
-                         printEval=FALSE, #Tells whether to print details of curve fit process.
-                         warnOnly=TRUE)
+control <- nls.control(maxiter=200, 
+                       tol=1e-05, 
+                       minFactor=1/1024,
+                       printEval=FALSE, #Tells whether to print details of curve fit process.
+                       warnOnly=TRUE)
 start <- list(omega_1=116 , omega_2=-0.63)
 dModel <- nls(formula=mortalityModel, data=calculatedHistoricalData, start=start, control=control)
 omega_1 <- coef(dModel)["omega_1"]
@@ -817,7 +821,8 @@ for $\omega_\mathrm{3}$ yields
 \end{equation}
 
 Substituting Equation~\ref{eq:omega_3} into 
-Equation~\ref{eq:mortality_rate} gives
+Equation~\ref{eq:mortality_rate} ensures that conditions 
+at $\mathrm{t} = \mathrm{t}_0$ will be met and yields
 
 \begin{equation} \label{eq:mortality_fit_model}
   d_\mathrm{t} = \frac{1}{\omega_\mathrm{1} z_\mathrm{t}^{\omega_\mathrm{2}} 
@@ -844,7 +849,7 @@ lineTypes <- c(0, 1) # line types. See http://en.wikibooks.org/wiki/R_Programmin
 lineWidths <- c(0, 2) # line widths. 0 means no line.
 colors <- c("black", "black") # line and symbol colors
 symbols <- c(1, NA)  # NA gives no symbol.
-
+# Now create the plot.
 xyplot(d_act+d_pred~z, data=dGraphData,
        type = graphType,
        xlab=list(label="$z_\\mathrm{t}$ [-]", cex=textScaling), 
@@ -870,7 +875,35 @@ xyplot(d_act+d_pred~z, data=dGraphData,
 \label{sec:utility}
 %------------------------------
 
-To determine $\eta$, $\gamma$, and $G$ we also used the 
+<<utility_parameter_estimation>>=
+
+@
+
+Parameters $\eta$, $\gamma$, and $G$ in the utility model 
+are determined a least squares technique, also. Applying 
+Equation~\ref{eq:FOC_with_G} at 
+$\mathrm{t} = \mathrm{t_0} = 1980$ and solving 
+for $G$ yields
+
+\begin{equation} \label{eq:G_t0}
+  G = w_0 \frac{\tilde{b}_0^\eta}{\tilde{c}_0^\eta}
+\end{equation}
+
+Substituting Equation~\ref{eq:G_t0} into Equation~\ref{eq:FOC_with_G}
+and solving for $\tilde{b}$ gives
+
+\begin{equation} \label{eq:b_tilde_for_least_squares}
+  \tilde{b} = \left( \frac{w}{w_0} \right)^\eta
+              \left( \frac{\tilde{c}}{\tilde{c}_0} \right)^{\gamma/\eta}
+              \tilde{b}_0
+\end{equation}
+
+
+
+
+
+
+we also used the 
 least-squares minimization technique. These parameters were 
 determined from the utility function portion of the model, 
 which simply consists of Equation \ref{eq:FOC_with_G}. 
