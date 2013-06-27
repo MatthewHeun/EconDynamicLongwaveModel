@@ -7,6 +7,7 @@
 \usepackage{graphicx} % Allows use of width and scale options for \includegraphics
 \usepackage{hyperref} % To create hyperlinks in the paper
 \usepackage{soul} % Provides strikethrough text
+\usepackage{float} % Provides precise positioning of figures
 
 \usepackage[authoryear,comma,longnamesfirst,sectionbib]{natbib} 
 %% The lineno packages adds line numbers. Start line numbering with
@@ -173,6 +174,25 @@ pprint <- function(num, digits = 2){
 \label{sec:introduction}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+**** Comments from Martin:
+
+Make sure here that readers understand why we need the Jones model 
+to be reproduced and why for such a short time frame. 
+I do not think you are that interested in the demographic transition, 
+but you are interested in the interplay between the stock of ideas and 
+certain limiting factors such as  labour, capital, energy, land. 
+New work on energy growth modelling may provide some insights 
+into what the real limiting factors for the US were in the period 1980-2011, 
+and speculate on what the limiting factors may become in the future. 
+When adding energy to the US economic production function 
+over the 1980-2011 time frame we must be able to show that 
+it is indeed valuable to do so--getting better predictive power, for example. 
+It is a pity the energy shock data from the 1970s is missed 
+with a 1980-2011 time frame. Can that still be included? 
+We need to find an "energy signal," even if 
+it is embedded in other factors of production--a kind of nested function, 
+if energy limits and innovation potential to circumvent those remains our thesis.
+****
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Basic model (without energy or capital stock)}
@@ -346,20 +366,19 @@ $k_\mathrm{b}$ and $k_\mathrm{c}$ represent the
 $U_\mathrm{b,0}$ and $U_\mathrm{c,0}$ are the total utilities 
   derived from births and consumption respectively in the first year. 
 Because $U_\mathrm{b,0}$, $U_\mathrm{c,0}$, $k_\mathrm{b}$, 
-$k_\mathrm{c}$, and $\mu$ are all constants that can be moved to the 
-front of either side of the equation, we grouped these parameters 
-together into a new parameter called $G$.
+$k_\mathrm{c}$, $\mu$, and $\nu$ are constant with respect 
+to time, we grouped these parameters together 
+
+\begin{equation} \label{eq:G}
+  G \equiv \frac{\mu \nu}{(1-\mu)} 
+    \left( \frac{k_\mathrm{c}}{U_\mathrm{c,0}} \right) ^{\gamma-1} 
+    \left( \frac{k_\mathrm{b}}{U_\mathrm{b,0}} \right) ^{1-\eta}
+\end{equation}
+
+\noindent such that Equation~\ref{eq:FOC_and_time_constraints} becomes
 
 \begin{equation} \label{eq:FOC_with_G} % FOC means "first order condition"
  	\tilde b_\mathrm{t}^\eta = \frac{\tilde c_\mathrm{t}^\gamma}{w_\mathrm{t}} G
-\end{equation}
-
-\noindent where $G$ is also constant over time and defined as:
-
-\begin{equation} \label{eq:G}
-	G \equiv \frac{\mu \nu}{(1-\mu)} 
-    \left( \frac{k_\mathrm{c}}{U_\mathrm{c,0}} \right) ^{\gamma-1} 
-    \left( \frac{k_\mathrm{b}}{U_\mathrm{b,0}} \right) ^{1-\eta}
 \end{equation}
 
 Labor is split between two sectors; one devoted to 
@@ -470,7 +489,7 @@ The form of the mortality equation is taken from \citet{Jones:2001wn} as
 \noindent where 
 $d_\mathrm{t}$ is the mortality rate and 
 $\bar{d}$ is the long-run mortality rate, taken to be 0 as \citet{Jones:2001wn}, 
-  both in units of deaths/year-capita. 
+both in units of deaths/year-capita. 
 $\omega_\mathrm{1}$, $\omega_\mathrm{2}$, and $\omega_\mathrm{3}$ 
 are fitted parameters. 
 The ratio of consumption to the subsistence level is given by $z_\mathrm{t}$:
@@ -743,7 +762,7 @@ truth values of $z_\mathrm{t}$.
 
 <<US_data_table, results='asis'>>=
 dataXtable <- xtable(x=calculatedHistoricalData[, 10:23], 
-                     caption="Ground truth data for the U.S.", label=paste("tab:Ground_truth_US_Data"))
+                     caption="``Ground truth'' data for the U.S.", label=paste("tab:Ground_truth_US_Data"))
 print(dataXtable, caption.placement="top", sanitize.rownames.function = identity, size="\\tiny")
 @
 
@@ -758,16 +777,11 @@ print(dataXtable, caption.placement="top", sanitize.rownames.function = identity
 To tune the basic model to match U.S. historical data from 1980--2011, 
 we estimate values for the fitting parameters in three portions of the model:
 \begin{itemize}
-\item{Mortality}
-  \begin{itemize}
-  \item{$\omega_1$, $\omega_2$, and $\omega_3$ from 
-    Equation~\ref{eq:mortality_rate}}
-  \end{itemize}
-\item{Utility}
-  \begin{itemize}
-    \item{$\eta$, $\gamma$, and $G$ from Equation~\ref{eq:FOC_with_G}}
-  \end{itemize}
-\item{Production}
+\item{Mortality: $\omega_1$, $\omega_2$, and $\omega_3$ from 
+      Equation~\ref{eq:mortality_rate}}
+\item{Utility: $\eta$, $\gamma$, and $G$ from 
+      Equation~\ref{eq:FOC_with_G}}
+\item{Production:}
   \begin{itemize}
     \item{$\beta$ and $\sigma$ from Equation~\ref{eq:Jones_production_function}}
     \item{$\lambda$ and $\phi$ from Equation~\ref{eq:da_dt}}
@@ -807,6 +821,9 @@ omega_1 <- coef(dModel)["omega_1"]
 omega_2 <- coef(dModel)["omega_2"]
 omega_3.est <- deltaMethod(dModel, "1/(z_0*(d_0-d_bar)) - omega_1*z_0^(omega_2-1.0)")
 omega_3 <- omega_3.est[1, "Estimate"]
+print("Mortality parameter estimation results.")
+print("To be removed before submission.")
+print(summary(dModel))
 @
 
 %****SEE 'JonesModelMortalityParameters' IN THE REPOSITORY****
@@ -833,14 +850,53 @@ at $\mathrm{t} = \mathrm{t}_0$ will be met and yields
                   z_\mathrm{t} } + \bar{d}
 \end{equation}
 
-\noindent which can be used in the \texttt{R} \citep{R} function 
+\noindent which can be used with the \texttt{R} \citep{R} function 
 \texttt{nls} to estimate 
-$\omega_1~=~\Sexpr{pprint(omega_1, digits=1)}$ **** units ****, 
-$\omega_2~=~\Sexpr{pprint(omega_2, digits=3)}$ **** units ****, and 
-$\omega_3~=~\Sexpr{pprint(omega_3, digits=2)}$ **** units ****.
-$\omega_1$, $\omega_2$, and $\omega_3$ are all 
+\begin{itemize}
+  \item{$\omega_1~=~\Sexpr{pprint(omega_1, digits=1)}$~(deaths/year-capita)$^{-1}$}
+  \item{$\omega_2~=~\Sexpr{pprint(omega_2, digits=3)}$}
+  \item{$\omega_3~=~\Sexpr{pprint(omega_3, digits=2)}$~(deaths/year-capita)$^{-1}$}
+\end{itemize}
+
+\noindent $\omega_1$, $\omega_2$, and $\omega_3$ are all 
 significant at the 1\% level. Figure~\ref{fig:mortality_graph} compares predicted
 and actual mortality rates as a function of $z_\mathrm{t}$.
+
+**** Martin: The curve fit here is a bit weird. The mortality function 
+(Equation~\ref{eq:mortality_rate}) is from \citet{Jones:2001wn}. But the
+best fit parameters yield a function that behaves strangely with 
+regard to $z_\mathrm{t}$. Figure~\ref{fig:mortality_graph} shows that
+at low $z_\mathrm{t}$ \emph{and} high $z_\mathrm{t}$, mortality decreases.
+Somewhere in the middle, mortality is maximized. I would have expected 
+a monotonically inverse relationship between $d_\mathrm{t}$
+and $z_\mathrm{t}$, i.e., $d_\mathrm{t}$ decreases as $z_\mathrm{t}$ 
+increases. 
+But maybe my assumptions are wrong here.
+I note that our parameter values are significantly different
+from Jones' values. In particualar, our value of $\omega_2$ is 
+more negative than his. --Matt ****
+
+**** Martin says:
+
+Assuming that all equations are correctly reproduced, 
+the anomaly must lie in the short time period of the data when compared what Jones did. 
+
+1. could it possibly have been the case that 
+subsistence levels increased after 1980 in the US before declining again? 
+(See Jones, p5: ``The mortality rate dt is assumed to be a function 
+of the average level of per capita consumption relative to subsistence''
+
+2. another thought. It is at subsistence level that people die according to model.  
+Actual mortality numbers are in fact driven by much more than subsistence only, 
+especially in a country like the US, post 1980 and highly developed, 
+the signal wrt subsistence can be expected to be weak. 
+
+3. is it conceivable that mortality could actually increase 
+with increased consumption over subsistence level as seen from z=2.0 to z=2.5?  
+I think it can--new kinds of diseases for example. 
+But it still does not explain why only up to certain 
+consumption levels--we need to unpack the data to better understand this.
+****
 
 <<mortality_graph, fig.pos="H", fig.width=singleGraphWidth, fig.height=singleGraphHeight, fig.cap="Mortality model results.">>=
 d_pred <- predict(dModel)
@@ -885,7 +941,9 @@ start <- list(eta=0.95, gamma=0.33)
 uModel <- nls(formula=utilityModel, data=calculatedHistoricalData, start=start, control=control)
 eta <- coef(uModel)["eta"]
 gamma <- coef(uModel)["gamma"]
-
+G <- w_worker_0 * b_tilde_0^eta / c_tilde_0^gamma
+print("Utility parameter estimation results.")
+print("To be removed before submission.")
 print(summary(uModel))
 @
 
@@ -896,12 +954,12 @@ $\mathrm{t} = \mathrm{t_0} = 1980$ and solving
 for $G$ yields
 
 \begin{equation} \label{eq:G_t0}
-  G = w_0 \; \frac{\tilde{b}_0^\eta}{\tilde{c}_0^\eta}
+  G = w_0 \; \frac{\tilde{b}_0^\eta}{\tilde{c}_0^\gamma}
 \end{equation}
 
 Substituting Equation~\ref{eq:G_t0} into Equation~\ref{eq:FOC_with_G}
-ensures that year $\mathrm{t} = \mathrm{t}_0$ will be matched. 
-Solving for $\tilde{b}$ gives
+ensures that year $\mathrm{t} = \mathrm{t}_0$ information 
+will be matched perfectly. Solving for $\tilde{b}$ gives
 
 \begin{equation} \label{eq:b_tilde_for_least_squares}
   \tilde{b} = \left( \frac{w}{w_0} \right)^\eta
@@ -911,9 +969,43 @@ Solving for $\tilde{b}$ gives
 
 \noindent which can be used in the \texttt{R} \citep{R} function 
 \texttt{nls} to estimate 
-$\eta=\Sexpr{pprint(eta, digits=3)}$, and
-$\gamma=\Sexpr{pprint(gamma, digits=3)}$. Both parameters 
-are significant at the **** level.
+\begin{itemize}
+  \item{$\eta = \Sexpr{pprint(eta, digits=3)}$}
+  \item{$\gamma = \Sexpr{pprint(gamma, digits=3)}$}
+  \item{$G = \Sexpr{pprint(G, digits=3)}$}
+\end{itemize}
+
+\noindent All fitted parameters are significant at the 0.1\% level.
+
+**** Martin: Again, the results are a bit surprising. 
+\citet{Jones:2001wn} indicates that $\eta$, $\gamma$ $\in$ (0,1).
+Our best fit to historical data from the U.S. for the 
+years 1980--2011 gives negative values for both coefficients. 
+Do you see anything that we are doing wrong in our analysis? 
+Is there a way to ``fix'' our analysis? 
+Should we identify an alternative way to describe 
+the choices between childrearing and working? --Matt ****
+
+****
+
+Martin says: Jones (p3) simply assume those ranges: 
+"We assume 0.0 $\le \mu \le$ 1.0, 0.0 $\le \gamma \le $ 1.0, and 0.0 $\le \eta \le$ 1.0. 
+These parameter restrictions ensure that the elasticity of 
+substitution between consumption ($\tilde{c}$) and children 
+($\tilde{b}$) is always greater than one. 
+This simple assumption will play an important role 
+in generating the demographic transition.
+
+Now, the period of data and the developmental state of the US 
+needs no fitting of a demographic transition. 
+That has already happened in the US. 
+I see two ways fwd: 
+(i) Place those restrictions on the model and see how it behaves. 
+(ii) Loosen up those restrictions as is done so far, but explain what that means.
+****
+
+**** Martin: This is as far as you need to read. --Matt ****
+
 
 <<utility_graph, fig.pos="H", fig.width=singleGraphWidth, fig.height=singleGraphHeight, fig.cap="Mortality model results.">>=
 # graphType <- "b" # b is for both line and symbol
@@ -933,32 +1025,32 @@ xyplot(predict(uModel)~calculatedHistoricalData["b_tilde"],
        )
 @
 
+% Some original text from Caleb.
 
-
-we also used the 
-least-squares minimization technique. These parameters were 
-determined from the utility function portion of the model, 
-which simply consists of Equation \ref{eq:FOC_with_G}. 
-Here you end up with one equation and three unknowns, 
-so $G$ was allowed to be determined by $\eta$ and $\gamma$. 
-We compared historical data on $b_\mathrm{t}$, 
-$w_\mathrm{t}$, and calculated historical $c_\mathrm{t}$ 
-to the corresponding predicted outputs for the minimization. 
-This portion of the model proved to be the most difficult to 
-optimize as the best value of $\eta$ appears to be right 
-around one of its bounding values (very close to 1). 
-A plot of the sum of the squared errors on $b_\mathrm{t}$, 
-$c_\mathrm{t}$, and $w_\mathrm{t}$ for varying values of 
-$\gamma$ and $\eta$ reveal that the best value of $\eta$ 
-actually lies above 1 ****Put SSE 3D plot here****. 
-Since values outside 1 are not included in the set that 
-$\eta$ is on, we chose a reasonable value for $\eta$ 
-(0.95 in this case, as to be slightly away from the boundary) 
-and then optimized for $\gamma$ at this point 
-(which was determined to be 0.3294). The value for $G$ 
-determined by $\eta$ and $\gamma$ was 34.85, where $G$ 
-is defined in Equation \ref{eq:G}.
-****SEE 'JonesModelUtilityParameters' IN THE REPOSITORY****
+% we also used the 
+% least-squares minimization technique. These parameters were 
+% determined from the utility function portion of the model, 
+% which simply consists of Equation \ref{eq:FOC_with_G}. 
+% Here you end up with one equation and three unknowns, 
+% so $G$ was allowed to be determined by $\eta$ and $\gamma$. 
+% We compared historical data on $b_\mathrm{t}$, 
+% $w_\mathrm{t}$, and calculated historical $c_\mathrm{t}$ 
+% to the corresponding predicted outputs for the minimization. 
+% This portion of the model proved to be the most difficult to 
+% optimize as the best value of $\eta$ appears to be right 
+% around one of its bounding values (very close to 1). 
+% A plot of the sum of the squared errors on $b_\mathrm{t}$, 
+% $c_\mathrm{t}$, and $w_\mathrm{t}$ for varying values of 
+% $\gamma$ and $\eta$ reveal that the best value of $\eta$ 
+% actually lies above 1 ****Put SSE 3D plot here****. 
+% Since values outside 1 are not included in the set that 
+% $\eta$ is on, we chose a reasonable value for $\eta$ 
+% (0.95 in this case, as to be slightly away from the boundary) 
+% and then optimized for $\gamma$ at this point 
+% (which was determined to be 0.3294). The value for $G$ 
+% determined by $\eta$ and $\gamma$ was 34.85, where $G$ 
+% is defined in Equation \ref{eq:G}.
+% ****SEE 'JonesModelUtilityParameters' IN THE REPOSITORY****
 
 %------------------------------
 \subsubsection{Production}
