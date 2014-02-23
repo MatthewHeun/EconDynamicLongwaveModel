@@ -21,11 +21,11 @@ params <- c(a=5, b=2)
 
 # Function that calculates residuals
 residuals <- function(t, y, dy, parms){
-  a <- parms[1]
-  b <- parms[2]
-  dy1dt <- dy[1]
-  y1 <- y[1]
-  y2 <- y[2]
+  a <- parms[["a"]]
+  b <- parms[["b"]]
+  dy1dt <- dy[["y1"]]
+  y1 <- y[["y1"]]
+  y2 <- y[["y2"]]
   res1 <- dy1dt - a
   res2 <- y2 - y1 - b
   out <- list(c(res1, res2), a, b)
