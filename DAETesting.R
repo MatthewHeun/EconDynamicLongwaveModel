@@ -1,4 +1,6 @@
 require(deSolve)
+require(lattice)
+
 
 # A test function for R's DAE solvers.
 # Example DAE system:
@@ -33,3 +35,6 @@ residuals <- function(t, y, dy, parms){
 result <- daspk(y=y_init, times=solveTimes, dy=dydt_init,
                 parms=params, res=residuals)
 df <- data.frame(result)
+
+# For a graph, type the following into the console:
+xyplot(y1+y2~time, data=df)
