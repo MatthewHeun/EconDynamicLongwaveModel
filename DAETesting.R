@@ -32,3 +32,4 @@ residuals <- function(t, y, dy, parms){
 
 result <- daspk(y=y_init, times=solveTimes, dy=dydt_init,
                 parms=params, res=residuals)
+df <- data.frame(result)
