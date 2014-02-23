@@ -26,7 +26,7 @@ residuals <- function(t, y, dy, parms){
   y2 <- y[2]
   res1 <- dy1dt - a
   res2 <- y2 - y1 - b
-  out <- list(c(res1, res2))
+  out <- list(c(res1, res2), a, b)
   return(out)
 }
 
