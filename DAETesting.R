@@ -17,21 +17,30 @@ require(lattice)
 # And initial condition:
 #   y1_0 = 0
 
-# Let's define the parameters first
+# Let's define the parameters for the model first
 parms <- c(a=5, b=2)
 
+# Standard deviation for the data scatter
+sigma <- 1
+
 # Specify the times at which we would like solutions reported
-solveTimes <- seq(0, 2, 0.1) 
+solveTimes <- seq(0, 2, 0.01) 
+y1_init <- 0 # An initial condition to be used everywhere.
 
 # Set up a function that solves the system using the DAE solver (daspk) in the deSolve package
-# This function takes a list of times at which you want the solution reported (times),
-# a set of initial values (y_init), and parameters to the function (parms).
-# Internally, it calculates the initial value for the derivatives at time 0.
+# This function takes as arguments:
+#   * times: a list of times at which you want the solution reported,
+#   * parms: parameters to the function,
+#   and either
+#   * y1_init: an initial value for y1
+#   * y_init: a vector of initial y values with names y1 and y2.
+# Internally, this function calculates the initial value for the derivatives at time 0.
 # I have buried the residuals function inside simpleSystemSolve, so that
 # the code is nicely compartmentalized.
-simpleModel <- function(times, 
-                        y_init=c(y1=0, y2=as.vector(y1+parms["b"])), 
-                        parms=c(a=5, b=2)){
+simpleDAE <- function(times, 
+                      y1_init=0,
+                      y_init=c(y1=y1_init, y2=as.vector(y1_init+parms["b"])),
+                      parms=c(a=5, b=2)){
 
   # Function that calculates residuals.
   # Bury inside simpleSystemSolve, because we don't need it anywhere else.
@@ -44,17 +53,18 @@ simpleModel <- function(times,
       # We don't need to de-reference them with statemens such as
       # a <- parms[["a"]]
       # Be careful for name collisions, though.
-      res1 <- dy1dt - a
-      res2 <- y2 - y1 - b
-      out <- list(c(res1, res2), a=a, b=b)
+      R1 <- dy1dt - a
+      R2 <- y2 - y1 - b
+      # I'm adding dydt to the output so that we can see it later.
+      out <- list(c(R1, R2))
       return(out)
     })
   }
-  # Find a consistent set of derivatives at the initial time.
-  # For this problem, it is easy. By inspection, we can what the derivatives are that the initial time.
+  # Find a consistent set of derivatives and algebraic variables at the initial time.
+  # For this problem, it is easy. By inspection, we can see what the derivatives are at the initial time.
   # But, for more complicated systems, we may need to execute a solve step.
   dydt_init <- c(dy1dt=as.vector(parms["a"]))
-  # Use the residual function and the initial state and derivatives
+  # Use the residual function, the initial state, and the derivatives function
   # to integrate the DAE system forward in time with the daspk function.
   result <- daspk(y=y_init, 
                   times=solveTimes, 
@@ -65,31 +75,43 @@ simpleModel <- function(times,
   return(out)
 }
 
-# Run the model
-result <- simpleModel(times=solveTimes)
-
-# Show a graph of the results
-print(xyplot(y1+y2~time, data=result))
+# Run the model using default values of the parameters (a and b)
+unperturbedModel <- simpleDAE(times=solveTimes)
 
 # If we know some "historical" data for y1 and y2, can we estimate values for a and b?
-# Add some random noise to the historical data.
-historical <- data.frame(result$time)
+
+# Add some random noise to the solution to create the "historical" data that we will fit.
+historical <- as.data.frame(solveTimes)
 colnames(historical) <- c("time")
-historical$y1 <- seq(0, 10, 0.5) #+ rnorm(sd=0.1, n=length(historical$time))
-historical$y2 <- seq(2, 12, 0.5) #+ rnorm(sd=0.1, n=length(historical$time))
+historical$y1 <- historical$time * parms["a"] + rnorm(sd=sigma, n=length(historical$time))
+historical$y2 <- historical$y1 + parms["b"] + rnorm(sd=sigma, n=length(historical$time))
 
 # Need to define a "cost" function.
 # We'll use the modCost function in package FME to help with this.
 # The model "cost" is a function of the parameters (parms)
-simpleModelCost <- function(parms){
-  pred <- simpleModel(times=solveTimes, parms=parms)
+simpleDAECost <- function(parms){
+  pred <- simpleDAE(times=solveTimes, parms=parms)
   cost <- modCost(model=pred, obs=historical, x="time")
   return(cost)
 }
 
 # Try the cost function.
-cost <- simpleModelCost(parms)
-
+cost <- simpleDAECost(parms)
+# We can plot the residuals as a function of time.
+# We expect nice, random scatter for a good model.
+par(mfrow=c(1, 1))
+print(plot(cost, xlab="time"))
+# 
 # Now use the cost function to estimate values for the parameters a and b.
-fitted <- modFit(f=simpleModelCost, p=c(a=4.5, b=1.5))
-print(fitted[["par"]])
+# a = 4.5 and b = 1.5 are the initial guesses.
+model <- modFit(f=simpleDAECost, p=c(a=1.0, b=1.0))
+fitted <- simpleDAE(times=solveTimes, parms=model$par)
+
+# Make a plot of historical data and the fit 
+par(mfrow=c(1, 2))
+print(plot(y1~time, data=historical, xlab="time", ylab="y1"))
+print(lines(y1~time, data=fitted))
+print(plot(y2~time, data=historical, xlab="time", ylab="y2"))
+print(lines(y2~time, data=fitted))
+par(mfrow=c(1, 1))
+
