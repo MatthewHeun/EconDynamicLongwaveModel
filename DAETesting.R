@@ -75,16 +75,23 @@ print(xyplot(y1+y2~time, data=result))
 # Add some random noise to the historical data.
 historical <- data.frame(result$time)
 colnames(historical) <- c("time")
-historical$y1_act <- seq(0, 10, 0.5) + rnorm(sd=0.1, n=length(historical$time))
-historical$y2_act <- seq(2, 12, 0.5) + rnorm(sd=0.1, n=length(historical$time))
+historical$y1 <- seq(0, 10, 0.5) + rnorm(sd=0.1, n=length(historical$time))
+historical$y2 <- seq(2, 12, 0.5) + rnorm(sd=0.1, n=length(historical$time))
 
 # Need to define a "cost" function.
 # We'll use the modCost function in package FME to help with this.
-# The model "cost" is a function of the parameters
-# simpleModelCostFunc <- function(parms){
-#   pred <- simpleModel(times=solveTimes, parms=parms)
-#   cost <- modCost(model=pred, obs=historical, err="sd")
-# }
-# 
-# # Try the cost function
-# cost <- simpleModelCostFunc(parms)
+# The model "cost" is a function of the parameters (parms)
+simpleModelCost <- function(parms){
+  pred <- simpleModel(times=solveTimes, parms=parms)
+  cost <- modCost(model=pred, obs=historical, x="time")
+  return(cost)
+}
+
+# Try the cost function.
+cost <- simpleModelCost(parms)
+# The result will be different each time, due to randomness added to the historical data
+print(cost$model) 
+
+# Now use the cost function to estimate values for the parameters a and b.
+fitted <- modFit(f=simpleModelCost, p=c(a=4.5, b=1.5))
+
