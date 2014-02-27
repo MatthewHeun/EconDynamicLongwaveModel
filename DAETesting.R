@@ -100,18 +100,20 @@ cost <- simpleDAECost(parms)
 # We can plot the residuals as a function of time.
 # We expect nice, random scatter for a good model.
 par(mfrow=c(1, 1))
-print(plot(cost, xlab="time"))
-# 
-# Now use the cost function to estimate values for the parameters a and b.
-# a = 4.5 and b = 1.5 are the initial guesses.
-model <- modFit(f=simpleDAECost, p=c(a=1.0, b=1.0))
+plot(cost, xlab="time")
+
+# Now use DAECost in the modFit function to estimate values for the parameters a and b.
+initGuess <- c(a=1.0, b=1.0)
+model <- modFit(f=simpleDAECost, p=initGuess)
+# The parameters that provide the best fit are in model$par.
+# We can use those parameters in simpleDAE to find our fitted prediction.
 fitted <- simpleDAE(times=solveTimes, parms=model$par)
 
 # Make a plot of historical data and the fit 
 par(mfrow=c(1, 2))
-print(plot(y1~time, data=historical, xlab="time", ylab="y1"))
-print(lines(y1~time, data=fitted))
-print(plot(y2~time, data=historical, xlab="time", ylab="y2"))
-print(lines(y2~time, data=fitted))
+plot(y1~time, data=historical, xlab="time", ylab="y1")
+lines(y1~time, data=fitted)
+plot(y2~time, data=historical, xlab="time", ylab="y2")
+lines(y2~time, data=fitted)
 par(mfrow=c(1, 1))
 
