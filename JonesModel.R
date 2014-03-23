@@ -91,8 +91,8 @@ jonesDAE <- function(times, y_init, parms){
     })
   }
   # Find a consistent set of derivatives and algebraic variables at the initial time.
-  # For this problem, it is easy. By inspection, we can see what the derivatives are at the initial time.
-  # But, for more complicated systems, we may need to execute a solve step.
+  # For now, putting b and d in the parms vector. 
+  # b and d will move to the y vector later.
   dndt_0 <- as.numeric((parms["b"] - parms["d"] + parms["m"])*y_init["n"])
   dydt_init <- c(dndt=dndt_0)
 
