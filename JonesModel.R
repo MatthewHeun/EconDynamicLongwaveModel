@@ -1,3 +1,5 @@
+require(deSolve)
+
 # Load raw data
 rawHistoricalData <- read.table(file="data/USData.txt", header=TRUE, row.names=1, sep="\t")
 # Duplicate the raw data into a new data.frame that we'll extend with calculated historical data.
