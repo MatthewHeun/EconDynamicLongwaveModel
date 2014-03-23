@@ -15,6 +15,8 @@ y <- calculatedHistoricalData["Y"] / Y_0; names(y) <- "y" # Indexed GDP
 n <- calculatedHistoricalData["N"] / N_0; names(n) <- "n" # Indexed population
 l_Y <- (calculatedHistoricalData["L_Y"]) / L_Y_0; names(l_Y) <- "l_Y" # Indexed workers in the manufacturing sector.
 calculatedHistoricalData <- cbind(calculatedHistoricalData, y, n, l_Y)
+y_0 <- 1.0 # initial indexed GDP
+n_0 <- 1.0 # initial indexed population
 
 # Calculate per-capita information
 # Births/year-capita
@@ -71,3 +73,41 @@ z <- calculatedHistoricalData["c"] / c_bar - 1
 names(z) <- "z" 
 z_0 <- z[firstYear, "z"]
 calculatedHistoricalData <- cbind(calculatedHistoricalData, b_tilde, c_tilde, z)
+
+
+jonesDAE <- function(times, y_init, parms){
+  
+  # Function that calculates residuals.
+  # Bury inside simpleSystemSolve, because we don't need it anywhere else.
+  residuals <- function(t, y, dydt, parms){
+    # The block of code to calculate the residuals goes here.
+    with(as.list(c(y, dydt, parms)), {
+      # The "with" statement allows us to simplify the equations.
+      # Because we're using "with," we can refer to the variables by their names
+      # in the y, dydt, and parms numeric lists.
+      R1 <- dndt - (b - d + m)*n
+      out <- list(c(R1))
+      return(out)
+    })
+  }
+  # Find a consistent set of derivatives and algebraic variables at the initial time.
+  # For this problem, it is easy. By inspection, we can see what the derivatives are at the initial time.
+  # But, for more complicated systems, we may need to execute a solve step.
+  dndt_0 <- as.numeric((parms["b"] - parms["d"] + parms["m"])*y_init["n"])
+  dydt_init <- c(dndt=dndt_0)
+
+  # Use the residual function, the initial state, and the derivatives function
+  # to integrate the DAE system forward in time with the daspk function.
+  result <- daspk(y=y_init, 
+                  times=solveTimes, 
+                  dy=dydt_init,
+                  parms=parms, 
+                  res=residuals)
+  out <- as.data.frame(result)
+  return(out)
+}
+
+solveTimes <- seq(1980, 2011, 1)
+y_init <- c(n=n_0) # Add b, d, and other variables when we expande beyond n.
+parms <- c(m=0.0038, b=b_0, d=d_0) # m (migration) is a placeholder for now.
+result <- jonesDAE(times=solveTimes, y_init=y_init, parms=parms)
