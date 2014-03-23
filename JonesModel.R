@@ -1,4 +1,5 @@
 require(deSolve)
+require(car)
 
 # Load raw data
 rawHistoricalData <- read.table(file="data/USData.txt", header=TRUE, row.names=1, sep="\t")
@@ -76,7 +77,25 @@ names(z) <- "z"
 z_0 <- z[firstYear, "z"]
 calculatedHistoricalData <- cbind(calculatedHistoricalData, b_tilde, c_tilde, z)
 
+#
+# Estimate mortality parameters
+# 
+mortalityModel <- d ~ 1.0 / (omega_1*z^omega_2 + (1.0 / (z_0*(d_0-d_bar)) - omega_1*z_0^(omega_2-1.0))*z) + d_bar
+control <- nls.control(maxiter=200, 
+                       tol=1e-05, 
+                       minFactor=1/1024,
+                       printEval=FALSE, #Tells whether to print details of curve fit process.
+                       warnOnly=TRUE)
+start <- list(omega_1=116 , omega_2=-0.63)
+dModel <- nls(formula=mortalityModel, data=calculatedHistoricalData, start=start, control=control)
+omega_1 <- coef(dModel)["omega_1"]
+omega_2 <- coef(dModel)["omega_2"]
+omega_3.est <- deltaMethod(dModel, "1/(z_0*(d_0-d_bar)) - omega_1*z_0^(omega_2-1.0)")
+omega_3 <- omega_3.est[1, "Estimate"]
 
+#
+# DAE Model
+#
 jonesDAE <- function(times, y_init, parms){
   
   # Function that calculates residuals.
