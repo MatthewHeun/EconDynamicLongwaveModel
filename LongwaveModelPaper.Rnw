@@ -535,42 +535,23 @@ The wage time series was adjusted for inflation to 2005\$.
 
 **** Heun: Add a discussion of $K_\mathrm{t}$ and $E_\mathrm{t}$ data and their sources here. ****
 
-<<Historical_Time_Series>>=
-# Load raw data
-# rawHistoricalData <- read.table(file="data/USData.txt", header=TRUE, row.names=1, sep="\t")
-# Duplicate the raw data into a new data.frame that we'll extend with calculated historical data.
-# calculatedHistoricalData <- rawHistoricalData
-# Calculate other raw data items
-# L_Y <- calculatedHistoricalData["L"] - calculatedHistoricalData["L_A"]; names(L_Y)  <- "L_Y"
-# calculatedHistoricalData <- cbind(calculatedHistoricalData, L_Y)
-# Calculate indexed data
-# firstYear <- "1980"
-# w_worker_0 <- calculatedHistoricalData[firstYear, "w_worker"] # Initial wage
-# Y_0  <- calculatedHistoricalData[firstYear, "Y"]  # Initial GDP
-# N_0 <- calculatedHistoricalData[firstYear, "N"]   # Initial population
-# L_Y_0 <- L_Y[firstYear,"L_Y"] # Initial L_Y
-# y <- calculatedHistoricalData["Y"] / Y_0; names(y) <- "y" # Indexed GDP
-# n <- calculatedHistoricalData["N"] / N_0; names(n) <- "n" # Indexed population
-# l_Y <- (calculatedHistoricalData["L_Y"]) / L_Y_0; names(l_Y) <- "l_Y" # Indexed workers in the manufacturing sector.
-# calculatedHistoricalData <- cbind(calculatedHistoricalData, y, n, l_Y)
-@
-
 Table~\ref{tab:Raw_US_Data} shows raw historical time series data for the U.S.
 
 <<Raw_US_Data, results='asis', eval=TRUE>>=
-usDataMassaged <- rawHistoricalData # We'll mess around with usDataMassaged to make it easier to read
-usDataMassaged["Y"] <- usDataMassaged["Y"] / 1e9 # Y is now in billion 2005$/year
-usDataMassaged["L"] <- usDataMassaged["L"] / 1e6 # total employment mow in millions/year
-usDataMassaged["L_A"] <- usDataMassaged["L_A"] / 1e6 # total STEM researchers now in millions/year
-usDataMassaged["N"] <- usDataMassaged["N"] / 1e6 # total population now in millions
-usDataMassaged["B"] <- usDataMassaged["B"] / 1e6 # births now in millions/year
-usDataMassaged["D"] <- usDataMassaged["D"] / 1e6 # deaths now in millions/year
-usDataMassaged["K"] <- usDataMassaged["K"] / 1e9 # capital stock now in billion 2005$
-usDataMassaged["E"] <- usDataMassaged["E"] / 1e3 # energy now in TJ/year
-colnames(usDataMassaged) <- c("$Y_\\mathrm{t}$", "$w_\\mathrm{t}$", "$L_\\mathrm{t}$", "$L_\\mathrm{A,t}$", 
+# Grab a subset of the data we want to present in this table.
+usDataTable <- data[ , c("Y", "w_worker", "L", "L_A", "N", "B", "D", "K", "E")]
+usDataTable$Y <- usDataTable$Y / 1e9 # Y is now in billion 2005$/year
+usDataTable$L <- usDataTable$L / 1e6 # total employment mow in millions/year
+usDataTable$L_A <- usDataTable$L_A / 1e6 # total STEM researchers now in millions/year
+usDataTable$N <- usDataTable$N / 1e6 # total population now in millions
+usDataTable$B <- usDataTable$B / 1e6 # births now in millions/year
+usDataTable$D <- usDataTable$D / 1e6 # deaths now in millions/year
+usDataTable$K <- usDataTable$K / 1e9 # capital stock now in billion 2005$
+usDataTable$E <- usDataTable$E / 1e3 # energy now in TJ/year
+colnames(usDataTable) <- c("$Y_\\mathrm{t}$", "$w_\\mathrm{t}$", "$L_\\mathrm{t}$", "$L_\\mathrm{A,t}$", 
                               "$N_\\mathrm{t}$", "$B_\\mathrm{t}$", "$D_\\mathrm{t}$", "$K_\\mathrm{t}$", 
                               "$E_\\mathrm{t}$")
-rawDataXtable <- xtable(x=usDataMassaged, 
+rawDataXtable <- xtable(x=usDataTable, 
                         caption="U.S. raw historical data. GDP ($Y_\\mathrm{t}$) in billion 2005\\$/year; wages ($w_\\mathrm{t}$) in 2005\\$/year-worker; total population ($L_\\mathrm{t}$) in millions of workers; researchers in STEM disciplines ($L_\\mathrm{A,t}$) in millions of workers; births ($B_\\mathrm{t}$) and deaths ($D_\\mathrm{t}$) in millions/year; population ($N_\\mathrm{t}$) in millions (capita); capital stock ($K_\\mathrm{t}$) in billion 2005\\$; and energy ($E_\\mathrm{t}$) in TJ/year.",
                         label="tab:Raw_US_Data",
                         digits=c(0, 2, 0, 1, 3, 1, 3, 3, 2, 2)
@@ -604,35 +585,12 @@ $\bar{c}$,
 $\tilde{c}_\mathrm{t}$, and 
 $z_\mathrm{t}$. 
 
-<<calculate_b_and_d>>=
-# Calculate per-capita information
-# Births/year-capita
-# b <- calculatedHistoricalData["B"] / calculatedHistoricalData["N"]
-# names(b) <- "b" 
-# b_0 <- b[firstYear, "b"]
-# Deaths/year-capita
-# d <- calculatedHistoricalData["D"] / calculatedHistoricalData["N"]
-# names(d) <- "d" 
-# d_0 <- d[firstYear, "d"]
-# calculatedHistoricalData <- cbind(calculatedHistoricalData, b, d)
-@
-
 To obtain $b_\mathrm{t}$ in units of 
 births/year-person, we divided the CDC birth data ($B_\mathrm{t}$) 
 by the total population ($N_\mathrm{t}$) for each year. 
 To obtain $d_\mathrm{t}$ in units of deaths/year-person, 
 we divided the CDC mortality data ($D_\mathrm{t}$) by 
 the total population ($N_\mathrm{t}$) for each year.
-
-<<calculate_tau_w_worker_and_c>>=
-# Fraction of workers in each year
-# tau <- calculatedHistoricalData["L"] / calculatedHistoricalData["N"]; 
-# names(tau) <- "tau" 
-# consumption in 2005$/year-capita. Same as wages in 2005$/year-capita.
-# c <- calculatedHistoricalData["w_worker"] * tau; 
-# names(c) <- "c" 
-# calculatedHistoricalData <- cbind(calculatedHistoricalData, tau, c)
-@
 
 Using Equation \ref{eq:pop_work}, we calculated historical 
 values for $\tau_\mathrm{t}$. 
@@ -644,22 +602,6 @@ Using the historical $\tau_\mathrm{t}$ values and Equation
 consumption ($c_\mathrm{t}$) in units of 2005\$/year-capita. 
 Note that consumption ($c_\mathrm{t}$) is equal to per-capita wages.
 
-<<calculate_nu_pi_and_zeta>>=
-# **** SEE JonesModelGroundTruthParameters.EES IN THE REPOSITORY ****
-# nu <- calculatedHistoricalData["b"] / (1.0 - calculatedHistoricalData["tau"]); 
-# names(nu) <- "nu" # Historical nu
-# nu_0 <- nu[firstYear, "nu"]
-# pi <- calculatedHistoricalData["L_A"] / calculatedHistoricalData["L"]
-# names(pi) <- "pi" # Historical pi
-# pi_0 <- pi[firstYear, "pi"]
-# wALA <- calculatedHistoricalData["w_worker"] * calculatedHistoricalData["L_A"]; 
-# names(wALA) <- "wALA"
-# piY <- pi * calculatedHistoricalData["Y"]; names(piY) <- "piY"
-# zeta <- wALA / piY; names(zeta) <- "zeta"
-# zeta_0 <- zeta[firstYear, "zeta"]
-# calculatedHistoricalData <- cbind(calculatedHistoricalData, nu, pi, zeta)
-@
-
 We used $\tau_\mathrm{1980}$ and $b_\mathrm{1980}$ with 
 Equation~\ref{eq:birth_constraint} to calculate a value for 
 $\nu$ (\Sexpr{nu_0}~births/year-capita) that is 
@@ -670,29 +612,6 @@ constant through time. Equation~\ref{eq:knowledge_compensation}
 was used with $\pi_\mathrm{1980}$ and wage and labor data 
 for 1980 in to calculate an invariant value for $\zeta$ 
 (\Sexpr{zeta_0}).
-
-<<calculate_b_bar_b_tilde_c_bar_c_tilde_d_bar_z>>=
-# Asymptotic birth rate as consumption goes to infinity
-# b_bar = 0.0
-# # Birth rate above asymptote, b_tilde
-# b_tilde <- calculatedHistoricalData["b"] - b_bar
-# names(b_tilde) <- "b_tilde"
-# b_tilde_0 <- b_tilde[firstYear, "b_tilde"]
-# # Consumption for subsistence level
-# ############## Perform this calculation here #################
-# c_bar = 5655 # 2005$/year
-# # Consumption above subsistence level, c_tilde
-# c_tilde <- calculatedHistoricalData["c"] - c_bar
-# names(c_tilde) <- "c_tilde"
-# c_tilde_0 <- c_tilde[firstYear, "c_tilde"]
-# # Asymptotic mortality rate
-# d_bar <- 0
-# # calculate z
-# z <- calculatedHistoricalData["c"] / c_bar - 1
-# names(z) <- "z" 
-# z_0 <- z[firstYear, "z"]
-# calculatedHistoricalData <- cbind(calculatedHistoricalData, b_tilde, c_tilde, z)
-@
 
 Following \citet[p.~16]{Jones:2001wn}, we take $\bar{b} = \Sexpr{b_bar}$ 
 for the asymptotic birth rate as $c \rightarrow \infty$. 
@@ -710,10 +629,10 @@ We used Equation~\ref{eq:z} with historical values for
 $c_\mathrm{t}$ and $\bar{c}$ to calculate ground
 truth values of $z_\mathrm{t}$. 
 
-
 <<US_data_table, results='asis'>>=
-dataXtable <- xtable(x=calculatedHistoricalData[, 10:23], 
-                     caption="``Ground truth'' data for the U.S.", label=paste("tab:Ground_truth_US_Data"))
+dataXtable <- xtable(x=data[, 10:23], 
+                     caption="``Ground truth'' data for the U.S.", 
+                     label="tab:Ground_truth_US_Data")
 print(dataXtable, caption.placement="top", sanitize.rownames.function = identity, size="\\tiny")
 @
 
@@ -760,18 +679,6 @@ The following subsections discuss the parameter estimation process.
 %------------------------------
 
 <<mortality_parameter_estimation>>=
-# mortalityModel <- d ~ 1.0 / (omega_1*z^omega_2 + (1.0 / (z_0*(d_0-d_bar)) - omega_1*z_0^(omega_2-1.0))*z) + d_bar
-# control <- nls.control(maxiter=200, 
-#                        tol=1e-05, 
-#                        minFactor=1/1024,
-#                        printEval=FALSE, #Tells whether to print details of curve fit process.
-#                        warnOnly=TRUE)
-# start <- list(omega_1=116 , omega_2=-0.63)
-# dModel <- nls(formula=mortalityModel, data=calculatedHistoricalData, start=start, control=control)
-# omega_1 <- coef(dModel)["omega_1"]
-# omega_2 <- coef(dModel)["omega_2"]
-# omega_3.est <- deltaMethod(dModel, "1/(z_0*(d_0-d_bar)) - omega_1*z_0^(omega_2-1.0)")
-# omega_3 <- omega_3.est[1, "Estimate"]
 print("Mortality parameter estimation results.")
 print("To be removed before submission.")
 print(summary(dModel))
@@ -851,8 +758,9 @@ consumption levels--we need to unpack the data to better understand this.
 
 <<mortality_graph, fig.pos="H", fig.width=singleGraphWidth, fig.height=singleGraphHeight, fig.cap="Mortality model results.">>=
 d_pred <- predict(dModel)
-d_act <- calculatedHistoricalData["d"]; names(d_act) <- "d_act"
-dGraphData <- cbind(d_act, d_pred, calculatedHistoricalData["z"])
+d_act <- data[ , "d"]; names(d_act) <- "d_act"
+dGraphData <- as.data.frame(cbind(d_act, d_pred, data$z))
+names(dGraphData) <- c("d_act", "d_pred", "z")
 graphType <- "b" # b is for both line and symbol
 lineTypes <- c(0, 1) # line types. See http://en.wikibooks.org/wiki/R_Programming/Graphics
 lineWidths <- c(0, 2) # line widths. 0 means no line.
@@ -885,14 +793,6 @@ xyplot(d_act+d_pred~z, data=dGraphData,
 %------------------------------
 
 <<utility_parameter_estimation>>=
-utilityModel <- b_tilde ~ (w_worker/w_worker_0)^eta * (c_tilde/c_tilde_0)^(gamma/eta) * b_tilde_0
-start <- list(eta=0.95, gamma=0.33)
-# eta <- 0.95
-# start <- list(gamma=0.33)
-uModel <- nls(formula=utilityModel, data=calculatedHistoricalData, start=start, control=control)
-eta <- coef(uModel)["eta"]
-gamma <- coef(uModel)["gamma"]
-G <- w_worker_0 * b_tilde_0^eta / c_tilde_0^gamma
 print("Utility parameter estimation results.")
 print("To be removed before submission.")
 print(summary(uModel))
@@ -959,13 +859,7 @@ I see two ways fwd:
 
 
 <<utility_graph, fig.pos="H", fig.width=singleGraphWidth, fig.height=singleGraphHeight, fig.cap="Mortality model results.">>=
-# graphType <- "b" # b is for both line and symbol
-# lineTypes <- c(0, 1) # line types. See http://en.wikibooks.org/wiki/R_Programming/Graphics
-# lineWidths <- c(0, 2) # line widths. 0 means no line.
-# colors <- c("black", "black") # line and symbol colors
-# symbols <- c(1, NA)  # NA gives no symbol.
-# Now create the plot.
-xyplot(predict(uModel)~calculatedHistoricalData["b_tilde"], 
+xyplot(predict(uModel)~data$b_tilde, #calculatedHistoricalData["b_tilde"], 
        xlab=list(label="Actual $\\tilde{b}$", cex=textScaling), 
        ylab=list(label="Predicted $\\tilde{b}$", cex=textScaling),
        scales=list(cex=scaleTextSize * textScaling, # controls text size on scales.

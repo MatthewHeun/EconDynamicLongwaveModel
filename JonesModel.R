@@ -1,85 +1,47 @@
 require(deSolve)
 require(car)
 
-# Load raw data
-rawHistoricalData <- read.table(file="data/USData.txt", header=TRUE, row.names=1, sep="\t")
-# Duplicate the raw data into a new data.frame that we'll extend with calculated historical data.
-calculatedHistoricalData <- rawHistoricalData
-# Calculate other raw data items
-L_Y <- calculatedHistoricalData["L"] - calculatedHistoricalData["L_A"]; names(L_Y)  <- "L_Y"
-calculatedHistoricalData <- cbind(calculatedHistoricalData, L_Y)
-# Calculate indexed data
-firstYear <- "1980"
-w_worker_0 <- calculatedHistoricalData[firstYear, "w_worker"] # Initial wage
-Y_0  <- calculatedHistoricalData[firstYear, "Y"]  # Initial GDP
-N_0 <- calculatedHistoricalData[firstYear, "N"]   # Initial population
-L_Y_0 <- L_Y[firstYear,"L_Y"] # Initial L_Y
-y <- calculatedHistoricalData["Y"] / Y_0; names(y) <- "y" # Indexed GDP
-n <- calculatedHistoricalData["N"] / N_0; names(n) <- "n" # Indexed population
-l_Y <- (calculatedHistoricalData["L_Y"]) / L_Y_0; names(l_Y) <- "l_Y" # Indexed workers in the manufacturing sector.
-calculatedHistoricalData <- cbind(calculatedHistoricalData, y, n, l_Y)
-y_0 <- 1.0 # initial indexed GDP
-n_0 <- 1.0 # initial indexed population
+# Read historical data
+data <- read.table(file="data/USData.txt", header=TRUE, row.names=1, sep="\t")
 
-# Calculate per-capita information
-# Births/year-capita
-b <- calculatedHistoricalData["B"] / calculatedHistoricalData["N"]
-names(b) <- "b" 
-b_0 <- b[firstYear, "b"]
-# Deaths/year-capita
-d <- calculatedHistoricalData["D"] / calculatedHistoricalData["N"]
-names(d) <- "d" 
-d_0 <- d[firstYear, "d"]
-calculatedHistoricalData <- cbind(calculatedHistoricalData, b, d)
+# Direct calculations from historical data
+data$L_Y <- data$L - data$L_A # workers
+w_worker_0 <- data$w_worker[1] # Initial wage
+Y_0  <- data$Y[1] # Initial GDP
+N_0 <- data$N[1]   # Initial population
+L_Y_0 <- data$L_Y[1] # Initial L_Y
+data$y <- data$Y / Y_0 # indexed GDP
+data$n <- data$N / N_0 # indexed population
+data$l_Y <- data$L_Y / L_Y_0 # indexed labor
+data$b <- data$B / data$N # Births/year-capita
+data$d <- data$D / data$N # Deaths/year-capita
+data$tau <- data$L / data$N # Fraction of workers in each year
+data$c <- data$w_worker * data$tau # consumption in 2005$/year-capita. Same as wages in 2005$/year-capita.
+data$nu <- data$b / (1.0 - data$tau)
+data$pi <- data$L_A / data$L
+data$wALA <- data$w_worker * data$L_A
+data$piY <- data$pi * data$Y
+data$zeta <- data$wALA / data$piY
+b_bar = 0.0 # Asymptotic birth rate as consumption goes to infinity
+data$b_tilde <- data$b - b_bar # Birth rate above asymptote, b_tilde
+c_bar = 5655 # 2005$/year, Consumption for subsistence level
+data$c_tilde <- data$c - c_bar # Consumption above subsistence level, c_tilde
+d_bar <- 0 # Asymptotic mortality rate
+data$z <- data$c / c_bar - 1
 
-# Fraction of workers in each year
-tau <- calculatedHistoricalData["L"] / calculatedHistoricalData["N"]; 
-names(tau) <- "tau" 
-# consumption in 2005$/year-capita. Same as wages in 2005$/year-capita.
-c <- calculatedHistoricalData["w_worker"] * tau; 
-names(c) <- "c" 
-calculatedHistoricalData <- cbind(calculatedHistoricalData, tau, c)
+# Some initial values
+y_0 <- data$y[1] # initial indexed GDP
+n_0 <- data$n[1] # initial indexed population
+b_0 <- data$b[1] # initial birth rate
+d_0 <- data$d[1] # initial death rate
+nu_0 <- data$nu[1] 
+pi_0 <- data$pi[1]
+zeta_0 <- data$zeta[1]
+b_tilde_0 <- data$b_tilde[1]
+c_tilde_0 <- data$c_tilde[1]
+z_0 <- data$z[1]
 
-# Calculate nu, pi, and zeta
-# **** SEE JonesModelGroundTruthParameters.EES IN THE REPOSITORY ****
-nu <- calculatedHistoricalData["b"] / (1.0 - calculatedHistoricalData["tau"]); 
-names(nu) <- "nu" # Historical nu
-nu_0 <- nu[firstYear, "nu"]
-pi <- calculatedHistoricalData["L_A"] / calculatedHistoricalData["L"]
-names(pi) <- "pi" # Historical pi
-pi_0 <- pi[firstYear, "pi"]
-wALA <- calculatedHistoricalData["w_worker"] * calculatedHistoricalData["L_A"]; 
-names(wALA) <- "wALA"
-piY <- pi * calculatedHistoricalData["Y"]; names(piY) <- "piY"
-zeta <- wALA / piY; names(zeta) <- "zeta"
-zeta_0 <- zeta[firstYear, "zeta"]
-calculatedHistoricalData <- cbind(calculatedHistoricalData, nu, pi, zeta)
-
-# calculate b_bar, b_tilde, c_bar, c_tilde, d_bar, z
-# Asymptotic birth rate as consumption goes to infinity
-b_bar = 0.0
-# Birth rate above asymptote, b_tilde
-b_tilde <- calculatedHistoricalData["b"] - b_bar
-names(b_tilde) <- "b_tilde"
-b_tilde_0 <- b_tilde[firstYear, "b_tilde"]
-# Consumption for subsistence level
-############## Perform this calculation here #################
-c_bar = 5655 # 2005$/year
-# Consumption above subsistence level, c_tilde
-c_tilde <- calculatedHistoricalData["c"] - c_bar
-names(c_tilde) <- "c_tilde"
-c_tilde_0 <- c_tilde[firstYear, "c_tilde"]
-# Asymptotic mortality rate
-d_bar <- 0
-# calculate z
-z <- calculatedHistoricalData["c"] / c_bar - 1
-names(z) <- "z" 
-z_0 <- z[firstYear, "z"]
-calculatedHistoricalData <- cbind(calculatedHistoricalData, b_tilde, c_tilde, z)
-
-#
 # Estimate mortality parameters
-# 
 mortalityModel <- d ~ 1.0 / (omega_1*z^omega_2 + (1.0 / (z_0*(d_0-d_bar)) - omega_1*z_0^(omega_2-1.0))*z) + d_bar
 control <- nls.control(maxiter=200, 
                        tol=1e-05, 
@@ -87,11 +49,23 @@ control <- nls.control(maxiter=200,
                        printEval=FALSE, #Tells whether to print details of curve fit process.
                        warnOnly=TRUE)
 start <- list(omega_1=116 , omega_2=-0.63)
-dModel <- nls(formula=mortalityModel, data=calculatedHistoricalData, start=start, control=control)
+dModel <- nls(formula=mortalityModel, data=data, start=start, control=control)
 omega_1 <- coef(dModel)["omega_1"]
 omega_2 <- coef(dModel)["omega_2"]
-omega_3.est <- deltaMethod(dModel, "1/(z_0*(d_0-d_bar)) - omega_1*z_0^(omega_2-1.0)")
-omega_3 <- omega_3.est[1, "Estimate"]
+omega_3 <- deltaMethod(dModel, "1/(z_0*(d_0-d_bar)) - omega_1*z_0^(omega_2-1.0)")[1, "Estimate"]
+names(omega_3) <- "omega_3"
+
+# Estimate utility model
+utilityModel <- b_tilde ~ (w_worker/w_worker_0)^eta * (c_tilde/c_tilde_0)^(gamma/eta) * b_tilde_0
+start <- list(eta=0.95, gamma=0.33)
+# eta <- 0.95
+# start <- list(gamma=0.33)
+# uModel <- nls(formula=utilityModel, data=calculatedHistoricalData, start=start, control=control)
+uModel <- nls(formula=utilityModel, data=data, start=start, control=control)
+eta <- coef(uModel)["eta"]
+gamma <- coef(uModel)["gamma"]
+G <- w_worker_0 * b_tilde_0^eta / c_tilde_0^gamma
+
 
 #
 # DAE Model
@@ -130,5 +104,5 @@ jonesDAE <- function(times, y_init, parms){
 
 solveTimes <- seq(1980, 2011, 1)
 y_init <- c(n=n_0) # Add b, d, and other variables when we expande beyond n.
-parms <- c(m=0.0038, b=b_0, d=d_0) # m (migration) is a placeholder for now.
+parms <- c(m=0.0038, b=b_0, d=d_0) # m (migration), b (birth rate), and d (death rate) are placeholders
 result <- jonesDAE(times=solveTimes, y_init=y_init, parms=parms)
