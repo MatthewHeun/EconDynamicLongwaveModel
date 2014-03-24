@@ -26,7 +26,7 @@ sigma <- 1
 
 # Specify the times at which we would like solutions reported
 solveTimes <- seq(0, 2, 0.01) 
-y1_init <- 0 # An initial condition to be used everywhere.
+y1_init <- 10 # An initial condition to be used everywhere.
 
 # Set up a function that solves the system using the DAE solver (daspk) in the deSolve package
 # This function takes as arguments:
@@ -39,9 +39,9 @@ y1_init <- 0 # An initial condition to be used everywhere.
 # I have buried the residuals function inside simpleSystemSolve, so that
 # the code is nicely compartmentalized.
 simpleDAE <- function(times, 
-                      y1_init=0,
+                      y1_init,
                       y_init=c(y1=y1_init, y2=as.vector(y1_init+parms["b"])),
-                      parms=c(a=5, b=2)){
+                      parms){
 
   # Function that calculates residuals.
   # Bury inside simpleSystemSolve, because we don't need it anywhere else.
@@ -77,7 +77,7 @@ simpleDAE <- function(times,
 }
 
 # Run the model using default values of the parameters (a and b)
-unperturbedModel <- simpleDAE(times=solveTimes)
+unperturbedModel <- simpleDAE(times=solveTimes, y1_init=y1_init, parms=parms)
 
 # If we know some "historical" data for y1 and y2, can we estimate values for a and b?
 
@@ -95,7 +95,7 @@ if (addNoise){
 # We'll use the modCost function in package FME to help with this.
 # The model "cost" is a function of the parameters (parms)
 simpleDAECost <- function(parms){
-  pred <- simpleDAE(times=solveTimes, parms=parms)
+  pred <- simpleDAE(times=solveTimes, parms=parms, y1=y1_init)
   cost <- modCost(model=pred, obs=historical, x="time")
   return(cost)
 }
@@ -112,7 +112,7 @@ initGuess <- c(a=1.0, b=1.0)
 model <- modFit(f=simpleDAECost, p=initGuess)
 # The parameters that provide the best fit are in model$par.
 # We can use those parameters in simpleDAE to find our fitted prediction.
-fitted <- simpleDAE(times=solveTimes, parms=model$par)
+fitted <- simpleDAE(times=solveTimes, y1_init=y1_init, parms=model$par)
 
 # Make a plot of historical data and the fit 
 par(mfrow=c(1, 2))
