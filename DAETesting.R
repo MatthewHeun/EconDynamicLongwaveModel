@@ -21,6 +21,7 @@ require(lattice)
 parms <- c(a=5, b=2)
 
 # Standard deviation for the data scatter
+addNoise <- TRUE
 sigma <- 1
 
 # Specify the times at which we would like solutions reported
@@ -83,8 +84,12 @@ unperturbedModel <- simpleDAE(times=solveTimes)
 # Add some random noise to the solution to create the "historical" data that we will fit.
 historical <- as.data.frame(solveTimes)
 colnames(historical) <- c("time")
-historical$y1 <- historical$time * parms["a"] + rnorm(sd=sigma, n=length(historical$time))
-historical$y2 <- historical$y1 + parms["b"] + rnorm(sd=sigma, n=length(historical$time))
+historical$y1 <- historical$time * parms["a"] + y1_init
+historical$y2 <- historical$y1 + parms["b"] 
+if (addNoise){
+  historical$y1 <- historical$y1 + rnorm(sd=sigma, n=length(historical$time))
+  historical$y2 <- historical$y2 + rnorm(sd=sigma, n=length(historical$time))
+}
 
 # Need to define a "cost" function.
 # We'll use the modCost function in package FME to help with this.
