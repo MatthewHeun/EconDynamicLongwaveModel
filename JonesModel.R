@@ -2,7 +2,7 @@ require(deSolve)
 require(car)
 
 # Read historical data
-data <- read.table(file="data/USData.txt", header=TRUE, row.names=1, sep="\t")
+data <- read.table(file="data/USData.txt", header=TRUE, sep="\t")
 
 # Direct calculations from historical data
 data$L_Y <- data$L - data$L_A # workers
@@ -67,6 +67,25 @@ gamma <- coef(uModel)["gamma"]
 G <- w_worker_0 * b_tilde_0^eta / c_tilde_0^gamma
 
 
+# 
+# Steady state model
+#
+ssResid <- function(p, constraints, year){
+  y <- p["y"]
+  Y <- approx(x=data$Year, y=data$Y, xout=year)$y
+  n <- p["n"]
+  N <- approx(x=data$Year, y=data$N, xout=year)$y
+  R1 <- as.vector(Y/Y_0 - y)
+  R2 <- as.vector(N/N_0 - n)
+  
+  return(c(R1=R1, R2=R2))
+}
+
+ssYear <- 1985
+ssParms <- c(dadt=0, dndt=0)
+p_init <- c(y=0, n=0)
+ssModel <- BBsolve(p=p_init, fn=ssResid, constraints=ssParms, year=ssYear)
+
 #
 # DAE Model
 #
@@ -106,3 +125,7 @@ solveTimes <- seq(1980, 2011, 1)
 y_init <- c(n=n_0) # Add b, d, and other variables when we expande beyond n.
 parms <- c(m=0.0038, b=b_0, d=d_0) # m (migration), b (birth rate), and d (death rate) are placeholders
 result <- jonesDAE(times=solveTimes, y_init=y_init, parms=parms)
+
+
+
+
