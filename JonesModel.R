@@ -71,19 +71,18 @@ G <- w_worker_0 * b_tilde_0^eta / c_tilde_0^gamma
 # Steady state model
 #
 ssResid <- function(p, constraints, year){
-  y <- p["y"]
-  Y <- approx(x=data$Year, y=data$Y, xout=year)$y
-  n <- p["n"]
-  N <- approx(x=data$Year, y=data$N, xout=year)$y
-  R1 <- as.vector(Y/Y_0 - y)
-  R2 <- as.vector(N/N_0 - n)
-  
-  return(c(R1=R1, R2=R2))
+  with(as.list(c(p, constraints)), {
+    Y <- approx(x=data$Year, y=data$Y, xout=year)$y # Interpolate to find Y at year
+    N <- approx(x=data$Year, y=data$N, xout=year)$y # Interpolate to find N at year
+    R1 <- as.vector(Y/Y_0 - y) # y = Y/Y_0   as.vector strips off the name
+    R2 <- as.vector(N/N_0 - n) # n = N/N_0
+    return(c(R1=R1, R2=R2))
+  })
 }
 
-ssYear <- 1985
-ssParms <- c(dadt=0, dndt=0)
-p_init <- c(y=0, n=0)
+ssYear <- 1985 # The year at which you want a steady-state solution
+ssParms <- c(dadt=0, dndt=0) # Parameters for the steady-state model
+p_init <- c(y=0, n=0) # Initial guess for the parameters
 ssModel <- BBsolve(p=p_init, fn=ssResid, constraints=ssParms, year=ssYear)
 
 #
