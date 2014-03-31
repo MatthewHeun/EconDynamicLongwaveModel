@@ -1,4 +1,5 @@
 require(deSolve)
+require(BB)
 require(car)
 
 # Read historical data
@@ -67,23 +68,37 @@ gamma <- coef(uModel)["gamma"]
 G <- w_worker_0 * b_tilde_0^eta / c_tilde_0^gamma
 
 
-# 
-# Steady state model
-#
-ssResid <- function(p, constraints, year){
+#' Residuals for the Jones model
+#' 
+#' Returns values for residuals for the Jones model. Note that \code{p} 
+#' and \code{constraints} should NOT contain any repeated variable names.
+#' 
+#' @param p a vector with named values at which residuals are to be evaluated.
+#' Both names and values in \coe{p} are important. 
+#' The names in \code{p} are used internally to make the residual equations more readable.
+#' The names in \code{p} are the variables to be solved for.
+#' The residuals will be evaluated with the values in \code{p}.
+#' @param constraints a vector of additional named values that constrain the solution.
+ssResid <- function(p, constraints){
+  # Ensure that p and constraints have no names in common.
+  # If any names are in common, that is an error! You can't both solve for a variable (by putting it in the p vector) 
+  # and use it as a constraint (by putting it in the constraints vector).
+  if (length(commonNames <- intersect(names(p), names(constraints))) > 0){
+    stop(paste("p and constraints both have variables named: "), commonNames)
+  }
   with(as.list(c(p, constraints)), {
     Y <- approx(x=data$Year, y=data$Y, xout=year)$y # Interpolate to find Y at year
     N <- approx(x=data$Year, y=data$N, xout=year)$y # Interpolate to find N at year
-    R1 <- as.vector(Y/Y_0 - y) # y = Y/Y_0   as.vector strips off the name
+    R1 <- as.vector(Y/Y_0 - y) # y = Y/Y_0   as.vector() strips off the name
     R2 <- as.vector(N/N_0 - n) # n = N/N_0
     return(c(R1=R1, R2=R2))
   })
 }
 
-ssYear <- 1985 # The year at which you want a steady-state solution
-ssParms <- c(dadt=0, dndt=0) # Parameters for the steady-state model
-p_init <- c(y=0, n=0) # Initial guess for the parameters
-ssModel <- BBsolve(p=p_init, fn=ssResid, constraints=ssParms, year=ssYear)
+p_init <- c(y=0, n=0) # Initial guess for the parameters that will be solved
+ssParms <- c(dadt=0, dndt=0, year=1980) # Constraint parameters for the model
+ssModel <- BBsolve(p=p_init, fn=ssResid, constraints=ssParms)
+print(ssModel$par)
 
 #
 # DAE Model
