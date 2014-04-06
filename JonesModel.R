@@ -10,6 +10,7 @@ data$L_Y <- data$L - data$L_A # workers
 w_worker_0 <- data$w_worker[1] # Initial wage
 Y_0  <- data$Y[1] # Initial GDP
 N_0 <- data$N[1]   # Initial population
+L_0 <- data$L[1]   # Initial labor force
 L_Y_0 <- data$L_Y[1] # Initial L_Y
 data$y <- data$Y / Y_0 # indexed GDP
 data$n <- data$N / N_0 # indexed population
@@ -98,16 +99,16 @@ ssResid <- function(p, constraints){
     R1 <- as.vector(Y/Y_0 - y) # y = Y/Y_0   as.vector() strips off the name
     R2 <- as.vector(N/N_0 - n) # n = N/N_0
     R3 <- as.vector(L_Y/L_Y_0 - l_Y) # l_Y = L_Y/L_Y_0
-#     R4 <- as.vector(L/L_0 - l) #l = L/L_0
+    R4 <- as.vector(L/L_0 - l) #l = L/L_0
 #     R5 <- as.vector(L/N - tau) #tau = L/N
 #     return(c(R1=R1, R2=R2, R3=R3, R4=R4, R5=R5))
-    return(c(R1=R1, R2=R2, R3=R3))
+    return(c(R1=R1, R2=R2, R3=R3, R4=R4))
   })
 }
 
 # p_init <- c(y=0, n=0, l_Y=0, l=0, tau=0) # Initial guess for the parameters that will be solved
-p_init <- c(y=0, n=0, l_Y=0) # Initial guess for the parameters that will be solved
-ssParms <- c(dadt=0, dndt=0, year=1980) # Constraint parameters for the model
+p_init <- c(y=0, n=0, l_Y=0, l=0) # Initial guess for the parameters that will be solved
+ssParms <- c(dadt=0, dndt=0, year=1985.5) # Constraint parameters for the model
 ssModel <- BBsolve(p=p_init, fn=ssResid, constraints=ssParms)
 print(ssModel$par)
 
