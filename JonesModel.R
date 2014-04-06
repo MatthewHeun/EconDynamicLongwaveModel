@@ -67,13 +67,10 @@ names(omega_3) <- "omega_3"
 # Estimate utility model
 utilityModel <- b_tilde ~ (w_worker/w_worker_0)^eta * (c_tilde/c_tilde_0)^(gamma/eta) * b_tilde_0
 start <- list(eta=0.95, gamma=0.33)
-# eta <- 0.95
-# start <- list(gamma=0.33)
-# uModel <- nls(formula=utilityModel, data=calculatedHistoricalData, start=start, control=control)
 uModel <- nls(formula=utilityModel, data=data, start=start, control=control)
 eta <- coef(uModel)["eta"]
 gamma <- coef(uModel)["gamma"]
-G <- w_worker_0 * b_tilde_0^eta / c_tilde_0^gamma
+# G_0 <- w_worker_0 * b_tilde_0^eta / c_tilde_0^gamma
 
 
 #' Residuals for the Jones model
@@ -116,14 +113,17 @@ ssResid <- function(p, constraints){
     R10 <- as.vector(c - c_bar - c_tilde) #c_tilde = c - c_bar
     R11 <- as.vector(nu*(1-tau) - b) #b = nu*(1-tau)
     R12 <- as.vector(b - b_bar - b_tilde) #b_tilde = b - b_bar
-    R13 <- as.vector(c/c_bar - 1 - z) #z = c/c_bar - 1
+    R13 <- as.vector(c/c_bar - 1.0 - z) #z = c/c_bar - 1
+#     R14 <- as.vector(1.0/(omega_1*z^omega_2 + omega_3*z) + d_bar - d) #d = 1/(omega_1*z^omega_2 + omega_3*z) + d_bar
     return(c(R1=R1, R2=R2, R3=R3, R4=R4, R5=R5, R6=R6, R7=R7, R8=R8, R9=R9, R10=R10, 
              R11=R11, R12=R12, R13=R13))
   })
 }
 
-p_init <- c(y=0, n=0, l_Y=0, l=0, tau=0, L_A=0, l_A=0, c=0, pi=0, c_tilde=0, b=0, b_tilde=0, z=0) # Initial guess for the parameters that will be solved
-ssParms <- c(dadt=0, dndt=0, year=1980) # Constraint parameters for the model
+p_init <- c(y=0, n=0, l_Y=0, l=0, tau=0, L_A=0, l_A=0, c=0, pi=0, c_tilde=0, b=0, b_tilde=0, z=2) # Initial guess for the parameters that will be solved
+ssParms <- c(dadt=0, dndt=0, year=1980, 
+             omega_1=omega_1, omega_2=omega_2, omega_3=omega_3,
+             d_bar=d_bar) # Constraint parameters for the model
 ssModel <- BBsolve(p=p_init, fn=ssResid, constraints=ssParms)
 print(ssModel$par)
 
