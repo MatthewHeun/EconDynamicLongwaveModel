@@ -12,6 +12,7 @@ Y_0  <- data$Y[1] # Initial GDP
 N_0 <- data$N[1]   # Initial population
 L_0 <- data$L[1]   # Initial labor force
 L_Y_0 <- data$L_Y[1] # Initial L_Y
+L_A_0 <- data$L_A[1] # Initial L_A
 data$y <- data$Y / Y_0 # indexed GDP
 data$n <- data$N / N_0 # indexed population
 data$l_Y <- data$L_Y / L_Y_0 # indexed labor
@@ -44,6 +45,9 @@ zeta_0 <- data$zeta[1]
 b_tilde_0 <- data$b_tilde[1]
 c_tilde_0 <- data$c_tilde[1]
 z_0 <- data$z[1]
+
+# Land model
+t <- 1 # indexed land (never changes)
 
 # Estimate mortality parameters
 mortalityModel <- d ~ 1.0 / (omega_1*z^omega_2 + (1.0 / (z_0*(d_0-d_bar)) - omega_1*z_0^(omega_2-1.0))*z) + d_bar
@@ -100,11 +104,13 @@ ssResid <- function(p, constraints){
     R3 <- as.vector(L_Y/L_Y_0 - l_Y) # l_Y = L_Y/L_Y_0
     R4 <- as.vector(L/L_0 - l) #l = L/L_0
     R5 <- as.vector(L/N - tau) #tau = L/N
-    return(c(R1=R1, R2=R2, R3=R3, R4=R4, R5=R5))
+    R6 <- as.vector(L - L_Y - L_A) #L_A = L - L_Y
+    R7 <- as.vector(L_A / L_A_0 - l_A) #l_A = L_A/L_A_0
+    return(c(R1=R1, R2=R2, R3=R3, R4=R4, R5=R5, R6=R6, R7=R7))
   })
 }
 
-p_init <- c(y=0, n=0, l_Y=0, l=0, tau=0) # Initial guess for the parameters that will be solved
+p_init <- c(y=0, n=0, l_Y=0, l=0, tau=0, L_A=0, l_A=0) # Initial guess for the parameters that will be solved
 ssParms <- c(dadt=0, dndt=0, year=1980) # Constraint parameters for the model
 ssModel <- BBsolve(p=p_init, fn=ssResid, constraints=ssParms)
 print(ssModel$par)
