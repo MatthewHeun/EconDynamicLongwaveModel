@@ -98,6 +98,7 @@ ssResid <- function(p, constraints){
     N <- approx(x=data$Year, y=data$N, xout=year)$y # Interpolate to find N at year
     L_Y <- approx(x=data$Year, y=data$L_Y, xout=year)$y #Interpolate to find L_Y at year
     L <- approx(x=data$Year, y=data$L, xout=year)$y #Interpolate to find L at year
+    w_worker <- approx(x=data$Year, y=data$w_worker, xout=year)$y #Interpolate to find w_worker at year
 
     R1 <- as.vector(Y/Y_0 - y) # y = Y/Y_0   as.vector() strips off the name
     R2 <- as.vector(N/N_0 - n) # n = N/N_0
@@ -106,11 +107,12 @@ ssResid <- function(p, constraints){
     R5 <- as.vector(L/N - tau) #tau = L/N
     R6 <- as.vector(L - L_Y - L_A) #L_A = L - L_Y
     R7 <- as.vector(L_A / L_A_0 - l_A) #l_A = L_A/L_A_0
-    return(c(R1=R1, R2=R2, R3=R3, R4=R4, R5=R5, R6=R6, R7=R7))
+    R8 <- as.vector(w_worker * tau - c) #c = w_worker*tau
+    return(c(R1=R1, R2=R2, R3=R3, R4=R4, R5=R5, R6=R6, R7=R7, R8=R8))
   })
 }
 
-p_init <- c(y=0, n=0, l_Y=0, l=0, tau=0, L_A=0, l_A=0) # Initial guess for the parameters that will be solved
+p_init <- c(y=0, n=0, l_Y=0, l=0, tau=0, L_A=0, l_A=0, c=0) # Initial guess for the parameters that will be solved
 ssParms <- c(dadt=0, dndt=0, year=1980) # Constraint parameters for the model
 ssModel <- BBsolve(p=p_init, fn=ssResid, constraints=ssParms)
 print(ssModel$par)
