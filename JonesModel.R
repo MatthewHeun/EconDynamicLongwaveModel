@@ -22,7 +22,8 @@ data$tau <- data$L / data$N # Fraction of workers in each year
 data$c <- data$w_worker * data$tau # consumption in 2005$/year-capita. Same as wages in 2005$/year-capita.
 data$nu <- data$b / (1.0 - data$tau)
 data$pi <- data$L_A / data$L
-data$wALA <- data$w_worker * data$L_A
+data$w_A <- data$w_worker # Jones says: "These wages will be equated in equilibrium by the free flow of labor between the two sectors."
+data$wALA <- data$w_A * data$L_A # Question: should this be w_A * L_A? Do we have w_A?
 data$piY <- data$pi * data$Y
 data$zeta <- data$wALA / data$piY
 b_bar = 0.0 # Asymptotic birth rate as consumption goes to infinity
@@ -99,6 +100,9 @@ ssResid <- function(p, constraints){
     L_Y <- approx(x=data$Year, y=data$L_Y, xout=year)$y #Interpolate to find L_Y at year
     L <- approx(x=data$Year, y=data$L, xout=year)$y #Interpolate to find L at year
     w_worker <- approx(x=data$Year, y=data$w_worker, xout=year)$y #Interpolate to find w_worker at year
+    w_A <- approx(x=data$Year, y=data$w_A, xout=year)$y #Interpolate to find w_A at year
+    zeta <- approx(x=data$Year, y=data$zeta, xout=year)$y #Interpolate to find zeta at year
+    nu <- approx(x=data$Year, y=data$nu, xout=year)$y #Interpolate to find nu at year
 
     R1 <- as.vector(Y/Y_0 - y) # y = Y/Y_0   as.vector() strips off the name
     R2 <- as.vector(N/N_0 - n) # n = N/N_0
@@ -108,11 +112,15 @@ ssResid <- function(p, constraints){
     R6 <- as.vector(L - L_Y - L_A) #L_A = L - L_Y
     R7 <- as.vector(L_A / L_A_0 - l_A) #l_A = L_A/L_A_0
     R8 <- as.vector(w_worker * tau - c) #c = w_worker*tau
-    return(c(R1=R1, R2=R2, R3=R3, R4=R4, R5=R5, R6=R6, R7=R7, R8=R8))
+    R9 <- as.vector(w_A*L_A/(Y*zeta) - pi) #pi = w_A*L_A / (zeta*Y)
+    R10 <- as.vector(c - c_bar - c_tilde) #c_tilde = c - c_bar
+    R11 <- as.vector(nu*(1-tau) - b) #b = nu*(1-tau)
+    R12 <- as.vector(b - b_bar - b_tilde) #b_tilde = b - b_bar
+    return(c(R1=R1, R2=R2, R3=R3, R4=R4, R5=R5, R6=R6, R7=R7, R8=R8, R9=R9, R10=R10, R11=R11, R12=R12))
   })
 }
 
-p_init <- c(y=0, n=0, l_Y=0, l=0, tau=0, L_A=0, l_A=0, c=0) # Initial guess for the parameters that will be solved
+p_init <- c(y=0, n=0, l_Y=0, l=0, tau=0, L_A=0, l_A=0, c=0, pi=0, c_tilde=0, b=0, b_tilde=0) # Initial guess for the parameters that will be solved
 ssParms <- c(dadt=0, dndt=0, year=1980) # Constraint parameters for the model
 ssModel <- BBsolve(p=p_init, fn=ssResid, constraints=ssParms)
 print(ssModel$par)
